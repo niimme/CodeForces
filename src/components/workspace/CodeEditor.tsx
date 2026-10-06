@@ -126,8 +126,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const [showBpMenu, setShowBpMenu] = useState(false);
   const [bpInputLine, setBpInputLine] = useState('');
 
-  // Default breakpoint on line 6 to match the user's screenshot out of the box
-  const [internalBreakpoints, setInternalBreakpoints] = useState<Set<number>>(new Set([6]));
+  // Breakpoints empty by default
+  const [internalBreakpoints, setInternalBreakpoints] = useState<Set<number>>(new Set());
   const activeBreakpoints = propBreakpoints ?? internalBreakpoints;
 
   // Compute exact line count matching code lines 1-to-1

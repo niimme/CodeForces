@@ -43,8 +43,8 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   // Dragging interaction state
   const [draggingAxis, setDraggingAxis] = useState<'horizontal' | 'vertical' | null>(null);
 
-  // Breakpoint state (initialized with line 6 matching screenshot)
-  const [breakpoints, setBreakpoints] = useState<Set<number>>(new Set([6]));
+  // Breakpoint state (empty by default)
+  const [breakpoints, setBreakpoints] = useState<Set<number>>(new Set());
 
   const handleToggleBreakpoint = (line: number) => {
     setBreakpoints(prev => {
