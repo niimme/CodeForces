@@ -1,5 +1,8 @@
 # Codeforces Interactive Learning & Practice Platform 🚀
 
+🌐 **Live Website**: [https://codeforces-519204329321.us-central1.run.app](https://codeforces-519204329321.us-central1.run.app)  
+📦 **GitHub Repository**: [https://github.com/niimme/CodeForces](https://github.com/niimme/CodeForces)
+
 A modern, high-performance web platform for competitive programming and algorithm practice based on top-solved Codeforces problems.
 
 ## ✨ Features
