@@ -58,6 +58,7 @@ export default function BadgesPage() {
 
       {/* Top Navbar */}
       <header
+        className="badges-page-header"
         style={{
           height: '64px',
           background: 'rgba(255, 255, 255, 0.9)',
@@ -107,6 +108,7 @@ export default function BadgesPage() {
       {/* Hero Header */}
       <div style={{ maxWidth: '1080px', margin: '2.5rem auto 2rem', padding: '0 1.5rem' }}>
         <div
+          className="badges-hero-card"
           style={{
             background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
             border: '1px solid #e2e8f0',

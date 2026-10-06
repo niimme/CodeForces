@@ -17,12 +17,30 @@ import { BadgesModal } from './BadgesModal';
 interface LoginProfileCardProps {
   progress: UserProgress;
   onUpdateProgress: (updated: UserProgress) => void;
+  forceOpenModal?: boolean;
+  onModalClose?: () => void;
 }
 
-export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, onUpdateProgress }) => {
+export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
+  progress,
+  onUpdateProgress,
+  forceOpenModal,
+  onModalClose,
+}) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showBadgesModal, setShowBadgesModal] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    if (forceOpenModal) {
+      setShowLoginModal(true);
+    }
+  }, [forceOpenModal]);
+
+  const handleCloseModal = () => {
+    setShowLoginModal(false);
+    onModalClose?.();
+  };
 
   // Login modal tab: 'cf' | 'credentials' | 'demo'
   const [loginTab, setLoginTab] = useState<'cf' | 'credentials' | 'demo'>('cf');
@@ -71,7 +89,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
         const demo = DEMO_PROFILES[lower];
         const updated = loginUser(demo);
         onUpdateProgress(updated);
-        setShowLoginModal(false);
+        handleCloseModal();
         setHandleInput('');
         return;
       }
@@ -98,7 +116,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
         };
         const updated = loginUser(newProfile);
         onUpdateProgress(updated);
-        setShowLoginModal(false);
+        handleCloseModal();
         setHandleInput('');
       } else {
         throw new Error(data.comment || 'Codeforces user not found');
@@ -118,7 +136,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
       };
       const updated = loginUser(fallbackProfile);
       onUpdateProgress(updated);
-      setShowLoginModal(false);
+      handleCloseModal();
       setHandleInput('');
     } finally {
       setIsLoading(false);
@@ -130,7 +148,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
     if (DEMO_PROFILES[key]) {
       const updated = loginUser(DEMO_PROFILES[key]);
       onUpdateProgress(updated);
-      setShowLoginModal(false);
+      handleCloseModal();
     }
   };
 
@@ -475,7 +493,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
         createPortal(
           <div
             className="login-modal-overlay"
-            onClick={() => setShowLoginModal(false)}
+            onClick={handleCloseModal}
             style={{
               position: 'fixed',
               top: 0,
@@ -536,7 +554,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
                 </div>
 
                 <button
-                  onClick={() => setShowLoginModal(false)}
+                  onClick={handleCloseModal}
                   style={{
                     background: '#f1f5f9',
                     border: 'none',

@@ -17,7 +17,7 @@ interface ProblemWorkspaceProps {
 }
 
 export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
-  const [problem, setProblem] = useState<ProblemMetadata | null>(null);
+  const [problem, setProblem] = useState<ProblemMetadata | null>(() => getProblemById(problemId) || null);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('instructions');
   const [language, setLanguage] = useState<'cpp' | 'c' | 'kotlin' | 'javascript' | 'python'>('cpp');
   const [code, setCode] = useState<string>('');
@@ -57,6 +57,19 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const leftPaneRef = useRef<HTMLDivElement>(null);
+
+  // Mobile responsive layout state
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [mobileTab, setMobileTab] = useState<'statement' | 'code' | 'tests'>('statement');
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Load problem and persisted layout splits
   useEffect(() => {
@@ -277,8 +290,76 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
     : `${100 - verticalSplit}%`;
 
   return (
-    <div className="workspace-container" style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-      {/* Sizable Workspace Split Body (No top navbar, 100% full height) */}
+    <div className={`workspace-container mobile-tab-${mobileTab}`} style={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {/* Mobile Top Navigation & Tab Bar (Shown only on mobile <= 768px via CSS) */}
+      <header className="workspace-mobile-header" aria-label="Mobile Workspace Controls">
+        <Link href="/" className="ws-mobile-back-link" title="Back to Roadmap">
+          <span>&larr;</span>
+          <span>Roadmap</span>
+        </Link>
+
+        <div className="ws-mobile-tabs" role="tablist">
+          <button
+            className={`ws-mobile-tab-btn ${mobileTab === 'statement' ? 'active' : ''}`}
+            onClick={() => setMobileTab('statement')}
+            role="tab"
+            aria-selected={mobileTab === 'statement'}
+          >
+            <span>📄</span>
+            <span>Statement</span>
+          </button>
+          <button
+            className={`ws-mobile-tab-btn ${mobileTab === 'code' ? 'active' : ''}`}
+            onClick={() => setMobileTab('code')}
+            role="tab"
+            aria-selected={mobileTab === 'code'}
+          >
+            <span>💻</span>
+            <span>Code</span>
+          </button>
+          <button
+            className={`ws-mobile-tab-btn ${mobileTab === 'tests' ? 'active' : ''}`}
+            onClick={() => setMobileTab('tests')}
+            role="tab"
+            aria-selected={mobileTab === 'tests'}
+          >
+            <span>🧪</span>
+            <span>Tests</span>
+            {executionSummary && (
+              <span
+                style={{
+                  fontSize: '10px',
+                  padding: '1px 6px',
+                  borderRadius: '8px',
+                  background: executionSummary.allPassed ? '#10b981' : '#ef4444',
+                  color: '#ffffff',
+                  marginLeft: '4px',
+                  fontWeight: 800,
+                }}
+              >
+                {executionSummary.allPassed ? 'AC' : `${executionSummary.passedCount}/${executionSummary.totalCount}`}
+              </span>
+            )}
+          </button>
+        </div>
+
+        <button
+          className="ws-mobile-run-btn"
+          onClick={() => {
+            handleRunCode();
+            if (mobileTab === 'code') {
+              setTimeout(() => setMobileTab('tests'), 300);
+            }
+          }}
+          disabled={isRunning}
+          title="Compile & Run Solution"
+          id="btn-mobile-run-code"
+        >
+          {isRunning ? '⏳' : '▶ Run'}
+        </button>
+      </header>
+
+      {/* Sizable Workspace Split Body (Controlled via CSS for desktop split vs mobile tabs) */}
       <div
         ref={containerRef}
         className={`workspace-split-body ${draggingAxis ? 'is-resizing' : ''}`}
@@ -300,6 +381,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
           >
             {/* Top Window: Code Editor */}
             <div
+              className="workspace-editor-wrapper"
               style={{
                 height: actualEditorHeight,
                 minHeight: isMaximizedEditor ? '100%' : '120px',
@@ -315,7 +397,10 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 onReset={handleResetCode}
                 language={language}
                 onLanguageChange={handleLanguageChange}
-                onRun={handleRunCode}
+                onRun={() => {
+                  handleRunCode();
+                  setTimeout(() => setMobileTab('tests'), 300);
+                }}
                 isMaximized={isMaximizedEditor}
                 onToggleMaximize={toggleMaximizeEditor}
                 breakpoints={breakpoints}
@@ -323,7 +408,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               />
             </div>
 
-            {/* Minimalist 1px Vertical Resizer Handle (matching Image 3) */}
+            {/* Minimalist 1px Vertical Resizer Handle */}
             {!isMaximizedEditor && !isMinimizedConsole && (
               <div
                 className={`workspace-resizer-v ${draggingAxis === 'vertical' ? 'active' : ''}`}
@@ -338,6 +423,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
 
             {/* Bottom Window: Test Runner Console */}
             <div
+              className="workspace-console-wrapper"
               style={{
                 height: actualConsoleHeight,
                 display: isMaximizedEditor ? 'none' : 'flex',
@@ -374,7 +460,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
           </button>
         )}
 
-        {/* Minimalist 1px Horizontal Resizer Handle (matching Image 2 & 3) */}
+        {/* Minimalist 1px Horizontal Resizer Handle */}
         {!isMaximizedLeft && !isMaximizedRight && (
           <div
             className={`workspace-resizer-h ${draggingAxis === 'horizontal' ? 'active' : ''}`}
@@ -399,7 +485,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
           </button>
         )}
 
-        {/* Right Panel: Problem Statement with Top Header Toolbar (matching Image 2) */}
+        {/* Right Panel: Problem Statement */}
         {actualRightWidth > 0 && (
           <section
             className="split-pane-right"
@@ -412,7 +498,6 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               flexShrink: 0,
             }}
           >
-            {/* Header toolbar on top of instructions window (matching Image 2) */}
             <InstructionsHeader
               activeTab={activeTab}
               onSelectTab={setActiveTab}
@@ -427,6 +512,17 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               isMaximized={isMaximizedRight}
               onToggleMaximize={toggleMaximizeStatement}
             />
+
+            {/* Mobile Bottom Button to jump to editor */}
+            <div className="ws-mobile-statement-footer">
+              <button
+                className="ws-mobile-solve-btn"
+                onClick={() => setMobileTab('code')}
+                id="btn-mobile-open-editor"
+              >
+                <span>💻 Open Code Editor & Solve &rarr;</span>
+              </button>
+            </div>
           </section>
         )}
       </div>

@@ -139,6 +139,7 @@ export default function LoginPage() {
 
         {/* Main Card */}
         <div
+          className="login-page-card"
           style={{
             background: '#ffffff',
             borderRadius: '24px',

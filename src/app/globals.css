@@ -1818,20 +1818,6 @@ html, body {
   background-color: rgba(100, 116, 139, 0.85);
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-  .workspace-split-body {
-    flex-direction: column;
-  }
-  .split-pane-left {
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
-    height: 55vh;
-  }
-  .split-pane-right {
-    height: 45vh;
-  }
-}
 
 /* Roadmap Symmetrical Centered 3-Column Layout */
 .roadmap-grid-layout {
@@ -1897,14 +1883,478 @@ html, body {
   }
 }
 
+/* ==========================================================================
+   MOBILE & RESPONSIVE DESIGN ENHANCEMENTS
+   ========================================================================== */
+
+/* Mobile Top App Bar (Hidden on desktop) */
+.mobile-top-bar {
+  display: none;
+}
+
+.mobile-chapter-pills {
+  display: none;
+}
+
+.workspace-mobile-header {
+  display: none;
+}
+
+.ws-mobile-statement-footer {
+  padding: 16px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.ws-mobile-solve-btn {
+  width: 100%;
+  max-width: 440px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  touch-action: manipulation;
+}
+
+.ws-mobile-solve-btn:active {
+  transform: scale(0.98);
+}
+
 @media (max-width: 860px) {
+  /* Mobile Sticky App Header */
+  .mobile-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    height: 54px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #0f172a;
+  }
+
+  .mobile-brand-icon {
+    font-size: 20px;
+  }
+
+  .mobile-brand-title {
+    font-weight: 800;
+    font-size: 15px;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+  }
+
+  .mobile-quick-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #059669;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: var(--border-radius-full);
+  }
+
+  .mobile-connect-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    border: none;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    touch-action: manipulation;
+  }
+
+  .mobile-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* Quick Chapter Scroller on mobile */
+  .mobile-chapter-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 16px;
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    scrollbar-width: none;
+  }
+  .mobile-chapter-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-chapter-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: var(--border-radius-full);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    touch-action: manipulation;
+  }
+  .mobile-chapter-chip:active {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1d4ed8;
+  }
+
+  /* Symmetrical Roadmap Grid on Mobile: Learning Path is HERO */
   .roadmap-grid-layout {
     grid-template-columns: 1fr;
-    padding: 1.5rem 1rem 5rem;
-    gap: 1.5rem;
+    padding: 1rem 0.75rem 5rem;
+    gap: 2rem;
+  }
+  .roadmap-left-col {
+    display: none;
+  }
+  .roadmap-center-col {
+    order: 1;
+    width: 100%;
   }
   .roadmap-right-col {
-    order: -1;
+    order: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .roadmap-right-col aside {
+    position: static !important;
+    max-width: 480px !important;
+    width: 100% !important;
+    margin: 0 auto;
+  }
+
+  /* Roadmap node adjustments for mobile */
+  .tree-node-wrapper {
+    margin-bottom: 24px;
+  }
+  .chapter-marker {
+    margin: 26px 0 18px;
+  }
+  .chapter-pill {
+    font-size: 11px;
+    padding: 6px 14px;
+    max-width: 94%;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.35;
+  }
+  .node-card {
+    padding: 13px 15px;
+    gap: 12px;
+    border-radius: 16px;
+  }
+  .node-icon-box {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    font-size: 22px;
+    border-radius: 12px;
+  }
+  .node-title {
+    font-size: 14.5px;
+  }
+  .node-subtitle {
+    font-size: 11.5px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Workspace Mobile Header */
+  .workspace-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0 10px;
+    gap: 8px;
+    z-index: 50;
+    flex-shrink: 0;
+  }
+
+  .ws-mobile-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0;
+  }
+
+  .ws-mobile-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 10px;
+  }
+
+  .ws-mobile-tab-btn {
+    border: none;
+    background: none;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    padding: 5px 9px;
+    border-radius: 7px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    transition: all 0.12s ease;
+    touch-action: manipulation;
+  }
+
+  .ws-mobile-tab-btn.active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  .ws-mobile-run-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: none;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    flex-shrink: 0;
+    touch-action: manipulation;
+  }
+
+  .ws-mobile-run-btn:disabled {
+    opacity: 0.65;
+  }
+
+  /* Prevent iOS zoom on code textarea by setting minimum font size */
+  .code-textarea {
+    font-size: 15px !important;
+  }
+
+  .editor-shortcut-hint {
+    display: none !important;
+  }
+
+  .editor-toolbar {
+    padding: 6px 10px !important;
+    gap: 6px !important;
+  }
+
+  .editor-lang-select {
+    font-size: 11.5px !important;
+    padding: 4px 8px !important;
+  }
+
+  .editor-bp-btn {
+    font-size: 11.5px !important;
+    padding: 4px 8px !important;
+  }
+
+  .editor-action-btn {
+    font-size: 11px !important;
+    padding: 4px 8px !important;
+  }
+
+  /* Problem statement on mobile */
+  .problem-header {
+    padding: 16px 14px !important;
+  }
+  .problem-title-text {
+    font-size: 19px !important;
+  }
+  .problem-limits-badge {
+    flex-wrap: wrap;
+    gap: 6px;
+    font-size: 11px;
+  }
+  .statement-text {
+    padding: 0 14px 20px !important;
+    font-size: 14px !important;
+  }
+
+  /* Test runner on mobile */
+  .runner-header {
+    padding: 8px 10px !important;
+    gap: 6px !important;
+  }
+  .test-dot {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 11.5px !important;
+  }
+
+  /* Mobile Workspace Tabbed View Rules */
+  .workspace-split-body {
+    flex-direction: column !important;
+    width: 100% !important;
+    height: calc(100vh - 50px) !important;
+  }
+  .workspace-resizer-h,
+  .workspace-resizer-v,
+  .collapsed-edge-restore-btn {
+    display: none !important;
+  }
+
+  /* When Statement tab is selected */
+  .mobile-tab-statement .split-pane-right {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+  }
+  .mobile-tab-statement .split-pane-left {
+    display: none !important;
+  }
+
+  /* When Code tab is selected */
+  .mobile-tab-code .split-pane-left {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+  }
+  .mobile-tab-code .split-pane-right {
+    display: none !important;
+  }
+  .mobile-tab-code .workspace-editor-wrapper {
+    display: flex !important;
+    height: 100% !important;
+    flex: 1 !important;
+  }
+  .mobile-tab-code .workspace-console-wrapper {
+    display: none !important;
+  }
+
+  /* When Tests tab is selected */
+  .mobile-tab-tests .split-pane-left {
+    display: flex !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+  }
+  .mobile-tab-tests .split-pane-right {
+    display: none !important;
+  }
+  .mobile-tab-tests .workspace-editor-wrapper {
+    display: none !important;
+  }
+  .mobile-tab-tests .workspace-console-wrapper {
+    display: flex !important;
+    height: 100% !important;
+    flex: 1 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .roadmap-grid-layout {
+    padding: 0.75rem 0.5rem 5rem;
+  }
+  .node-card {
+    padding: 11px 12px;
+    gap: 10px;
+    border-radius: 14px;
+  }
+  .node-icon-box {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 19px;
+  }
+  .node-title {
+    font-size: 13.5px;
+  }
+  .node-subtitle {
+    font-size: 11px;
+  }
+  .chapter-pill {
+    font-size: 10.5px;
+    padding: 5px 11px;
+  }
+  .login-modal-overlay {
+    padding: 12px !important;
+  }
+  .login-modal-card {
+    padding: 20px 16px !important;
+    border-radius: 20px !important;
+  }
+  .login-page-card {
+    padding: 22px 18px !important;
+    border-radius: 20px !important;
+  }
+  .badges-hero-card {
+    padding: 20px 16px !important;
+    border-radius: 20px !important;
   }
 }
 
