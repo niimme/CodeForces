@@ -34,10 +34,10 @@ const TOKEN_REGEX = new RegExp(
     '^\\s*#[a-zA-Z_]+[^\\n]*' +
   ')|(' +
     // 4: Keywords & control flow (BLUE in screenshot)
-    '\\b(?:let|var|const|if|else|while|for|do|switch|case|break|continue|return|using|namespace|class|struct|public|private|protected|template|typename|int|long|double|float|char|bool|void|string|auto|static|def|import|from|function)\\b' +
+    '\\b(?:let|var|val|const|fun|if|else|while|for|do|switch|case|break|continue|return|when|using|namespace|package|class|struct|union|enum|interface|object|public|private|protected|internal|override|open|data|sealed|companion|init|constructor|suspend|inline|reified|typealias|by|is|in|as|template|typename|int|long|double|float|char|bool|boolean|void|string|auto|static|sizeof|typedef|unsigned|signed|short|volatile|extern|register|goto|def|import|from|function)\\b' +
   ')|(' +
     // 5: Booleans & Numbers (RED in screenshot)
-    '\\b(?:true|false)\\b|\\b\\d+(?:\\.\\d+)?\\b' +
+    '\\b(?:true|false|null|nil|None)\\b|\\b\\d+(?:\\.\\d+)?\\b' +
   ')|(' +
     // 6: Operators (BLUE in screenshot: ===, ==, !=, =, <, >, +, ++, -, etc.)
     '===|==|!=|>=|<=|&&|\\|\\||<<|>>|\\+\\+|--|\\+=|-=|\\*=|\\/=|%=|->|::|[+\\-*\\/%&|^!~<>=?:_]' +
@@ -287,9 +287,11 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                 aria-label="Select Programming Language"
                 id="select-programming-language"
               >
-                <option value="cpp">⚡ C++ (C++20 / clang++)</option>
-                <option value="javascript">⚡ JavaScript (Node.js)</option>
+                <option value="cpp">⚡ C++ (C++20)</option>
+                <option value="c">⚡ C (C17 / clang)</option>
+                <option value="kotlin">⚡ Kotlin (JVM)</option>
                 <option value="python">⚡ Python 3</option>
+                <option value="javascript">⚡ JavaScript (Node.js)</option>
               </select>
             </div>
           ) : (

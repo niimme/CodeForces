@@ -15,8 +15,8 @@
     "inputSpecificationHtml": "\n      <p>The first (and the only) input line contains integer number $w$ ($1 \\le w \\le 100$) &mdash; the weight of the watermelon bought by the boys.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Print <code>YES</code>, if the boys can divide the watermelon into two parts, each of them weighing even number of kilos; and <code>NO</code> in the opposite case.</p>\n    ",
     "sampleNotesHtml": "\n      <p>For example, the boys can divide the watermelon into two parts of $2$ and $6$ kilos respectively (another variant &mdash; two parts of $4$ and $4$ kilos).</p>\n    ",
-    "starterCode": "/**\n * Problem: 4A - Watermelon\n * Language: C++ (C++20 / clang++)\n * Input: w (integer weight, 1 <= w <= 100)\n * Output: \"YES\" or \"NO\"\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int w;\n    if (cin >> w) {\n        // Both parts must be positive even integers (>= 2).\n        // Smallest even sum of two positive even numbers is 2 + 2 = 4.\n        if (w > 2 && w % 2 == 0) {\n            cout << \"YES\\n\";\n        } else {\n            cout << \"NO\\n\";\n        }\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    w = int(input_str.strip())\n    if w > 2 and w % 2 == 0:\n        return \"YES\"\n    return \"NO\"\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Both parts must be even positive integers: part1 >= 2 and part2 >= 2.",
       "The sum of two even numbers is always even. So if w is odd, it's impossible!",
@@ -60,8 +60,8 @@
         "expectedOutput": "YES"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 4A - Watermelon\n * Input: w (integer as string or number)\n * Return: 'YES' or 'NO'\n */\nfunction solve(input) {\n  const w = parseInt(input.trim(), 10);\n  \n  // Each part must weigh an even number of kilos, and be > 0.\n  if (w > 2 && w % 2 === 0) {\n    return \"YES\";\n  }\n  return \"NO\";\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 4A - Watermelon\n * Language: C++ (C++20 / clang++)\n * Input: w (integer weight, 1 <= w <= 100)\n * Output: \"YES\" or \"NO\"\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int w;\n    if (cin >> w) {\n        // Both parts must be positive even integers (>= 2).\n        // Smallest even sum of two positive even numbers is 2 + 2 = 4.\n        if (w > 2 && w % 2 == 0) {\n            cout << \"YES\\n\";\n        } else {\n            cout << \"NO\\n\";\n        }\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "71A",
@@ -79,8 +79,8 @@
     "inputSpecificationHtml": "\n      <p>The first line contains an integer $n$ ($1 \\le n \\le 100$). Each of the following $n$ lines contains one word. All the words consist of lowercase Latin letters and possess lengths from $1$ to $100$ characters.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Print $n$ lines. The $i$-th line should contain the result of replacing of the $i$-th word from the input data.</p>\n    ",
     "sampleNotesHtml": "\n      <p>For a word of length $\\le 10$, output it as is. For a word of length $> 10$, abbreviation is <code>word[0] + (length - 2) + word[last]</code>.</p>\n    ",
-    "starterCode": "/**\n * Problem: 71A - Way Too Long Words\n * Language: C++ (C++20 / clang++)\n * Input: n words\n * Output: Abbreviate words with length > 10\n */\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    if (cin >> n) {\n        while (n--) {\n            string s;\n            cin >> s;\n            if (s.length() > 10) {\n                cout << s.front() << (s.length() - 2) << s.back() << \"\\n\";\n            } else {\n                cout << s << \"\\n\";\n            }\n        }\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    lines = [l.strip() for l in input_str.strip().split('\\n') if l.strip()]\n    n = int(lines[0])\n    res = []\n    for word in lines[1:n+1]:\n        if len(word) > 10:\n            res.append(f\"{word[0]}{len(word)-2}{word[-1]}\")\n        else:\n            res.append(word)\n    return '\\n'.join(res)\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Check length: is length strictly greater than 10? (> 10, not >= 10).",
       "If length <= 10, print the word untouched.",
@@ -124,8 +124,8 @@
         "expectedOutput": "a10a\nz9z"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 71A - Way Too Long Words\n * Input: Multiline string containing n, followed by n words\n * Return: Abbreviated words separated by newline\n */\nfunction solve(input) {\n  const lines = input.trim().split('\\n').map(l => l.trim()).filter(Boolean);\n  const n = parseInt(lines[0], 10);\n  const results = [];\n  \n  for (let i = 1; i <= n; i++) {\n    const word = lines[i];\n    if (word.length > 10) {\n      const abbr = word[0] + (word.length - 2) + word[word.length - 1];\n      results.push(abbr);\n    } else {\n      results.push(word);\n    }\n  }\n  \n  return results.join('\\n');\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 71A - Way Too Long Words\n * Language: C++ (C++20 / clang++)\n * Input: n words\n * Output: Abbreviate words with length > 10\n */\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    if (cin >> n) {\n        while (n--) {\n            string s;\n            cin >> s;\n            if (s.length() > 10) {\n                cout << s.front() << (s.length() - 2) << s.back() << \"\\n\";\n            } else {\n                cout << s << \"\\n\";\n            }\n        }\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "231A",
@@ -143,8 +143,8 @@
     "inputSpecificationHtml": "\n      <p>The first input line contains a single integer $n$ ($1 \\le n \\le 1000$) &mdash; the number of problems in the contest. Then $n$ lines contain three integers each, each integer is either $0$ or $1$. If the first number in the line equals $1$, then Petya is sure about the problem's solution, otherwise he isn't sure. The second number shows Vasya's view on the solution, the third number shows Tonya's view. The numbers on the lines are separated by spaces.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the number of problems the friends will implement on the contest.</p>\n    ",
     "sampleNotesHtml": "\n      <p>In the first sample, Petya and Vasya are sure on problem 1, all three are sure on problem 2, and only Petya on problem 3. Total solved = 2.</p>\n    ",
-    "starterCode": "/**\n * Problem: 231A - Team\n * Language: C++ (C++20 / clang++)\n * Input: n lines of 3 binary integers\n * Output: Number of problems with >= 2 sure opinions\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    if (cin >> n) {\n        int count = 0;\n        for (int i = 0; i < n; i++) {\n            int a, b, c;\n            cin >> a >> b >> c;\n            if (a + b + c >= 2) {\n                count++;\n            }\n        }\n        cout << count << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    lines = [l.strip() for l in input_str.strip().split('\\n') if l.strip()]\n    n = int(lines[0])\n    count = 0\n    for l in lines[1:n+1]:\n        nums = list(map(int, l.split()))\n        if sum(nums) >= 2:\n            count += 1\n    return str(count)\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "For each problem, sum up the three values: Petya + Vasya + Tonya.",
       "If the sum is >= 2, increment your answer counter.",
@@ -188,72 +188,8 @@
         "expectedOutput": "1"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 231A - Team\n * Input: Multiline string with n followed by lines of 3 numbers (0 or 1)\n * Return: Number of problems where sum >= 2\n */\nfunction solve(input) {\n  const lines = input.trim().split('\\n').map(l => l.trim()).filter(Boolean);\n  const n = parseInt(lines[0], 10);\n  let count = 0;\n  \n  for (let i = 1; i <= n; i++) {\n    const [p, v, t] = lines[i].split(/\\s+/).map(Number);\n    if (p + v + t >= 2) {\n      count++;\n    }\n  }\n  \n  return count.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 231A - Team\n * Language: C++ (C++20 / clang++)\n * Input: n lines of 3 binary integers\n * Output: Number of problems with >= 2 sure opinions\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    if (cin >> n) {\n        int count = 0;\n        for (int i = 0; i < n; i++) {\n            int a, b, c;\n            cin >> a >> b >> c;\n            if (a + b + c >= 2) {\n                count++;\n            }\n        }\n        cout << count << \"\\n\";\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "282A",
-    "contestId": 282,
-    "index": "A",
-    "title": "Bit++",
-    "emoji": "💻",
-    "category": "Implementation",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 382313,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>The classic programming language of Bitland is Bit++. A language that is so peculiar and complicated.</p>\n      <p>The language is that peculiar as it has only one variable, called $x$. Also, there are two operations:</p>\n      <ul>\n        <li>Operation <code>++</code> increases the value of variable $x$ by 1.</li>\n        <li>Operation <code>--</code> decreases the value of variable $x$ by 1.</li>\n      </ul>\n      <p>A statement in language Bit++ is a sequence, consisting of exactly one operation and one variable $x$. The statement is written without spaces, that is, it can only contain characters <code>+</code>, <code>-</code>, <code>X</code>. Executing a statement means applying its operation to variable $x$.</p>\n      <p>A programme in Bit++ is a sequence of statements, each of them needs to be executed. Putting values to variable $x$ is called executing the programme. Initially the value of $x$ is 0.</p>\n      <p>You are given a programme in Bit++. Execute it and find the final value of variable $x$.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains a single integer $n$ ($1 \\le n \\le 150$) &mdash; the number of statements in the programme. Next $n$ lines contain statements. Each line contains exactly one statement. The statements are valid Bit++ statements: <code>++X</code>, <code>X++</code>, <code>--X</code>, or <code>X--</code>.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the final value of $x$.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>If the statement contains '+', $x$ increases by 1. If it contains '-', $x$ decreases by 1.</p>\n    ",
-    "starterCode": "/**\n * Problem: 282A - Bit++\n * Language: C++ (C++20 / clang++)\n * Input: n operations containing ++ or --\n * Output: Final integer value of x\n */\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    if (cin >> n) {\n        int x = 0;\n        while (n--) {\n            string s;\n            cin >> s;\n            if (s.find(\"++\") != string::npos) {\n                x++;\n            } else {\n                x--;\n            }\n        }\n        cout << x << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    lines = [l.strip() for l in input_str.strip().split('\\n') if l.strip()]\n    n = int(lines[0])\n    x = 0\n    for op in lines[1:n+1]:\n        if '+' in op:\n            x += 1\n        else:\n            x -= 1\n    return str(x)\n",
-    "hints": [
-      "The variable starts at 0.",
-      "Notice that every operation contains either '+' or '-'. If it contains '+', x = x + 1, otherwise x = x - 1.",
-      "The position of X (prefix vs postfix) doesn't change the final accumulator value."
-    ],
-    "explanation": "Start with $x = 0$. For each instruction, check if it contains the character '+'. If so, increment $x$ by 1. Otherwise decrement $x$ by 1. Return the final value.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: Single Increment",
-        "description": "Official sample 1: ++X results in 1.",
-        "input": "1\n++X",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: Balanced Operations",
-        "description": "Official sample 2: X++ then --X returns to 0.",
-        "input": "2\nX++\n--X",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 3,
-        "title": "Multiple Decrements Negative Result",
-        "description": "3 decrements starting from 0 reach -3.",
-        "input": "3\n--X\nX--\n--X",
-        "expectedOutput": "-3"
-      },
-      {
-        "id": 4,
-        "title": "Alternating Order",
-        "description": "Mixed prefix and postfix statements.",
-        "input": "4\n++X\nX++\n--X\n++X",
-        "expectedOutput": "2"
-      },
-      {
-        "id": 5,
-        "title": "Net Negative Operations",
-        "description": "More decrements than increments.",
-        "input": "5\n++X\n--X\n--X\n--X\nX++",
-        "expectedOutput": "-1"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 282A - Bit++\n * Input: Multiline string with n followed by n operations (++X, X++, --X, X--)\n * Return: Final integer value of x\n */\nfunction solve(input) {\n  const lines = input.trim().split('\\n').map(l => l.trim()).filter(Boolean);\n  const n = parseInt(lines[0], 10);\n  let x = 0;\n  \n  for (let i = 1; i <= n; i++) {\n    if (lines[i].includes('+')) {\n      x++;\n    } else {\n      x--;\n    }\n  }\n  \n  return x.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 282A - Bit++\n * Language: C++ (C++20 / clang++)\n * Input: n operations containing ++ or --\n * Output: Final integer value of x\n */\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    if (cin >> n) {\n        int x = 0;\n        while (n--) {\n            string s;\n            cin >> s;\n            if (s.find(\"++\") != string::npos) {\n                x++;\n            } else {\n                x--;\n            }\n        }\n        cout << x << \"\\n\";\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "158A",
@@ -271,8 +207,8 @@
     "inputSpecificationHtml": "\n      <p>The first line of the input contains two integers $n$ and $k$ ($1 \\le k \\le n \\le 50$) separated by a single space.</p>\n      <p>The second line contains $n$ space-separated integers $a_1, a_2, \\dots, a_n$ ($0 \\le a_i \\le 100$), where $a_i$ is the score earned by the participant who got the $i$-th place. The given sequence is non-increasing (that is, for all $i$ from $1$ to $n - 1$ the following condition is fulfilled: $a_i \\ge a_{i+1}$).</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Output the number of participants who advance to the next round.</p>\n    ",
     "sampleNotesHtml": "\n      <p>In the first sample the participant on the 5th place earned 7 points. As the participant on the 6th place also earned 7 points, there are 6 advancers.</p>\n      <p>In the second sample nobody got a positive score (score > 0), so 0 advance.</p>\n    ",
-    "starterCode": "/**\n * Problem: 158A - Next Round\n * Language: C++ (C++20 / clang++)\n * Input: n contestants, k-th place cutoff, and n scores\n * Output: Count of participants with score >= k-th cutoff and score > 0\n */\n#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n, k;\n    if (cin >> n >> k) {\n        vector<int> a(n);\n        for (int i = 0; i < n; i++) {\n            cin >> a[i];\n        }\n        int cutoff = a[k - 1];\n        int advancers = 0;\n        for (int i = 0; i < n; i++) {\n            if (a[i] >= cutoff && a[i] > 0) {\n                advancers++;\n            }\n        }\n        cout << advancers << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    lines = [l.strip() for l in input_str.strip().split('\\n') if l.strip()]\n    n, k = map(int, lines[0].split())\n    scores = list(map(int, lines[1].split()))\n    cutoff = scores[k - 1]\n    ans = sum(1 for s in scores if s >= cutoff and s > 0)\n    return str(ans)\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Find the score of the k-th participant: remember in 0-indexed arrays, this is scores[k - 1].",
       "A participant qualifies if score >= scores[k - 1] AND score > 0.",
@@ -316,8 +252,8 @@
         "expectedOutput": "1"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 158A - Next Round\n * Input:\n *   Line 1: \"n k\"\n *   Line 2: scores separated by space\n * Return: Number of qualifying participants\n */\nfunction solve(input) {\n  const lines = input.trim().split('\\n').map(l => l.trim()).filter(Boolean);\n  const [n, k] = lines[0].split(/\\s+/).map(Number);\n  const scores = lines[1].split(/\\s+/).map(Number);\n  \n  const cutoffScore = scores[k - 1]; // 0-indexed k-th place\n  let count = 0;\n  \n  for (let i = 0; i < n; i++) {\n    if (scores[i] >= cutoffScore && scores[i] > 0) {\n      count++;\n    }\n  }\n  \n  return count.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 158A - Next Round\n * Language: C++ (C++20 / clang++)\n * Input: n contestants, k-th place cutoff, and n scores\n * Output: Count of participants with score >= k-th cutoff and score > 0\n */\n#include <iostream>\n#include <vector>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n, k;\n    if (cin >> n >> k) {\n        vector<int> a(n);\n        for (int i = 0; i < n; i++) {\n            cin >> a[i];\n        }\n        int cutoff = a[k - 1];\n        int advancers = 0;\n        for (int i = 0; i < n; i++) {\n            if (a[i] >= cutoff && a[i] > 0) {\n                advancers++;\n            }\n        }\n        cout << advancers << \"\\n\";\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "50A",
@@ -335,8 +271,8 @@
     "inputSpecificationHtml": "\n      <p>In a single line you are given two integers $M$ and $N$ ($1 \\le M \\le N \\le 16$).</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Output one number &mdash; the maximal number of dominoes, which can be placed.</p>\n    ",
     "sampleNotesHtml": "\n      <p>Each domino covers exactly 2 squares. The board has $M \\times N$ squares. Maximum dominoes is $\\lfloor (M \\times N) / 2 \\rfloor$.</p>\n    ",
-    "starterCode": "/**\n * Problem: 50A - Domino piling\n * Language: C++ (C++20 / clang++)\n * Input: Board dimensions M and N\n * Output: Maximum number of 2x1 dominoes that fit\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int m, n;\n    if (cin >> m >> n) {\n        cout << (m * n) / 2 << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    m, n = map(int, input_str.strip().split())\n    return str((m * n) // 2)\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Total squares on the board = M * N.",
       "Each domino covers exactly 2 squares.",
@@ -380,8 +316,136 @@
         "expectedOutput": "128"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 50A - Domino piling\n * Input: \"M N\"\n * Return: Maximum number of 2x1 dominoes that fit\n */\nfunction solve(input) {\n  const [m, n] = input.trim().split(/\\s+/).map(Number);\n  const ans = Math.floor((m * n) / 2);\n  return ans.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 50A - Domino piling\n * Language: C++ (C++20 / clang++)\n * Input: Board dimensions M and N\n * Output: Maximum number of 2x1 dominoes that fit\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int m, n;\n    if (cin >> m >> n) {\n        cout << (m * n) / 2 << \"\\n\";\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
+  },
+  {
+    "id": "282A",
+    "contestId": 282,
+    "index": "A",
+    "title": "Bit++",
+    "emoji": "💻",
+    "category": "Implementation",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 382313,
+    "timeLimit": "1.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "\n      <p>The classic programming language of Bitland is Bit++. A language that is so peculiar and complicated.</p>\n      <p>The language is that peculiar as it has only one variable, called $x$. Also, there are two operations:</p>\n      <ul>\n        <li>Operation <code>++</code> increases the value of variable $x$ by 1.</li>\n        <li>Operation <code>--</code> decreases the value of variable $x$ by 1.</li>\n      </ul>\n      <p>A statement in language Bit++ is a sequence, consisting of exactly one operation and one variable $x$. The statement is written without spaces, that is, it can only contain characters <code>+</code>, <code>-</code>, <code>X</code>. Executing a statement means applying its operation to variable $x$.</p>\n      <p>A programme in Bit++ is a sequence of statements, each of them needs to be executed. Putting values to variable $x$ is called executing the programme. Initially the value of $x$ is 0.</p>\n      <p>You are given a programme in Bit++. Execute it and find the final value of variable $x$.</p>\n    ",
+    "inputSpecificationHtml": "\n      <p>The first line contains a single integer $n$ ($1 \\le n \\le 150$) &mdash; the number of statements in the programme. Next $n$ lines contain statements. Each line contains exactly one statement. The statements are valid Bit++ statements: <code>++X</code>, <code>X++</code>, <code>--X</code>, or <code>X--</code>.</p>\n    ",
+    "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the final value of $x$.</p>\n    ",
+    "sampleNotesHtml": "\n      <p>If the statement contains '+', $x$ increases by 1. If it contains '-', $x$ decreases by 1.</p>\n    ",
+    "starterCode": "",
+    "starterCodePy": "",
+    "hints": [
+      "The variable starts at 0.",
+      "Notice that every operation contains either '+' or '-'. If it contains '+', x = x + 1, otherwise x = x - 1.",
+      "The position of X (prefix vs postfix) doesn't change the final accumulator value."
+    ],
+    "explanation": "Start with $x = 0$. For each instruction, check if it contains the character '+'. If so, increment $x$ by 1. Otherwise decrement $x$ by 1. Return the final value.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1: Single Increment",
+        "description": "Official sample 1: ++X results in 1.",
+        "input": "1\n++X",
+        "expectedOutput": "1"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2: Balanced Operations",
+        "description": "Official sample 2: X++ then --X returns to 0.",
+        "input": "2\nX++\n--X",
+        "expectedOutput": "0"
+      },
+      {
+        "id": 3,
+        "title": "Multiple Decrements Negative Result",
+        "description": "3 decrements starting from 0 reach -3.",
+        "input": "3\n--X\nX--\n--X",
+        "expectedOutput": "-3"
+      },
+      {
+        "id": 4,
+        "title": "Alternating Order",
+        "description": "Mixed prefix and postfix statements.",
+        "input": "4\n++X\nX++\n--X\n++X",
+        "expectedOutput": "2"
+      },
+      {
+        "id": 5,
+        "title": "Net Negative Operations",
+        "description": "More decrements than increments.",
+        "input": "5\n++X\n--X\n--X\n--X\nX++",
+        "expectedOutput": "-1"
+      }
+    ],
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
+  },
+  {
+    "id": "112A",
+    "contestId": 112,
+    "index": "A",
+    "title": "Petya and Strings",
+    "emoji": "🔡",
+    "category": "Strings / Comparison",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 303947,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "\n      <p>Little Petya loves presents. His mum bought him two strings of the same size for his birthday. The strings consist of uppercase and lowercase Latin letters. Now Petya wants to compare those two strings <strong>lexicographically</strong>.</p>\n      <p>The letters' case does not matter, that is an uppercase letter is considered equivalent to the corresponding lowercase letter.</p>\n      <p>Compare the strings: print <code>-1</code> if the first string is less than the second one, <code>1</code> if the second string is less, or <code>0</code> if they are equal.</p>\n    ",
+    "inputSpecificationHtml": "\n      <p>Each of the first two lines contains a string. The lengths of the strings range from $1$ to $100$ inclusive. It is guaranteed that the strings are of the same length and also consist of uppercase and lowercase Latin letters.</p>\n    ",
+    "outputSpecificationHtml": "\n      <p>If the first string is less than the second string, print <code>-1</code>. If the second string is less than the first string, print <code>1</code>. If the strings are equal, print <code>0</code>. Note that the letters' case is not taken into consideration when the strings are compared.</p>\n    ",
+    "sampleNotesHtml": "\n      <p>Convert both strings to lowercase. Compare character by character.</p>\n    ",
+    "starterCode": "",
+    "starterCodePy": "",
+    "hints": [
+      "Convert both strings to lowercase first so letter casing is ignored.",
+      "Compare them using standard string comparison (< and >).",
+      "Return '-1', '1', or '0' accordingly."
+    ],
+    "explanation": "Convert both strings to lowercase with `.toLowerCase()`. Compare using standard lexicographical comparison.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1: Equal Strings (Different Case)",
+        "description": "Official sample: 'aaaa' and 'aaaA' are equal ignoring case.",
+        "input": "aaaa\naaaA",
+        "expectedOutput": "0"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2: First is Less",
+        "description": "Official sample: 'abs' < 'Abz'.",
+        "input": "abs\nAbz",
+        "expectedOutput": "-1"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3: Second is Less",
+        "description": "Official sample: 'abcdefg' > 'AbCdEfF'.",
+        "input": "abcdefg\nAbCdEfF",
+        "expectedOutput": "1"
+      },
+      {
+        "id": 4,
+        "title": "Single Characters Differing in Case",
+        "description": "Single char 'Z' vs 'a': lowercase 'z' is greater than 'a'.",
+        "input": "Z\na",
+        "expectedOutput": "1"
+      },
+      {
+        "id": 5,
+        "title": "Identical Strings",
+        "description": "Both strings have identical case and characters.",
+        "input": "hellocodeforces\nhellocodeforces",
+        "expectedOutput": "0"
+      }
+    ],
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "263A",
@@ -399,8 +463,8 @@
     "inputSpecificationHtml": "\n      <p>The input consists of five lines, each line contains five integers: the $j$-th integer in the $i$-th line of the input represents the element of the matrix that is located on the intersection of the $i$-th row and the $j$-th column. It is guaranteed that the matrix consists of 24 zeroes and a single number one.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the minimum number of moves needed to make the matrix beautiful.</p>\n    ",
     "sampleNotesHtml": "\n      <p>The target position is $(3, 3)$. The minimum moves is the Manhattan distance: $|r - 3| + |c - 3|$.</p>\n    ",
-    "starterCode": "/**\n * Problem: 263A - Beautiful Matrix\n * Language: C++ (C++20 / clang++)\n * Input: 5x5 matrix containing exactly one 1\n * Output: Minimum moves to bring 1 to matrix center (row 3, col 3)\n */\n#include <iostream>\n#include <cmath>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int val;\n    for (int r = 1; r <= 5; r++) {\n        for (int c = 1; c <= 5; c++) {\n            cin >> val;\n            if (val == 1) {\n                cout << abs(r - 3) + abs(c - 3) << \"\\n\";\n                return 0;\n            }\n        }\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    rows = [l.strip().split() for l in input_str.strip().split('\\n') if l.strip()]\n    for r in range(5):\n        for c in range(5):\n            if rows[r][c] == '1':\n                return str(abs(r - 2) + abs(c - 2))\n    return \"0\"\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Find the coordinates (row, col) of the number 1 (using 1-based indexing, from 1 to 5).",
       "The center of the 5x5 matrix is at row 3, column 3.",
@@ -445,136 +509,8 @@
         "expectedOutput": "2"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 263A - Beautiful Matrix\n * Input: 5 lines representing a 5x5 matrix with a single '1'\n * Return: Minimum row and column swaps to move '1' to (3, 3)\n */\nfunction solve(input) {\n  const rows = input.trim().split('\\n').map(r => r.trim()).filter(Boolean);\n  let targetRow = -1;\n  let targetCol = -1;\n  \n  for (let r = 0; r < 5; r++) {\n    const cols = rows[r].split(/\\s+/).map(Number);\n    for (let c = 0; c < 5; c++) {\n      if (cols[c] === 1) {\n        targetRow = r + 1; // 1-indexed\n        targetCol = c + 1;\n        break;\n      }\n    }\n  }\n  \n  const moves = Math.abs(targetRow - 3) + Math.abs(targetCol - 3);\n  return moves.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 263A - Beautiful Matrix\n * Language: C++ (C++20 / clang++)\n * Input: 5x5 matrix containing exactly one 1\n * Output: Minimum moves to bring 1 to matrix center (row 3, col 3)\n */\n#include <iostream>\n#include <cmath>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int val;\n    for (int r = 1; r <= 5; r++) {\n        for (int c = 1; c <= 5; c++) {\n            cin >> val;\n            if (val == 1) {\n                cout << abs(r - 3) + abs(c - 3) << \"\\n\";\n                return 0;\n            }\n        }\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "112A",
-    "contestId": 112,
-    "index": "A",
-    "title": "Petya and Strings",
-    "emoji": "🔡",
-    "category": "Strings / Comparison",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 303947,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Little Petya loves presents. His mum bought him two strings of the same size for his birthday. The strings consist of uppercase and lowercase Latin letters. Now Petya wants to compare those two strings <strong>lexicographically</strong>.</p>\n      <p>The letters' case does not matter, that is an uppercase letter is considered equivalent to the corresponding lowercase letter.</p>\n      <p>Compare the strings: print <code>-1</code> if the first string is less than the second one, <code>1</code> if the second string is less, or <code>0</code> if they are equal.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>Each of the first two lines contains a string. The lengths of the strings range from $1$ to $100$ inclusive. It is guaranteed that the strings are of the same length and also consist of uppercase and lowercase Latin letters.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>If the first string is less than the second string, print <code>-1</code>. If the second string is less than the first string, print <code>1</code>. If the strings are equal, print <code>0</code>. Note that the letters' case is not taken into consideration when the strings are compared.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Convert both strings to lowercase. Compare character by character.</p>\n    ",
-    "starterCode": "/**\n * Problem: 112A - Petya and Strings\n * Language: C++ (C++20 / clang++)\n * Input: Two strings of equal length\n * Output: -1 if s1 < s2, 1 if s1 > s2, 0 if equal (case-insensitive)\n */\n#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s1, s2;\n    if (cin >> s1 >> s2) {\n        transform(s1.begin(), s1.end(), s1.begin(), ::tolower);\n        transform(s2.begin(), s2.end(), s2.begin(), ::tolower);\n        if (s1 < s2) {\n            cout << \"-1\\n\";\n        } else if (s1 > s2) {\n            cout << \"1\\n\";\n        } else {\n            cout << \"0\\n\";\n        }\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    s1, s2 = [l.strip().lower() for l in input_str.strip().split('\\n') if l.strip()]\n    if s1 < s2: return \"-1\"\n    if s1 > s2: return \"1\"\n    return \"0\"\n",
-    "hints": [
-      "Convert both strings to lowercase first so letter casing is ignored.",
-      "Compare them using standard string comparison (< and >).",
-      "Return '-1', '1', or '0' accordingly."
-    ],
-    "explanation": "Convert both strings to lowercase with `.toLowerCase()`. Compare using standard lexicographical comparison.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: Equal Strings (Different Case)",
-        "description": "Official sample: 'aaaa' and 'aaaA' are equal ignoring case.",
-        "input": "aaaa\naaaA",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: First is Less",
-        "description": "Official sample: 'abs' < 'Abz'.",
-        "input": "abs\nAbz",
-        "expectedOutput": "-1"
-      },
-      {
-        "id": 3,
-        "title": "Sample Test 3: Second is Less",
-        "description": "Official sample: 'abcdefg' > 'AbCdEfF'.",
-        "input": "abcdefg\nAbCdEfF",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 4,
-        "title": "Single Characters Differing in Case",
-        "description": "Single char 'Z' vs 'a': lowercase 'z' is greater than 'a'.",
-        "input": "Z\na",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 5,
-        "title": "Identical Strings",
-        "description": "Both strings have identical case and characters.",
-        "input": "hellocodeforces\nhellocodeforces",
-        "expectedOutput": "0"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 112A - Petya and Strings\n * Input: Two lines with strings of equal length\n * Return: -1, 0, or 1\n */\nfunction solve(input) {\n  const lines = input.trim().split('\\n').map(l => l.trim().toLowerCase());\n  const [s1, s2] = lines;\n  \n  if (s1 < s2) return \"-1\";\n  if (s1 > s2) return \"1\";\n  return \"0\";\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 112A - Petya and Strings\n * Language: C++ (C++20 / clang++)\n * Input: Two strings of equal length\n * Output: -1 if s1 < s2, 1 if s1 > s2, 0 if equal (case-insensitive)\n */\n#include <iostream>\n#include <string>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s1, s2;\n    if (cin >> s1 >> s2) {\n        transform(s1.begin(), s1.end(), s1.begin(), ::tolower);\n        transform(s2.begin(), s2.end(), s2.begin(), ::tolower);\n        if (s1 < s2) {\n            cout << \"-1\\n\";\n        } else if (s1 > s2) {\n            cout << \"1\\n\";\n        } else {\n            cout << \"0\\n\";\n        }\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "236A",
-    "contestId": 236,
-    "index": "A",
-    "title": "Boy or Girl",
-    "emoji": "🚻",
-    "category": "Hash Sets / Counting",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 298654,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Those days, many boys use beautiful girls' photos as avatars in forums. So it is very hard to tell the gender of a user at the first glance.</p>\n      <p>Here is a method: if the number of distinct characters in one's user name is odd, then he is a male, otherwise she is a female.</p>\n      <p>You are given the string that denotes the user name, please help our hero to determine the gender of this user by his method.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains a non-empty string, that contains only lowercase English letters &mdash; the user name. The string doesn't contain more than $100$ letters.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>If the user is a female by our hero's method, print <code>CHAT WITH HER!</code>. If the user is a male, print <code>IGNORE HIM!</code>.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Count the distinct characters using a Set. If size is even: \"CHAT WITH HER!\". If odd: \"IGNORE HIM!\".</p>\n    ",
-    "starterCode": "/**\n * Problem: 236A - Boy or Girl\n * Language: C++ (C++20 / clang++)\n * Input: Username string\n * Output: \"CHAT WITH HER!\" if distinct character count is even, else \"IGNORE HIM!\"\n */\n#include <iostream>\n#include <string>\n#include <unordered_set>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s;\n    if (cin >> s) {\n        unordered_set<char> distinct(s.begin(), s.end());\n        if (distinct.size() % 2 == 0) {\n            cout << \"CHAT WITH HER!\\n\";\n        } else {\n            cout << \"IGNORE HIM!\\n\";\n        }\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    name = input_str.strip()\n    return \"CHAT WITH HER!\" if len(set(name)) % 2 == 0 else \"IGNORE HIM!\"\n",
-    "hints": [
-      "Use a Set or frequency array to count the number of unique characters.",
-      "Check whether `distinctCount % 2 === 0`.",
-      "Even -> 'CHAT WITH HER!', Odd -> 'IGNORE HIM!'."
-    ],
-    "explanation": "Insert all characters into a Set to filter duplicates. Check the parity of the set size: even corresponds to female ('CHAT WITH HER!'), odd to male ('IGNORE HIM!').",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: wjmzbmr (6 distinct letters)",
-        "description": "Official sample: {w, j, m, z, b, r} has 6 letters (even).",
-        "input": "wjmzbmr",
-        "expectedOutput": "CHAT WITH HER!"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: xiaodao (5 distinct letters)",
-        "description": "Official sample: {x, i, a, o, d} has 5 letters (odd).",
-        "input": "xiaodao",
-        "expectedOutput": "IGNORE HIM!"
-      },
-      {
-        "id": 3,
-        "title": "Sample Test 3: sevenkplus (8 distinct letters)",
-        "description": "Official sample: 8 distinct characters (even).",
-        "input": "sevenkplus",
-        "expectedOutput": "CHAT WITH HER!"
-      },
-      {
-        "id": 4,
-        "title": "Single Repeated Character",
-        "description": "'aaaaa' has only 1 unique letter (odd).",
-        "input": "aaaaa",
-        "expectedOutput": "IGNORE HIM!"
-      },
-      {
-        "id": 5,
-        "title": "Alphabet Subset (2 distinct)",
-        "description": "'ab' has 2 distinct letters (even).",
-        "input": "ab",
-        "expectedOutput": "CHAT WITH HER!"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 236A - Boy or Girl\n * Input: A single string with the username\n * Return: 'CHAT WITH HER!' if distinct chars is even, else 'IGNORE HIM!'\n */\nfunction solve(input) {\n  const username = input.trim();\n  const distinctLetters = new Set(username);\n  \n  if (distinctLetters.size % 2 === 0) {\n    return \"CHAT WITH HER!\";\n  } else {\n    return \"IGNORE HIM!\";\n  }\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 236A - Boy or Girl\n * Language: C++ (C++20 / clang++)\n * Input: Username string\n * Output: \"CHAT WITH HER!\" if distinct character count is even, else \"IGNORE HIM!\"\n */\n#include <iostream>\n#include <string>\n#include <unordered_set>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s;\n    if (cin >> s) {\n        unordered_set<char> distinct(s.begin(), s.end());\n        if (distinct.size() % 2 == 0) {\n            cout << \"CHAT WITH HER!\\n\";\n        } else {\n            cout << \"IGNORE HIM!\\n\";\n        }\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "339A",
@@ -592,8 +528,8 @@
     "inputSpecificationHtml": "\n      <p>The first line contains a non-empty string $s$ &mdash; the sum Xenia needs to count. String $s$ contains no spaces. It only contains digits and characters \"+\". The length of string $s$ cannot exceed $100$ characters.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Print the new sum that Xenia can count.</p>\n    ",
     "sampleNotesHtml": "\n      <p>Extract all numbers, sort them ascending, and join them back with '+'.</p>\n    ",
-    "starterCode": "/**\n * Problem: 339A - Helpful Maths\n * Language: C++ (C++20 / clang++)\n * Input: Expression string like \"3+2+1\"\n * Output: Non-decreasing ordered expression like \"1+2+3\"\n */\n#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s;\n    if (cin >> s) {\n        vector<char> nums;\n        for (char c : s) {\n            if (c != '+') nums.push_back(c);\n        }\n        sort(nums.begin(), nums.end());\n        for (size_t i = 0; i < nums.size(); i++) {\n            if (i > 0) cout << \"+\";\n            cout << nums[i];\n        }\n        cout << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    nums = sorted(input_str.strip().split('+'))\n    return '+'.join(nums)\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Split the input string by '+' to get an array of number strings.",
       "Sort the numbers in ascending order.",
@@ -637,264 +573,8 @@
         "expectedOutput": "3+3+3+3"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 339A - Helpful Maths\n * Input: String expression like \"3+2+1\"\n * Return: Sorted expression like \"1+2+3\"\n */\nfunction solve(input) {\n  const nums = input.trim().split('+').map(Number);\n  nums.sort((a, b) => a - b);\n  return nums.join('+');\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 339A - Helpful Maths\n * Language: C++ (C++20 / clang++)\n * Input: Expression string like \"3+2+1\"\n * Output: Non-decreasing ordered expression like \"1+2+3\"\n */\n#include <iostream>\n#include <string>\n#include <vector>\n#include <algorithm>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s;\n    if (cin >> s) {\n        vector<char> nums;\n        for (char c : s) {\n            if (c != '+') nums.push_back(c);\n        }\n        sort(nums.begin(), nums.end());\n        for (size_t i = 0; i < nums.size(); i++) {\n            if (i > 0) cout << \"+\";\n            cout << nums[i];\n        }\n        cout << \"\\n\";\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "281A",
-    "contestId": 281,
-    "index": "A",
-    "title": "Word Capitalization",
-    "emoji": "🔠",
-    "category": "Strings",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 285730,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Capitalization is writing a word with its first letter as a capital letter. Your task is to capitalize the given word.</p>\n      <p>Note, that during capitalization all the other letters remain unchanged.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>A single line contains a non-empty word consisting of lowercase and uppercase Latin letters. Its length will not exceed $10^3$.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Output the given word after capitalization.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Ensure the first character is uppercase, leave the rest of the string as is.</p>\n    ",
-    "starterCode": "/**\n * Problem: 281A - Word Capitalization\n * Language: C++ (C++20 / clang++)\n * Input: Single word\n * Output: Word with first character capitalized\n */\n#include <iostream>\n#include <string>\n#include <cctype>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s;\n    if (cin >> s) {\n        s[0] = toupper(s[0]);\n        cout << s << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    w = input_str.strip()\n    return w[0].upper() + w[1:] if w else \"\"\n",
-    "hints": [
-      "Access the first character word[0] and call .toUpperCase().",
-      "Append the rest of the string using word.slice(1).",
-      "Do NOT lowercase the rest of the letters; only uppercase the first letter!"
-    ],
-    "explanation": "Capitalize the first character using `word[0].toUpperCase()` and preserve `word.slice(1)`.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: Lowercase Word",
-        "description": "Official sample: 'ApPLe' -> 'ApPLe'.",
-        "input": "ApPLe",
-        "expectedOutput": "ApPLe"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: All Lowercase",
-        "description": "Official sample: 'konjac' -> 'Konjac'.",
-        "input": "konjac",
-        "expectedOutput": "Konjac"
-      },
-      {
-        "id": 3,
-        "title": "Single Lowercase Letter",
-        "description": "'z' -> 'Z'.",
-        "input": "z",
-        "expectedOutput": "Z"
-      },
-      {
-        "id": 4,
-        "title": "Already Capitalized Word",
-        "description": "'Codeforces' remains 'Codeforces'.",
-        "input": "Codeforces",
-        "expectedOutput": "Codeforces"
-      },
-      {
-        "id": 5,
-        "title": "All Uppercase Letters",
-        "description": "'HELLO' remains 'HELLO'.",
-        "input": "HELLO",
-        "expectedOutput": "HELLO"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 281A - Word Capitalization\n * Input: Single word\n * Return: Word with first character capitalized\n */\nfunction solve(input) {\n  const word = input.trim();\n  if (!word) return \"\";\n  return word[0].toUpperCase() + word.slice(1);\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 281A - Word Capitalization\n * Language: C++ (C++20 / clang++)\n * Input: Single word\n * Output: Word with first character capitalized\n */\n#include <iostream>\n#include <string>\n#include <cctype>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    string s;\n    if (cin >> s) {\n        s[0] = toupper(s[0]);\n        cout << s << \"\\n\";\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "791A",
-    "contestId": 791,
-    "index": "A",
-    "title": "Bear and Big Brother",
-    "emoji": "🐻",
-    "category": "Loops / Math",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 273222,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Bear Limak wants to become the largest of bears, or at least to become larger than his brother Bob.</p>\n      <p>Right now, Limak and Bob weigh $a$ and $b$ respectively. It's guaranteed that Limak's weight is smaller than or equal to his brother's weight.</p>\n      <p>Limak eats a lot and his weight is tripled after every year, while Bob's weight is doubled after every year.</p>\n      <p>After how many full years will Limak become <strong>strictly larger</strong> than Bob (that is, strictly more weight)?</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The only line of the input contains two integers $a$ and $b$ ($1 \\le a \\le b \\le 10$) &mdash; the initial weights of Limak and Bob respectively.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print one integer, denoting the integer number of years after which Limak will become strictly larger than Bob.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Year 1: Limak becomes $a \\times 3$, Bob becomes $b \\times 2$. Continue until Limak > Bob.</p>\n    ",
-    "starterCode": "/**\n * Problem: 791A - Bear and Big Brother\n * Language: C++ (C++20 / clang++)\n * Input: Limak weight a, Bob weight b\n * Output: Number of years until a > b (a triples each year, b doubles each year)\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int a, b;\n    if (cin >> a >> b) {\n        int years = 0;\n        while (a <= b) {\n            a *= 3;\n            b *= 2;\n            years++;\n        }\n        cout << years << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    a, b = map(int, input_str.strip().split())\n    years = 0\n    while a <= b:\n        a *= 3\n        b *= 2\n        years += 1\n    return str(years)\n",
-    "hints": [
-      "Use a simple while loop: condition `while (a <= b)`.",
-      "In each iteration, multiply a by 3 and b by 2, and increment years by 1.",
-      "Stop when a is strictly greater than b."
-    ],
-    "explanation": "Simulate year by year. Because $a$ triples and $b$ doubles, Limak's weight grows exponentially faster than Bob's, stopping within very few iterations ($< 10$).",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: 4 and 7",
-        "description": "Official sample: after 2 years Limak is 36, Bob is 28 (36 > 28).",
-        "input": "4 7",
-        "expectedOutput": "2"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: 4 and 9",
-        "description": "Official sample: after 3 years Limak is 108, Bob is 72.",
-        "input": "4 9",
-        "expectedOutput": "3"
-      },
-      {
-        "id": 3,
-        "title": "Sample Test 3: 1 and 1",
-        "description": "Official sample: identical initial weight, after 1 year 3 > 2.",
-        "input": "1 1",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 4,
-        "title": "Initial Weight: 1 and 10",
-        "description": "Maximum disparity for initial bounds.",
-        "input": "1 10",
-        "expectedOutput": "6"
-      },
-      {
-        "id": 5,
-        "title": "Same Weight Max: 10 and 10",
-        "description": "Both start at 10, after 1 year 30 > 20.",
-        "input": "10 10",
-        "expectedOutput": "1"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 791A - Bear and Big Brother\n * Input: \"a b\"\n * Return: Years until a > b (a triples each year, b doubles each year)\n */\nfunction solve(input) {\n  let [a, b] = input.trim().split(/\\s+/).map(Number);\n  let years = 0;\n  \n  while (a <= b) {\n    a *= 3;\n    b *= 2;\n    years++;\n  }\n  \n  return years.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 791A - Bear and Big Brother\n * Language: C++ (C++20 / clang++)\n * Input: Limak weight a, Bob weight b\n * Output: Number of years until a > b (a triples each year, b doubles each year)\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int a, b;\n    if (cin >> a >> b) {\n        int years = 0;\n        while (a <= b) {\n            a *= 3;\n            b *= 2;\n            years++;\n        }\n        cout << years << \"\\n\";\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "617A",
-    "contestId": 617,
-    "index": "A",
-    "title": "Elephant",
-    "emoji": "🐘",
-    "category": "Math / Greedy",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 266455,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>An elephant decided to visit his friend. It turned out that the elephant's house is located at point 0 and his friend's house is located at point $x$ ($x > 0$) of the coordinate line.</p>\n      <p>In one step the elephant can move 1, 2, 3, 4 or 5 positions forward. Determine, what is the minimum number of steps he need to make in order to reach his friend's house.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line of the input contains an integer $x$ ($1 \\le x \\le 1\\,000\\,000$) &mdash; the coordinate of the friend's house.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print the minimum number of steps that elephant needs to make to get from point 0 to point $x$.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>The greedy strategy is to make as many steps of length 5 as possible. Result is $\\lceil x / 5 \\rceil$.</p>\n    ",
-    "starterCode": "/**\n * Problem: 617A - Elephant\n * Language: C++ (C++20 / clang++)\n * Input: Target coordinate x\n * Output: Minimum steps of sizes {1, 2, 3, 4, 5}\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int x;\n    if (cin >> x) {\n        cout << (x + 4) / 5 << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "import math\n\ndef solve(input_str):\n    x = int(input_str.strip())\n    return str(math.ceil(x / 5))\n",
-    "hints": [
-      "To minimize steps, greedily take the largest step possible (length 5).",
-      "If the remaining distance is less than 5, you can cover it with a single step of size 1, 2, 3, or 4.",
-      "The formula is ceil(x / 5) or floor((x + 4) / 5)."
-    ],
-    "explanation": "Greedy choice: make as many size-5 steps as possible. If $x \\% 5 \\ne 0$, one more step of size $x \\% 5$ is needed. Total is $\\lceil x / 5 \\rceil$.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: Distance 5",
-        "description": "Official sample: 1 step of length 5.",
-        "input": "5",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: Distance 12",
-        "description": "Official sample: two steps of 5 and one step of 2 -> 3 steps.",
-        "input": "12",
-        "expectedOutput": "3"
-      },
-      {
-        "id": 3,
-        "title": "Distance 1",
-        "description": "1 step of size 1.",
-        "input": "1",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 4,
-        "title": "Multiple of 5: 100",
-        "description": "20 steps of size 5.",
-        "input": "100",
-        "expectedOutput": "20"
-      },
-      {
-        "id": 5,
-        "title": "Large Coordinate: 1,000,000",
-        "description": "1,000,000 / 5 = 200,000 steps.",
-        "input": "1000000",
-        "expectedOutput": "200000"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 617A - Elephant\n * Input: x (distance)\n * Return: Minimum steps of sizes {1, 2, 3, 4, 5}\n */\nfunction solve(input) {\n  const x = parseInt(input.trim(), 10);\n  return Math.ceil(x / 5).toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 617A - Elephant\n * Language: C++ (C++20 / clang++)\n * Input: Target coordinate x\n * Output: Minimum steps of sizes {1, 2, 3, 4, 5}\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int x;\n    if (cin >> x) {\n        cout << (x + 4) / 5 << \"\\n\";\n    }\n    return 0;\n}\n"
-  },
-  {
-    "id": "977A",
-    "contestId": 977,
-    "index": "A",
-    "title": "Wrong Subtraction",
-    "emoji": "➖",
-    "category": "Simulation / Math",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 230498,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Little girl Tanya is learning how to decrease a number by one, but she does it wrong with a number consisting of two or more digits. Tanya subtracts one from a number by the following algorithm:</p>\n      <ul>\n        <li>if the last digit of the number is non-zero, she decreases the number by one;</li>\n        <li>if the last digit of the number is zero, she divides the number by 10 (i.e. removes the last digit).</li>\n      </ul>\n      <p>You are given two integer numbers $n$ and $k$. Tanya will subtract one from $n$ $k$ times. Your task is to print the result after all $k$ subtractions.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line of the input contains two integer numbers $n$ and $k$ ($2 \\le n \\le 10^9$, $1 \\le k \\le 50$) &mdash; the initial number and the number of subtractions.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print one integer number &mdash; the result of the decreasing $n$ by one $k$ times.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>512 -> 511 -> 510 -> 51 -> 50. Total 4 steps for 512 with k=4 results in 50.</p>\n    ",
-    "starterCode": "/**\n * Problem: 977A - Wrong Subtraction\n * Language: C++ (C++20 / clang++)\n * Input: Number n and k operations\n * Output: Number after k steps of subtraction\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    long long n;\n    int k;\n    if (cin >> n >> k) {\n        while (k--) {\n            if (n % 10 == 0) {\n                n /= 10;\n            } else {\n                n--;\n            }\n        }\n        cout << n << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    n, k = map(int, input_str.strip().split())\n    for _ in range(k):\n        if n % 10 == 0:\n            n //= 10\n        else:\n            n -= 1\n    return str(n)\n",
-    "hints": [
-      "Simulate k steps in a loop.",
-      "Check the last digit: if n % 10 === 0, divide by 10 (Math.floor(n / 10)).",
-      "Otherwise, subtract 1 (n--)."
-    ],
-    "explanation": "Loop $k$ times. In each iteration, if $n$ ends with a zero ($n \\% 10 == 0$), integer divide $n$ by 10. Otherwise, decrease $n$ by 1.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: 512 with 4 steps",
-        "description": "Official sample 1: 512 -> 511 -> 510 -> 51 -> 50.",
-        "input": "512 4",
-        "expectedOutput": "50"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: 1000000000 with 9 steps",
-        "description": "Official sample 2: nine zero divisions removes all 9 zeroes, leaving 1.",
-        "input": "1000000000 9",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 3,
-        "title": "Single Step Non-Zero",
-        "description": "Single step on 42 gives 41.",
-        "input": "42 1",
-        "expectedOutput": "41"
-      },
-      {
-        "id": 4,
-        "title": "Single Step Ending in Zero",
-        "description": "Single step on 30 gives 3.",
-        "input": "30 1",
-        "expectedOutput": "3"
-      },
-      {
-        "id": 5,
-        "title": "Multiple Consecutive Decrements",
-        "description": "15 with 5 steps: 15 -> 14 -> 13 -> 12 -> 11 -> 10.",
-        "input": "15 5",
-        "expectedOutput": "10"
-      }
-    ],
-    "starterCodeJs": "/**\n * Problem: 977A - Wrong Subtraction\n * Input: \"n k\"\n * Return: Number after k steps of Tanya's subtraction\n */\nfunction solve(input) {\n  let [n, k] = input.trim().split(/\\s+/).map(Number);\n  \n  for (let i = 0; i < k; i++) {\n    if (n % 10 === 0) {\n      n = Math.floor(n / 10);\n    } else {\n      n--;\n    }\n  }\n  \n  return n.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 977A - Wrong Subtraction\n * Language: C++ (C++20 / clang++)\n * Input: Number n and k operations\n * Output: Number after k steps of subtraction\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    long long n;\n    int k;\n    if (cin >> n >> k) {\n        while (k--) {\n            if (n % 10 == 0) {\n                n /= 10;\n            } else {\n                n--;\n            }\n        }\n        cout << n << \"\\n\";\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "266A",
@@ -912,8 +592,8 @@
     "inputSpecificationHtml": "\n      <p>The first line contains integer $n$ ($1 \\le n \\le 50$) &mdash; the number of stones on the table.</p>\n      <p>The next line contains string $s$, which represents the colors of the stones. We'll consider the stones in the row numbered from 1 to $n$ from left to right. Then the $i$-th character $s$ equals \"R\", if the $i$-th stone is red, \"G\", if it's green and \"B\", if it's blue.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the minimum number of stones you need to remove.</p>\n    ",
     "sampleNotesHtml": "\n      <p>Whenever $s[i] == s[i-1]$, we must remove one stone. So count all adjacent pairs with identical colors.</p>\n    ",
-    "starterCode": "/**\n * Problem: 266A - Stones on the Table\n * Language: C++ (C++20 / clang++)\n * Input: n stones, string of colors\n * Output: Minimum removals so no two adjacent stones share color\n */\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    string s;\n    if (cin >> n >> s) {\n        int removals = 0;\n        for (int i = 1; i < n; i++) {\n            if (s[i] == s[i - 1]) {\n                removals++;\n            }\n        }\n        cout << removals << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    lines = [l.strip() for l in input_str.strip().split('\\n') if l.strip()]\n    n = int(lines[0])\n    s = lines[1]\n    return str(sum(1 for i in range(1, n) if s[i] == s[i-1]))\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "Any adjacent pair of identical colors violates the rule.",
       "Iterate from index 1 to n - 1.",
@@ -957,8 +637,136 @@
         "expectedOutput": "1"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 266A - Stones on the Table\n * Input:\n *   Line 1: n\n *   Line 2: string s of 'R', 'G', 'B'\n * Return: Count of adjacent identical pairs to remove\n */\nfunction solve(input) {\n  const lines = input.trim().split('\\n').map(l => l.trim()).filter(Boolean);\n  const n = parseInt(lines[0], 10);\n  const s = lines[1];\n  let removals = 0;\n  \n  for (let i = 1; i < n; i++) {\n    if (s[i] === s[i - 1]) {\n      removals++;\n    }\n  }\n  \n  return removals.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 266A - Stones on the Table\n * Language: C++ (C++20 / clang++)\n * Input: n stones, string of colors\n * Output: Minimum removals so no two adjacent stones share color\n */\n#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    int n;\n    string s;\n    if (cin >> n >> s) {\n        int removals = 0;\n        for (int i = 1; i < n; i++) {\n            if (s[i] == s[i - 1]) {\n                removals++;\n            }\n        }\n        cout << removals << \"\\n\";\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
+  },
+  {
+    "id": "236A",
+    "contestId": 236,
+    "index": "A",
+    "title": "Boy or Girl",
+    "emoji": "🚻",
+    "category": "Hash Sets / Counting",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 298654,
+    "timeLimit": "1.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "\n      <p>Those days, many boys use beautiful girls' photos as avatars in forums. So it is very hard to tell the gender of a user at the first glance.</p>\n      <p>Here is a method: if the number of distinct characters in one's user name is odd, then he is a male, otherwise she is a female.</p>\n      <p>You are given the string that denotes the user name, please help our hero to determine the gender of this user by his method.</p>\n    ",
+    "inputSpecificationHtml": "\n      <p>The first line contains a non-empty string, that contains only lowercase English letters &mdash; the user name. The string doesn't contain more than $100$ letters.</p>\n    ",
+    "outputSpecificationHtml": "\n      <p>If the user is a female by our hero's method, print <code>CHAT WITH HER!</code>. If the user is a male, print <code>IGNORE HIM!</code>.</p>\n    ",
+    "sampleNotesHtml": "\n      <p>Count the distinct characters using a Set. If size is even: \"CHAT WITH HER!\". If odd: \"IGNORE HIM!\".</p>\n    ",
+    "starterCode": "",
+    "starterCodePy": "",
+    "hints": [
+      "Use a Set or frequency array to count the number of unique characters.",
+      "Check whether `distinctCount % 2 === 0`.",
+      "Even -> 'CHAT WITH HER!', Odd -> 'IGNORE HIM!'."
+    ],
+    "explanation": "Insert all characters into a Set to filter duplicates. Check the parity of the set size: even corresponds to female ('CHAT WITH HER!'), odd to male ('IGNORE HIM!').",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1: wjmzbmr (6 distinct letters)",
+        "description": "Official sample: {w, j, m, z, b, r} has 6 letters (even).",
+        "input": "wjmzbmr",
+        "expectedOutput": "CHAT WITH HER!"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2: xiaodao (5 distinct letters)",
+        "description": "Official sample: {x, i, a, o, d} has 5 letters (odd).",
+        "input": "xiaodao",
+        "expectedOutput": "IGNORE HIM!"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3: sevenkplus (8 distinct letters)",
+        "description": "Official sample: 8 distinct characters (even).",
+        "input": "sevenkplus",
+        "expectedOutput": "CHAT WITH HER!"
+      },
+      {
+        "id": 4,
+        "title": "Single Repeated Character",
+        "description": "'aaaaa' has only 1 unique letter (odd).",
+        "input": "aaaaa",
+        "expectedOutput": "IGNORE HIM!"
+      },
+      {
+        "id": 5,
+        "title": "Alphabet Subset (2 distinct)",
+        "description": "'ab' has 2 distinct letters (even).",
+        "input": "ab",
+        "expectedOutput": "CHAT WITH HER!"
+      }
+    ],
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
+  },
+  {
+    "id": "977A",
+    "contestId": 977,
+    "index": "A",
+    "title": "Wrong Subtraction",
+    "emoji": "➖",
+    "category": "Simulation / Math",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 230498,
+    "timeLimit": "1.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "\n      <p>Little girl Tanya is learning how to decrease a number by one, but she does it wrong with a number consisting of two or more digits. Tanya subtracts one from a number by the following algorithm:</p>\n      <ul>\n        <li>if the last digit of the number is non-zero, she decreases the number by one;</li>\n        <li>if the last digit of the number is zero, she divides the number by 10 (i.e. removes the last digit).</li>\n      </ul>\n      <p>You are given two integer numbers $n$ and $k$. Tanya will subtract one from $n$ $k$ times. Your task is to print the result after all $k$ subtractions.</p>\n    ",
+    "inputSpecificationHtml": "\n      <p>The first line of the input contains two integer numbers $n$ and $k$ ($2 \\le n \\le 10^9$, $1 \\le k \\le 50$) &mdash; the initial number and the number of subtractions.</p>\n    ",
+    "outputSpecificationHtml": "\n      <p>Print one integer number &mdash; the result of the decreasing $n$ by one $k$ times.</p>\n    ",
+    "sampleNotesHtml": "\n      <p>512 -> 511 -> 510 -> 51 -> 50. Total 4 steps for 512 with k=4 results in 50.</p>\n    ",
+    "starterCode": "",
+    "starterCodePy": "",
+    "hints": [
+      "Simulate k steps in a loop.",
+      "Check the last digit: if n % 10 === 0, divide by 10 (Math.floor(n / 10)).",
+      "Otherwise, subtract 1 (n--)."
+    ],
+    "explanation": "Loop $k$ times. In each iteration, if $n$ ends with a zero ($n \\% 10 == 0$), integer divide $n$ by 10. Otherwise, decrease $n$ by 1.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1: 512 with 4 steps",
+        "description": "Official sample 1: 512 -> 511 -> 510 -> 51 -> 50.",
+        "input": "512 4",
+        "expectedOutput": "50"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2: 1000000000 with 9 steps",
+        "description": "Official sample 2: nine zero divisions removes all 9 zeroes, leaving 1.",
+        "input": "1000000000 9",
+        "expectedOutput": "1"
+      },
+      {
+        "id": 3,
+        "title": "Single Step Non-Zero",
+        "description": "Single step on 42 gives 41.",
+        "input": "42 1",
+        "expectedOutput": "41"
+      },
+      {
+        "id": 4,
+        "title": "Single Step Ending in Zero",
+        "description": "Single step on 30 gives 3.",
+        "input": "30 1",
+        "expectedOutput": "3"
+      },
+      {
+        "id": 5,
+        "title": "Multiple Consecutive Decrements",
+        "description": "15 with 5 steps: 15 -> 14 -> 13 -> 12 -> 11 -> 10.",
+        "input": "15 5",
+        "expectedOutput": "10"
+      }
+    ],
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
   },
   {
     "id": "546A",
@@ -976,8 +784,8 @@
     "inputSpecificationHtml": "\n      <p>The first line contains three positive integers $k, n, w$ ($1 \\le k, w \\le 1000$, $0 \\le n \\le 10^9$) &mdash; the cost of the first banana, initial number of dollars the soldier has and number of bananas he wants.</p>\n    ",
     "outputSpecificationHtml": "\n      <p>Output one integer &mdash; the amount of dollars that the soldier must borrow from his friend. If he doesn't have to borrow money, output <code>0</code>.</p>\n    ",
     "sampleNotesHtml": "\n      <p>Total cost is $k \\times (1 + 2 + \\dots + w) = k \\times \\frac{w(w+1)}{2}$. Borrow amount is $\\max(0, \\text{totalCost} - n)$.</p>\n    ",
-    "starterCode": "/**\n * Problem: 546A - Soldier and Bananas\n * Language: C++ (C++20 / clang++)\n * Input: Cost of 1st banana k, money n, bananas to buy w\n * Output: Dollars soldier needs to borrow (or 0 if sufficient)\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    long long k, n, w;\n    if (cin >> k >> n >> w) {\n        long long total = k * (w * (w + 1) / 2);\n        long long borrow = total - n;\n        if (borrow < 0) borrow = 0;\n        cout << borrow << \"\\n\";\n    }\n    return 0;\n}\n",
-    "starterCodePy": "def solve(input_str):\n    k, n, w = map(int, input_str.strip().split())\n    total_cost = k * w * (w + 1) // 2\n    return str(max(0, total_cost - n))\n",
+    "starterCode": "",
+    "starterCodePy": "",
     "hints": [
       "The sum of numbers from 1 to w is w * (w + 1) / 2.",
       "The total cost is k * w * (w + 1) / 2.",
@@ -1021,7 +829,327 @@
         "expectedOutput": "5"
       }
     ],
-    "starterCodeJs": "/**\n * Problem: 546A - Soldier and Bananas\n * Input: \"k n w\"\n * Return: Dollars soldier must borrow (or 0 if has enough)\n */\nfunction solve(input) {\n  const [k, n, w] = input.trim().split(/\\s+/).map(Number);\n  const totalCost = k * (w * (w + 1)) / 2;\n  const borrow = Math.max(0, totalCost - n);\n  return borrow.toString();\n}\n",
-    "starterCodeCpp": "/**\n * Problem: 546A - Soldier and Bananas\n * Language: C++ (C++20 / clang++)\n * Input: Cost of 1st banana k, money n, bananas to buy w\n * Output: Dollars soldier needs to borrow (or 0 if sufficient)\n */\n#include <iostream>\n\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n\n    long long k, n, w;\n    if (cin >> k >> n >> w) {\n        long long total = k * (w * (w + 1) / 2);\n        long long borrow = total - n;\n        if (borrow < 0) borrow = 0;\n        cout << borrow << \"\\n\";\n    }\n    return 0;\n}\n"
+    "starterCodeJs": "",
+    "starterCodeCpp": ""
+  },
+  {
+    "id": "116A",
+    "contestId": 116,
+    "index": "A",
+    "title": "Tram",
+    "emoji": "🚊",
+    "category": "Simulation",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 420000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>Linear tram route has $n$ stops. At each stop $i$, $a_i$ passengers get off and $b_i$ passengers get on the tram. Find the minimum possible tram capacity such that the number of passengers inside never exceeds capacity.</p>",
+    "inputSpecificationHtml": "<p>The first line contains an integer $n$ ($2 \\le n \\le 1000$). The next $n$ lines contain pairs of integers $a_i$ and $b_i$ ($0 \\le a_i, b_i \\le 1000$).</p>",
+    "outputSpecificationHtml": "<p>Print a single integer &mdash; the minimum capacity of the tram.</p>",
+    "sampleNotesHtml": "<p>At the 2nd stop, 2 people exit and 5 enter, giving 6 people in the tram, which is the maximum throughout the route.</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Maintain a running passenger counter starting from 0.",
+      "At each stop: current = current - a_i + b_i.",
+      "Track the maximum value of current throughout the simulation."
+    ],
+    "explanation": "Simulate the passenger count stop by stop. Since the tram starts empty, count = 0. For each stop i, subtract exiting passengers a_i and add entering passengers b_i. The required capacity is max(count) across all stops.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: 4 stops",
+        "description": "Official sample test case.",
+        "input": "4\n0 3\n2 5\n4 2\n4 0",
+        "expectedOutput": "6"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: Simple 2 stops",
+        "description": "Single load and unload.",
+        "input": "2\n0 5\n5 0",
+        "expectedOutput": "5"
+      },
+      {
+        "id": 3,
+        "title": "Sample 3: 3 stops constant 1",
+        "description": "One person swaps at middle stop.",
+        "input": "3\n0 1\n1 1\n1 0",
+        "expectedOutput": "1"
+      }
+    ]
+  },
+  {
+    "id": "59A",
+    "contestId": 59,
+    "index": "A",
+    "title": "Word",
+    "emoji": "🔤",
+    "category": "Strings",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 460000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>Vasya is very upset because he often mixes up uppercase and lowercase letters. Given a word $s$, change the case so that either all letters are lowercase or all are uppercase. Choose the case that requires the minimum changes. If the counts are equal, prefer lowercase.</p>",
+    "inputSpecificationHtml": "<p>The first line contains word $s$, consisting of uppercase and lowercase Latin letters ($1 \\le |s| \\le 100$).</p>",
+    "outputSpecificationHtml": "<p>Print the corrected word $s$.</p>",
+    "sampleNotesHtml": "<p>In HoUse, 2 uppercase and 3 lowercase, so convert all to lowercase: house.</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Count uppercase letters and lowercase letters.",
+      "If uppercase > lowercase, convert entire string to uppercase.",
+      "Else (lowercase >= uppercase), convert entire string to lowercase."
+    ],
+    "explanation": "Loop through the string and count how many characters are uppercase vs lowercase. If uppercase count is strictly greater than lowercase count, convert all characters to uppercase. Otherwise, convert to lowercase.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: HoUse",
+        "description": "More lowercase letters.",
+        "input": "HoUse",
+        "expectedOutput": "house"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: ViP",
+        "description": "More uppercase letters.",
+        "input": "ViP",
+        "expectedOutput": "VIP"
+      },
+      {
+        "id": 3,
+        "title": "Sample 3: maTRIx",
+        "description": "Equal count (3 and 3), prefer lowercase.",
+        "input": "maTRIx",
+        "expectedOutput": "matrix"
+      }
+    ]
+  },
+  {
+    "id": "69A",
+    "contestId": 69,
+    "index": "A",
+    "title": "Young Physicist",
+    "emoji": "⚛️",
+    "category": "Math / Simulation",
+    "type": "exercise",
+    "rating": 1000,
+    "solvedCount": 490000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>A body is at rest if the vector sum of all forces applied to it equals zero. Given $n$ force vectors $(x_i, y_i, z_i)$, determine whether the body is in static equilibrium.</p>",
+    "inputSpecificationHtml": "<p>The first line contains an integer $n$ ($1 \\le n \\le 100$). The next $n$ lines each contain three integers $x_i, y_i, z_i$ ($-100 \\le x_i, y_i, z_i \\le 100$).</p>",
+    "outputSpecificationHtml": "<p>Print <code>YES</code> if the body is in equilibrium, otherwise print <code>NO</code>.</p>",
+    "sampleNotesHtml": "<p>Check sum(x) == 0 && sum(y) == 0 && sum(z) == 0.</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Keep three separate accumulators: sumX, sumY, sumZ.",
+      "For equilibrium, ALL THREE sums must equal zero simultaneously."
+    ],
+    "explanation": "Add up all the x coordinates, y coordinates, and z coordinates independently. If sumX == 0 and sumY == 0 and sumZ == 0, output YES, otherwise output NO.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: Unequal forces",
+        "description": "Vector sum does not equal zero.",
+        "input": "3\n4 1 7\n-2 4 -1\n1 -5 -3",
+        "expectedOutput": "NO"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: Equilibrium forces",
+        "description": "Vector sums equal zero on all 3 axes.",
+        "input": "3\n3 -1 7\n-5 2 -4\n2 -1 -3",
+        "expectedOutput": "YES"
+      }
+    ]
+  },
+  {
+    "id": "266B",
+    "contestId": 266,
+    "index": "B",
+    "title": "Queue at the School",
+    "emoji": "🚶",
+    "category": "Simulation",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 410000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>During recess children stand in a queue. If a boy is standing immediately before a girl, he will let the girl swap positions with him in one second. Given queue string and time $t$, determine the queue state after $t$ seconds.</p>",
+    "inputSpecificationHtml": "<p>The first line contains integers $n$ and $t$ ($1 \\le n, t \\le 50$). The second line contains string $s$ of length $n$ with characters <code>B</code> (boy) and <code>G</code> (girl).</p>",
+    "outputSpecificationHtml": "<p>Print the string representing the queue after $t$ seconds.</p>",
+    "sampleNotesHtml": "<p>In 1 second, BG turns into GB.</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Simulate t rounds.",
+      "In each round, iterate through the string and whenever s[i] == \"B\" and s[i+1] == \"G\", swap them and skip the next index so you don\"t move the boy twice in one second."
+    ],
+    "explanation": "For each second from 1 to t, traverse the string. Whenever you encounter s[i] == \"B\" and s[i+1] == \"G\", swap them to s[i] = \"G\" and s[i+1] = \"B\", then increment i by 1 extra to avoid moving the same child again in the same second.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: 5 children 1 second",
+        "description": "One round of swapping.",
+        "input": "5 1\nBGGBG",
+        "expectedOutput": "GBGGB"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: 5 children 2 seconds",
+        "description": "Two rounds of swapping.",
+        "input": "5 2\nBGGBG",
+        "expectedOutput": "GGBGB"
+      },
+      {
+        "id": 3,
+        "title": "Sample 3: All girls and one boy at end",
+        "description": "No swaps possible.",
+        "input": "4 1\nGGGB",
+        "expectedOutput": "GGGB"
+      }
+    ]
+  },
+  {
+    "id": "160A",
+    "contestId": 160,
+    "index": "A",
+    "title": "Twins",
+    "emoji": "🪙",
+    "category": "Greedy / Sorting",
+    "type": "exercise",
+    "rating": 900,
+    "solvedCount": 450000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>You have $n$ coins with values $a_1, a_2, \\dots, a_n$. Find the minimum number of coins to take such that the total sum of your coins is strictly greater than the sum of the remaining coins.</p>",
+    "inputSpecificationHtml": "<p>The first line contains integer $n$ ($1 \\le n \\le 100$). The second line contains $n$ integers $a_i$ ($1 \\le a_i \\le 100$).</p>",
+    "outputSpecificationHtml": "<p>Print the minimum number of coins needed.</p>",
+    "sampleNotesHtml": "<p>Taking coins 3 and 3 gives sum 6 > 0 (taking 1 coin gives 3 which is not strictly greater than 3).</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Calculate total sum of all coins.",
+      "Sort the coins in descending order.",
+      "Greedily pick the largest coin until your accumulated sum > total / 2."
+    ],
+    "explanation": "To minimize the count of coins taken while maximizing their sum, greedily choose the largest values first. Sort the array in non-increasing order. Keep taking coins until your sum strictly exceeds half the total sum.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: Two equal coins",
+        "description": "Must take both coins for strictly greater sum.",
+        "input": "2\n3 3",
+        "expectedOutput": "2"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: Three coins 2 1 2",
+        "description": "Taking two 2s gives 4 > 1.",
+        "input": "3\n2 1 2",
+        "expectedOutput": "2"
+      }
+    ]
+  },
+  {
+    "id": "520A",
+    "contestId": 520,
+    "index": "A",
+    "title": "Pangram",
+    "emoji": "🔤",
+    "category": "Strings",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 430000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>A word or a sentence in some language is called a pangram if all the characters of the alphabet of this language appear in it at least once. Given a string, determine whether it is a pangram.</p>",
+    "inputSpecificationHtml": "<p>The first line contains an integer $n$ ($1 \\le n \\le 100$). The second line contains string $s$ consisting of uppercase and lowercase Latin letters.</p>",
+    "outputSpecificationHtml": "<p>Print <code>YES</code> if the string is a pangram, otherwise print <code>NO</code>.</p>",
+    "sampleNotesHtml": "<p>There are 26 letters in the English alphabet.</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Convert the string to lowercase.",
+      "Collect all unique letters in a set.",
+      "If the set size is 26, it is a pangram."
+    ],
+    "explanation": "Convert the string to lowercase and insert all letters into a set (or boolean frequency array of size 26). If the set has size 26, answer YES, otherwise NO.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: Too short",
+        "description": "Only 12 letters.",
+        "input": "12\ntoosmallword",
+        "expectedOutput": "NO"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: Classic pangram",
+        "description": "Contains all 26 English letters.",
+        "input": "35\nTheQuickBrownFoxJumpsOverTheLazyDog",
+        "expectedOutput": "YES"
+      }
+    ]
+  },
+  {
+    "id": "580A",
+    "contestId": 580,
+    "index": "A",
+    "title": "Kefa and First Steps",
+    "emoji": "📈",
+    "category": "Implementation / DP",
+    "type": "exercise",
+    "rating": 900,
+    "solvedCount": 460000,
+    "timeLimit": "2.0s",
+    "memoryLimit": "256MB",
+    "descriptionHtml": "<p>Kefa wants to celebrate his first progress in competitive programming. Given an array of $n$ numbers, find the length of the maximum non-decreasing contiguous subsegment.</p>",
+    "inputSpecificationHtml": "<p>The first line contains integer $n$ ($1 \\le n \\le 10^5$). The second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^9$).</p>",
+    "outputSpecificationHtml": "<p>Print a single integer &mdash; the maximum length of a non-decreasing contiguous subsegment.</p>",
+    "sampleNotesHtml": "<p>Subsegment [1, 3, 4] has length 3 and is non-decreasing.</p>",
+    "starterCode": "",
+    "starterCodeCpp": "",
+    "starterCodeJs": "",
+    "starterCodePy": "",
+    "hints": [
+      "Maintain curLen = 1 and maxLen = 1.",
+      "Iterate from index 1 to n-1: if a[i] >= a[i-1], curLen++, else curLen = 1.",
+      "Update maxLen = max(maxLen, curLen)."
+    ],
+    "explanation": "Loop through the array starting from the second element. If the current number is greater than or equal to the previous number, increment the current streak length. Otherwise, reset the streak length to 1. The answer is the maximum streak encountered.",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample 1: 6 elements",
+        "description": "Subsegment 1, 3, 4 has length 3.",
+        "input": "6\n2 2 1 3 4 1",
+        "expectedOutput": "3"
+      },
+      {
+        "id": 2,
+        "title": "Sample 2: Already non-decreasing",
+        "description": "All 3 elements form one subsegment.",
+        "input": "3\n2 2 9",
+        "expectedOutput": "3"
+      }
+    ]
   }
 ]

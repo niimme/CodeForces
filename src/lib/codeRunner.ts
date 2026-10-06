@@ -39,17 +39,19 @@ export function normalizeOutput(output: string): string {
 }
 
 /**
- * Runs C++ code through the backend compiler & execution sandbox (/api/run-cpp).
+ * Runs code through the backend compilation & execution sandbox (/api/run-code).
+ * Supports C++, C, Kotlin, Python, and JavaScript.
  */
-export async function runCppTestCases(
+export async function runBackendTestCases(
   userCode: string,
-  testCases: TestCase[]
+  testCases: TestCase[],
+  language: string = 'cpp'
 ): Promise<ExecutionSummary> {
   try {
-    const res = await fetch('/api/run-cpp', {
+    const res = await fetch('/api/run-code', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: userCode, testCases }),
+      body: JSON.stringify({ code: userCode, testCases, language }),
     });
 
     if (!res.ok) {
@@ -59,18 +61,18 @@ export async function runCppTestCases(
 
     return (await res.json()) as ExecutionSummary;
   } catch (err: any) {
-    console.error('C++ execution error:', err);
+    console.error(`${language} execution error:`, err);
     return {
       allPassed: false,
       passedCount: 0,
       totalCount: testCases.length,
       totalTimeMs: 0,
-      compilationError: err.message || 'Failed to connect to C++ runner',
+      compilationError: err.message || `Failed to connect to ${language} runner`,
       results: testCases.map(tc => ({
         testCaseId: tc.id,
         title: tc.title,
         passed: false,
-        actualOutput: `Error executing C++ program: ${err.message || String(err)}`,
+        actualOutput: `Error executing ${language.toUpperCase()} program: ${err.message || String(err)}`,
         expectedOutput: tc.expectedOutput,
         input: tc.input,
         executionTimeMs: 0,
@@ -81,6 +83,10 @@ export async function runCppTestCases(
     };
   }
 }
+
+// Backward-compatibility alias
+export const runCppTestCases = (userCode: string, testCases: TestCase[]) =>
+  runBackendTestCases(userCode, testCases, 'cpp');
 
 /**
  * Safely runs JavaScript in the browser sandbox.
@@ -192,7 +198,7 @@ export async function runJsTestCases(
 }
 
 /**
- * Universal runner dispatching to C++ (default) or JavaScript.
+ * Universal runner dispatching C++, C, Kotlin, Python, and JavaScript.
  */
 export async function runTestCases(
   userCode: string,
@@ -200,9 +206,7 @@ export async function runTestCases(
   language: string = 'cpp'
 ): Promise<ExecutionSummary> {
   const normLang = language.toLowerCase();
-  if (normLang.includes('js') || normLang.includes('javascript')) {
-    return runJsTestCases(userCode, testCases);
-  }
-  // Default to C++
-  return runCppTestCases(userCode, testCases);
+  // Try backend sandbox first for reliable process execution across all languages
+  return runBackendTestCases(userCode, testCases, normLang);
 }
+

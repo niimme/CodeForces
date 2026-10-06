@@ -15,11 +15,11 @@ export const LearningPath: React.FC<LearningPathProps> = ({
   userProgress,
   onUpdateProgress,
 }) => {
-  // Generate learning nodes strictly for coding exercises
+  // Generate learning nodes strictly for the exact 20 exercises
   const completedSet = new Set(userProgress.completedProblemIds.map(id => id.toUpperCase()));
 
   const nodes: LearningPathNode[] = [
-    // --- CHAPTER 1 ---
+    // --- CHAPTER 1: LOGIC & LOOPS (5 exercises) ---
     {
       id: 'node_4A',
       type: 'exercise',
@@ -53,19 +53,6 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       duration: '800 Rating',
       completed: completedSet.has('231A'),
     },
-
-    // --- CHAPTER 2 ---
-    {
-      id: 'node_282A',
-      type: 'exercise',
-      problemId: '282A',
-      title: '282A. Bit++',
-      subtitle: 'Variable mutation simulation • Implementation',
-      emoji: '💻',
-      badgeLabel: '📝 Exercise',
-      duration: '800 Rating',
-      completed: completedSet.has('282A'),
-    },
     {
       id: 'node_158A',
       type: 'exercise',
@@ -81,26 +68,26 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       id: 'node_50A',
       type: 'exercise',
       problemId: '50A',
-      title: '50A. Domino piling',
+      title: '50A. Domino Piling',
       subtitle: '2x1 tiling on rectangular boards • Math / Geometry',
       emoji: '🁓',
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
       completed: completedSet.has('50A'),
     },
+
+    // --- CHAPTER 2: SIMULATION & STATE (5 exercises) ---
     {
-      id: 'node_263A',
+      id: 'node_282A',
       type: 'exercise',
-      problemId: '263A',
-      title: '263A. Beautiful Matrix',
-      subtitle: 'Manhattan distance centering • 2D Matrices',
-      emoji: '🔲',
+      problemId: '282A',
+      title: '282A. Bit',
+      subtitle: 'Variable mutation simulation • Implementation',
+      emoji: '💻',
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
-      completed: completedSet.has('263A'),
+      completed: completedSet.has('282A'),
     },
-
-    // --- CHAPTER 3 ---
     {
       id: 'node_112A',
       type: 'exercise',
@@ -113,15 +100,15 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       completed: completedSet.has('112A'),
     },
     {
-      id: 'node_236A',
+      id: 'node_263A',
       type: 'exercise',
-      problemId: '236A',
-      title: '236A. Boy or Girl',
-      subtitle: 'Distinct character frequency • Hash Sets',
-      emoji: '🚻',
+      problemId: '263A',
+      title: '263A. Beautiful Matrix',
+      subtitle: 'Manhattan distance centering • 2D Matrices',
+      emoji: '🔲',
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
-      completed: completedSet.has('236A'),
+      completed: completedSet.has('263A'),
     },
     {
       id: 'node_339A',
@@ -135,39 +122,28 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       completed: completedSet.has('339A'),
     },
     {
-      id: 'node_281A',
+      id: 'node_266A',
       type: 'exercise',
-      problemId: '281A',
-      title: '281A. Word Capitalization',
-      subtitle: 'ASCII casing manipulation • String slicing',
-      emoji: '🔠',
+      problemId: '266A',
+      title: '266A. Stones on the Table',
+      subtitle: 'Adjacent duplicate filtering • Greedy',
+      emoji: '💎',
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
-      completed: completedSet.has('281A'),
+      completed: completedSet.has('266A'),
     },
 
-    // --- CHAPTER 4 ---
+    // --- CHAPTER 3: STRINGS, LOGIC & ARITHMETIC (5 exercises) ---
     {
-      id: 'node_791A',
+      id: 'node_236A',
       type: 'exercise',
-      problemId: '791A',
-      title: '791A. Bear and Big Brother',
-      subtitle: 'Exponential growth simulation • Loops',
-      emoji: '🐻',
+      problemId: '236A',
+      title: '236A. Boy or Girl',
+      subtitle: 'Distinct character frequency • Hash Sets',
+      emoji: '🚻',
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
-      completed: completedSet.has('791A'),
-    },
-    {
-      id: 'node_617A',
-      type: 'exercise',
-      problemId: '617A',
-      title: '617A. Elephant',
-      subtitle: 'Greedy jump sizes • Modular arithmetic',
-      emoji: '🐘',
-      badgeLabel: '📝 Exercise',
-      duration: '800 Rating',
-      completed: completedSet.has('617A'),
+      completed: completedSet.has('236A'),
     },
     {
       id: 'node_977A',
@@ -181,17 +157,6 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       completed: completedSet.has('977A'),
     },
     {
-      id: 'node_266A',
-      type: 'exercise',
-      problemId: '266A',
-      title: '266A. Stones on the Table',
-      subtitle: 'Adjacent duplicate filtering • Greedy',
-      emoji: '💎',
-      badgeLabel: '📝 Exercise',
-      duration: '800 Rating',
-      completed: completedSet.has('266A'),
-    },
-    {
       id: 'node_546A',
       type: 'exercise',
       problemId: '546A',
@@ -201,6 +166,85 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
       completed: completedSet.has('546A'),
+    },
+    {
+      id: 'node_116A',
+      type: 'exercise',
+      problemId: '116A',
+      title: '116A. Tram',
+      subtitle: 'Passenger load tracking • Peak Capacity',
+      emoji: '🚊',
+      badgeLabel: '📝 Exercise',
+      duration: '800 Rating',
+      completed: completedSet.has('116A'),
+    },
+    {
+      id: 'node_59A',
+      type: 'exercise',
+      problemId: '59A',
+      title: '59A. Word',
+      subtitle: 'Uppercase vs lowercase casing conversion',
+      emoji: '🔤',
+      badgeLabel: '📝 Exercise',
+      duration: '800 Rating',
+      completed: completedSet.has('59A'),
+    },
+
+    // --- CHAPTER 4: VECTORS, QUEUES & GREEDY SEQUENCES (5 exercises) ---
+    {
+      id: 'node_69A',
+      type: 'exercise',
+      problemId: '69A',
+      title: '69A. Young Physicist',
+      subtitle: '3D vector equilibrium check • Math',
+      emoji: '⚛️',
+      badgeLabel: '📝 Exercise',
+      duration: '1000 Rating',
+      completed: completedSet.has('69A'),
+    },
+    {
+      id: 'node_266B',
+      type: 'exercise',
+      problemId: '266B',
+      title: '266B. Queue at the School',
+      subtitle: 'Discrete time queue swap simulation',
+      emoji: '🚶',
+      badgeLabel: '📝 Exercise',
+      duration: '800 Rating',
+      completed: completedSet.has('266B'),
+    },
+    {
+      id: 'node_160A',
+      type: 'exercise',
+      problemId: '160A',
+      title: '160A. Twins',
+      subtitle: 'Greedy coin sum strictly greater than half',
+      emoji: '🪙',
+      badgeLabel: '📝 Exercise',
+      duration: '900 Rating',
+      completed: completedSet.has('160A'),
+    },
+    {
+      id: 'node_520A',
+      type: 'exercise',
+      problemId: '520A',
+      title: '520A. Pangram',
+      subtitle: 'English alphabet coverage verification',
+      emoji: '🔤',
+      badgeLabel: '📝 Exercise',
+      duration: '800 Rating',
+      completed: completedSet.has('520A'),
+    },
+    {
+      id: 'node_580A',
+      type: 'exercise',
+      problemId: '580A',
+      title: '580A. Kefa and First Steps',
+      subtitle: 'Longest non-decreasing subsegment • Dynamic Programming',
+      emoji: '📈',
+      badgeLabel: '📝 Exercise',
+      duration: '900 Rating',
+      completed: completedSet.has('580A'),
     },
   ];
 
@@ -221,7 +265,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({
               </div>
             </div>
           );
-        } else if (index === 3) {
+        } else if (index === 5) {
           chapterHeader = (
             <div className="chapter-marker" key="chap_2" id="chapter-2">
               <div className="chapter-pill">
@@ -230,21 +274,21 @@ export const LearningPath: React.FC<LearningPathProps> = ({
               </div>
             </div>
           );
-        } else if (index === 7) {
+        } else if (index === 10) {
           chapterHeader = (
             <div className="chapter-marker" key="chap_3" id="chapter-3">
               <div className="chapter-pill">
                 <span>🔤</span>
-                <span>Chapter 3: String Mastery & Sets</span>
+                <span>Chapter 3: String Mastery & Logic</span>
               </div>
             </div>
           );
-        } else if (index === 11) {
+        } else if (index === 15) {
           chapterHeader = (
             <div className="chapter-marker" key="chap_4" id="chapter-4">
               <div className="chapter-pill">
                 <span>🎯</span>
-                <span>Chapter 4: Greedy Choices & Arithmetic</span>
+                <span>Chapter 4: Vectors, Queues & Greedy Sequences</span>
               </div>
             </div>
           );

@@ -32,13 +32,6 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
-  // Email/Password state
-  const [isRegisterMode, setIsRegisterMode] = useState(false);
-  const [emailInput, setEmailInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  const [regHandleInput, setRegHandleInput] = useState('');
-  const [authSuccessMsg, setAuthSuccessMsg] = useState<string | null>(null);
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -132,34 +125,6 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
     }
   };
 
-  const handleCredentialsAuth = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginError(null);
-    setAuthSuccessMsg(null);
-
-    if (isRegisterMode) {
-      const res = registerAccount(emailInput, passwordInput, regHandleInput);
-      if (res.success && res.user) {
-        onUpdateProgress(res.user);
-        setShowLoginModal(false);
-        setEmailInput('');
-        setPasswordInput('');
-        setRegHandleInput('');
-      } else {
-        setLoginError(res.error || 'Registration failed.');
-      }
-    } else {
-      const res = loginWithCredentials(emailInput, passwordInput);
-      if (res.success && res.user) {
-        onUpdateProgress(res.user);
-        setShowLoginModal(false);
-        setEmailInput('');
-        setPasswordInput('');
-      } else {
-        setLoginError(res.error || 'Invalid email or password.');
-      }
-    }
-  };
 
   const handleQuickDemo = (key: string) => {
     if (DEMO_PROFILES[key]) {
@@ -273,7 +238,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
             <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '10px', textAlign: 'center' }}>
               <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>Solved</div>
               <div style={{ fontSize: '16px', fontWeight: 800, color: '#059669', marginTop: '2px' }}>
-                {progress.completedProblemIds.length} / 16
+                {progress.completedProblemIds.length} / 20
               </div>
             </div>
           </div>
@@ -478,7 +443,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
               id="btn-primary-sign-in"
             >
               <span>🔑</span>
-              <span>Sign In / Connect CF</span>
+              <span>Connect Codeforces Handle</span>
             </button>
 
             <Link
@@ -491,7 +456,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
                 fontWeight: 600,
               }}
             >
-              Open Full Login Page &rarr;
+              Open Handle Connect Page &rarr;
             </Link>
           </div>
         )}
@@ -562,10 +527,10 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
                   </div>
                   <div>
                     <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                      Account Authentication
+                      Connect Codeforces Handle
                     </h3>
                     <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0' }}>
-                      Sign in with Codeforces or credentials
+                      Sync your rating, rank, and solved problems
                     </p>
                   </div>
                 </div>
@@ -591,86 +556,6 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
                 </button>
               </div>
 
-              {/* Login Method Tabs */}
-              <div
-                style={{
-                  display: 'flex',
-                  background: '#f1f5f9',
-                  borderRadius: '12px',
-                  padding: '3px',
-                  marginBottom: '18px',
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginTab('cf');
-                    setLoginError(null);
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '8px 10px',
-                    borderRadius: '9px',
-                    border: 'none',
-                    fontSize: '12px',
-                    fontWeight: loginTab === 'cf' ? 800 : 600,
-                    color: loginTab === 'cf' ? '#2563eb' : '#64748b',
-                    background: loginTab === 'cf' ? '#ffffff' : 'transparent',
-                    boxShadow: loginTab === 'cf' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  Codeforces Handle
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginTab('credentials');
-                    setLoginError(null);
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '8px 10px',
-                    borderRadius: '9px',
-                    border: 'none',
-                    fontSize: '12px',
-                    fontWeight: loginTab === 'credentials' ? 800 : 600,
-                    color: loginTab === 'credentials' ? '#2563eb' : '#64748b',
-                    background: loginTab === 'credentials' ? '#ffffff' : 'transparent',
-                    boxShadow: loginTab === 'credentials' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  Email & Password
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginTab('demo');
-                    setLoginError(null);
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '8px 10px',
-                    borderRadius: '9px',
-                    border: 'none',
-                    fontSize: '12px',
-                    fontWeight: loginTab === 'demo' ? 800 : 600,
-                    color: loginTab === 'demo' ? '#2563eb' : '#64748b',
-                    background: loginTab === 'demo' ? '#ffffff' : 'transparent',
-                    boxShadow: loginTab === 'demo' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s ease',
-                  }}
-                >
-                  ⚡ Demo
-                </button>
-              </div>
-
               {loginError && (
                 <div
                   style={{
@@ -691,219 +576,111 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({ progress, on
                 </div>
               )}
 
-              {/* Tab 1: Codeforces Handle */}
-              {loginTab === 'cf' && (
-                <div>
-                  <div style={{ marginBottom: '14px' }}>
-                    <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                      Enter your Codeforces Handle
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. tourist, petr, nicholas"
-                      value={handleInput}
-                      onChange={e => setHandleInput(e.target.value)}
-                      onKeyDown={e => e.key === 'Enter' && handleConnectCF()}
-                      style={{
-                        width: '100%',
-                        padding: '12px 14px',
-                        borderRadius: '10px',
-                        border: '1.5px solid #cbd5e1',
-                        fontSize: '14px',
-                        fontFamily: 'inherit',
-                        outline: 'none',
-                        boxSizing: 'border-box',
-                      }}
-                      id="input-cf-handle-modal"
-                    />
-                  </div>
-
-                  <button
-                    onClick={() => handleConnectCF()}
-                    disabled={isLoading || !handleInput.trim()}
+              {/* Codeforces Handle Input Form */}
+              <div>
+                <div style={{ marginBottom: '14px' }}>
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                    Codeforces Handle
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. tourist, petr, nicholas"
+                    value={handleInput}
+                    onChange={e => setHandleInput(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleConnectCF()}
                     style={{
                       width: '100%',
-                      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                      color: '#ffffff',
-                      border: 'none',
+                      padding: '12px 14px',
                       borderRadius: '10px',
-                      padding: '12px',
+                      border: '1.5px solid #cbd5e1',
                       fontSize: '14px',
-                      fontWeight: 700,
-                      cursor: isLoading || !handleInput.trim() ? 'not-allowed' : 'pointer',
-                      opacity: isLoading || !handleInput.trim() ? 0.6 : 1,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      marginBottom: '16px',
+                      fontFamily: 'inherit',
+                      outline: 'none',
+                      boxSizing: 'border-box',
                     }}
-                    id="btn-confirm-cf-handle"
-                  >
-                    {isLoading ? <span>Verifying with Codeforces API...</span> : <span>Connect Handle &rarr;</span>}
-                  </button>
-
-                  <div style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
-                    Verified live with Codeforces Official Public API
-                  </div>
+                    id="input-cf-handle-modal"
+                  />
                 </div>
-              )}
 
-              {/* Tab 2: Email & Password */}
-              {loginTab === 'credentials' && (
-                <form onSubmit={handleCredentialsAuth}>
-                  {isRegisterMode && (
-                    <div style={{ marginBottom: '12px' }}>
-                      <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                        Username / Handle
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Your display handle"
-                        value={regHandleInput}
-                        onChange={e => setRegHandleInput(e.target.value)}
-                        required
-                        style={{
-                          width: '100%',
-                          padding: '10px 12px',
-                          borderRadius: '10px',
-                          border: '1.5px solid #cbd5e1',
-                          fontSize: '13.5px',
-                          boxSizing: 'border-box',
-                        }}
-                      />
-                    </div>
-                  )}
+                <button
+                  onClick={() => handleConnectCF()}
+                  disabled={isLoading || !handleInput.trim()}
+                  style={{
+                    width: '100%',
+                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: '10px',
+                    padding: '12px',
+                    fontSize: '14px',
+                    fontWeight: 700,
+                    cursor: isLoading || !handleInput.trim() ? 'not-allowed' : 'pointer',
+                    opacity: isLoading || !handleInput.trim() ? 0.6 : 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    marginBottom: '16px',
+                  }}
+                  id="btn-confirm-cf-handle"
+                >
+                  {isLoading ? <span>Verifying with Codeforces API...</span> : <span>Connect Handle &rarr;</span>}
+                </button>
 
-                  <div style={{ marginBottom: '12px' }}>
-                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="user@example.com"
-                      value={emailInput}
-                      onChange={e => setEmailInput(e.target.value)}
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '10px 12px',
-                        borderRadius: '10px',
-                        border: '1.5px solid #cbd5e1',
-                        fontSize: '13.5px',
-                        boxSizing: 'border-box',
-                      }}
-                    />
+                <div style={{ fontSize: '11px', color: '#64748b', textAlign: 'center', marginBottom: '16px' }}>
+                  Verified live with Codeforces Official Public API
+                </div>
+
+                {/* Quick Select Demo Handles */}
+                <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '14px' }}>
+                  <div style={{ fontSize: '11px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' }}>
+                    Or try a popular handle:
                   </div>
-
-                  <div style={{ marginBottom: '16px' }}>
-                    <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                      Password (min 6 characters)
-                    </label>
-                    <input
-                      type="password"
-                      placeholder="••••••••"
-                      value={passwordInput}
-                      onChange={e => setPasswordInput(e.target.value)}
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '10px 12px',
-                        borderRadius: '10px',
-                        border: '1.5px solid #cbd5e1',
-                        fontSize: '13.5px',
-                        boxSizing: 'border-box',
-                      }}
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    style={{
-                      width: '100%',
-                      background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                      color: '#ffffff',
-                      border: 'none',
-                      borderRadius: '10px',
-                      padding: '12px',
-                      fontSize: '14px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      marginBottom: '12px',
-                    }}
-                  >
-                    {isRegisterMode ? 'Create Free Account' : 'Sign In with Password'}
-                  </button>
-
-                  <div style={{ textAlign: 'center' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <button
-                      type="button"
-                      onClick={() => {
-                        setIsRegisterMode(!isRegisterMode);
-                        setLoginError(null);
-                      }}
+                      onClick={() => handleQuickDemo('nicholas')}
                       style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#2563eb',
-                        fontSize: '12px',
-                        fontWeight: 600,
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '10px',
+                        padding: '10px 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                         cursor: 'pointer',
-                        textDecoration: 'underline',
+                        textAlign: 'left',
                       }}
                     >
-                      {isRegisterMode ? 'Already have an account? Sign in' : "Don't have an account? Create one"}
+                      <div>
+                        <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '13px' }}>@nicholas</span>
+                        <span style={{ fontSize: '11.5px', color: '#64748b', marginLeft: '8px' }}>Specialist • 1540</span>
+                      </div>
+                      <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: 700 }}>Connect &rarr;</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleQuickDemo('tourist')}
+                      style={{
+                        background: '#f8fafc',
+                        border: '1px solid #e2e8f0',
+                        borderRadius: '10px',
+                        padding: '10px 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                      }}
+                    >
+                      <div>
+                        <span style={{ fontWeight: 700, color: '#0f172a', fontSize: '13px' }}>@tourist</span>
+                        <span style={{ fontSize: '11.5px', color: '#dc2626', marginLeft: '8px' }}>Legendary Grandmaster • 3979</span>
+                      </div>
+                      <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: 700 }}>Connect &rarr;</span>
                     </button>
                   </div>
-                </form>
-              )}
-
-              {/* Tab 3: Demo Profiles */}
-              {loginTab === 'demo' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <button
-                    onClick={() => handleQuickDemo('nicholas')}
-                    style={{
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '12px',
-                      padding: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '13.5px' }}>Nicholas I. (@nicholas)</div>
-                      <div style={{ fontSize: '11px', color: '#64748b' }}>Specialist • 1540 Rating • 4 Badges</div>
-                    </div>
-                    <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: 700 }}>Select &rarr;</span>
-                  </button>
-
-                  <button
-                    onClick={() => handleQuickDemo('tourist')}
-                    style={{
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '12px',
-                      padding: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 800, color: '#0f172a', fontSize: '13.5px' }}>Gennady Korotkevich (@tourist)</div>
-                      <div style={{ fontSize: '11px', color: '#dc2626', fontWeight: 600 }}>Legendary Grandmaster • 3979 Rating</div>
-                    </div>
-                    <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: 700 }}>Select &rarr;</span>
-                  </button>
                 </div>
-              )}
+              </div>
             </div>
           </div>,
           document.body

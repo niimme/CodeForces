@@ -19,7 +19,7 @@ interface ProblemWorkspaceProps {
 export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [problem, setProblem] = useState<ProblemMetadata | null>(null);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('instructions');
-  const [language, setLanguage] = useState<'cpp' | 'javascript' | 'python'>('cpp');
+  const [language, setLanguage] = useState<'cpp' | 'c' | 'kotlin' | 'javascript' | 'python'>('cpp');
   const [code, setCode] = useState<string>('');
   const [selectedTestIndex, setSelectedTestIndex] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -63,8 +63,8 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
     const p = getProblemById(problemId);
     if (p) {
       setProblem(p);
-      // Default to C++ starter code
-      setCode(p.starterCodeCpp || p.starterCode);
+      // Templates are blank by default
+      setCode('');
 
       // Find next problem for quick continuation
       const all = getAllProblems();
@@ -94,29 +94,17 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   // Handle language switching
   const handleLanguageChange = (newLang: string) => {
     if (!problem) return;
-    const typedLang = newLang as 'cpp' | 'javascript' | 'python';
+    const typedLang = newLang as 'cpp' | 'c' | 'kotlin' | 'javascript' | 'python';
     setLanguage(typedLang);
-
-    if (typedLang === 'cpp') {
-      setCode(problem.starterCodeCpp || problem.starterCode);
-    } else if (typedLang === 'javascript') {
-      setCode(problem.starterCodeJs || problem.starterCode);
-    } else if (typedLang === 'python') {
-      setCode(problem.starterCodePy || `# ${problem.id} - ${problem.title}\nimport sys\n\ndef main():\n    pass\n\nif __name__ == '__main__':\n    main()\n`);
-    }
+    // Keep template blank when switching language
+    setCode('');
     setExecutionSummary(null);
   };
 
   const handleResetCode = () => {
     if (problem) {
-      if (confirm('Are you sure you want to reset your code to the starter template?')) {
-        if (language === 'cpp') {
-          setCode(problem.starterCodeCpp || problem.starterCode);
-        } else if (language === 'javascript') {
-          setCode(problem.starterCodeJs || problem.starterCode);
-        } else {
-          setCode(problem.starterCodePy || '');
-        }
+      if (confirm('Are you sure you want to clear your code?')) {
+        setCode('');
         setExecutionSummary(null);
       }
     }
