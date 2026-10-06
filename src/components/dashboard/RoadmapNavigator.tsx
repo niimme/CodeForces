@@ -17,7 +17,6 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
       fullTitle: 'Chapter 1: Logic & Loops',
       icon: '🌱',
       problems: ['4A', '71A', '231A'],
-      concepts: ['concept_complexity'],
     },
     {
       id: 'chapter-2',
@@ -25,7 +24,6 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
       fullTitle: 'Chapter 2: Simulation & State',
       icon: '⚙️',
       problems: ['282A', '158A', '50A', '263A'],
-      concepts: ['concept_fast_io'],
     },
     {
       id: 'chapter-3',
@@ -33,7 +31,6 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
       fullTitle: 'Chapter 3: String Mastery',
       icon: '🔤',
       problems: ['112A', '236A', '339A', '281A'],
-      concepts: [],
     },
     {
       id: 'chapter-4',
@@ -41,7 +38,6 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
       fullTitle: 'Chapter 4: Greedy Choices',
       icon: '🎯',
       problems: ['791A', '617A', '977A', '266A', '546A'],
-      concepts: [],
     },
   ];
 
@@ -57,7 +53,7 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
       className="roadmap-left-nav"
       style={{
         position: 'sticky',
-        top: '88px',
+        top: '24px',
         maxWidth: '280px',
         marginLeft: 'auto',
         width: '100%',

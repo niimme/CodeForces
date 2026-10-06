@@ -6,10 +6,9 @@ import { LearningPathNode } from '../../types';
 
 interface PathNodeCardProps {
   node: LearningPathNode;
-  onOpenConcept?: (node: LearningPathNode) => void;
 }
 
-export const PathNodeCard: React.FC<PathNodeCardProps> = ({ node, onOpenConcept }) => {
+export const PathNodeCard: React.FC<PathNodeCardProps> = ({ node }) => {
   const isCompleted = node.completed;
 
   const cardContent = (
@@ -20,13 +19,7 @@ export const PathNodeCard: React.FC<PathNodeCardProps> = ({ node, onOpenConcept 
 
       <div className="node-content">
         <div className="node-badge-row">
-          <span
-            className={`node-badge ${
-              node.type === 'exercise'
-                ? 'exercise-badge'
-                : 'concept-badge'
-            }`}
-          >
+          <span className="node-badge exercise-badge">
             {node.badgeLabel}
           </span>
           {node.duration && <span className="node-rating">• {node.duration}</span>}
@@ -56,27 +49,13 @@ export const PathNodeCard: React.FC<PathNodeCardProps> = ({ node, onOpenConcept 
     </>
   );
 
-  if (node.type === 'exercise' && node.problemId) {
-    return (
-      <Link
-        href={`/problem/${node.problemId}`}
-        className={`node-card ${!isCompleted ? 'uncompleted' : ''}`}
-        id={`node-${node.id}`}
-      >
-        {cardContent}
-      </Link>
-    );
-  }
-
   return (
-    <div
-      className={`node-card concept-card ${!isCompleted ? 'uncompleted' : ''}`}
-      onClick={() => onOpenConcept?.(node)}
+    <Link
+      href={`/problem/${node.problemId || '4A'}`}
+      className={`node-card ${!isCompleted ? 'uncompleted' : ''}`}
       id={`node-${node.id}`}
-      role="button"
-      tabIndex={0}
     >
       {cardContent}
-    </div>
+    </Link>
   );
 };

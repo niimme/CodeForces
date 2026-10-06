@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { LearningPathNode, ProblemMetadata, UserProgress } from '../../types';
 import { PathNodeCard } from './PathNodeCard';
 
@@ -15,9 +15,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({
   userProgress,
   onUpdateProgress,
 }) => {
-  const [selectedConcept, setSelectedConcept] = useState<LearningPathNode | null>(null);
-
-  // Generate learning nodes combining exercises and concepts
+  // Generate learning nodes strictly for coding exercises
   const completedSet = new Set(userProgress.completedProblemIds.map(id => id.toUpperCase()));
 
   const nodes: LearningPathNode[] = [
@@ -32,17 +30,6 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
       completed: completedSet.has('4A'),
-    },
-    {
-      id: 'concept_complexity',
-      type: 'concept',
-      title: 'Time Complexity & The 10⁸ Operations Rule',
-      subtitle: 'Estimating Big-O limits for 1.0s time budgets',
-      emoji: '⚡',
-      badgeLabel: '💡 Concept',
-      duration: '3 min read',
-      completed: true,
-      summary: 'In Codeforces, an operation budget of ~10^8 elementary instructions runs within 1 second. When N <= 10^5, aim for O(N) or O(N log N). When N <= 1000, O(N^2) passes. For N <= 100, even O(N^3) is acceptable!',
     },
     {
       id: 'node_71A',
@@ -89,17 +76,6 @@ export const LearningPath: React.FC<LearningPathProps> = ({
       badgeLabel: '📝 Exercise',
       duration: '800 Rating',
       completed: completedSet.has('158A'),
-    },
-    {
-      id: 'concept_fast_io',
-      type: 'concept',
-      title: 'Fast I/O & Clean Parsing Habits',
-      subtitle: 'Handling multiline test cases without timeouts',
-      emoji: '🚀',
-      badgeLabel: '💡 Concept',
-      duration: '3 min read',
-      completed: false,
-      summary: 'Reading large volumes of numbers on Codeforces requires fast buffering. In C++, use ios_base::sync_with_stdio(false); cin.tie(NULL);. In Python, use sys.stdin.read().split(). In JavaScript, process buffers in chunks.',
     },
     {
       id: 'node_50A',
@@ -228,36 +204,6 @@ export const LearningPath: React.FC<LearningPathProps> = ({
     },
   ];
 
-  // Scroll to active/first uncompleted node
-  const handleScrollToNext = () => {
-    const firstUncompleted = nodes.find(n => !n.completed);
-    if (firstUncompleted) {
-      const element = document.getElementById(`node-${firstUncompleted.id}`);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-  };
-
-  const handleToggleConceptCompleted = (nodeId: string) => {
-    // Toggle in completed list
-    const updatedIds = completedSet.has(nodeId)
-      ? userProgress.completedProblemIds.filter(id => id !== nodeId)
-      : [...userProgress.completedProblemIds, nodeId];
-
-    const updated = {
-      ...userProgress,
-      completedProblemIds: updatedIds,
-    };
-    onUpdateProgress(updated);
-    if (selectedConcept) {
-      setSelectedConcept({
-        ...selectedConcept,
-        completed: !completedSet.has(nodeId),
-      });
-    }
-  };
-
   return (
     <div className="tree-container">
       {/* Top Journey Ribbon Tag */}
@@ -283,7 +229,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({
               </div>
             </div>
           );
-        } else if (index === 4) {
+        } else if (index === 3) {
           chapterHeader = (
             <div className="chapter-marker" key="chap_2" id="chapter-2">
               <div className="chapter-pill">
@@ -292,7 +238,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({
               </div>
             </div>
           );
-        } else if (index === 9) {
+        } else if (index === 7) {
           chapterHeader = (
             <div className="chapter-marker" key="chap_3" id="chapter-3">
               <div className="chapter-pill">
@@ -301,7 +247,7 @@ export const LearningPath: React.FC<LearningPathProps> = ({
               </div>
             </div>
           );
-        } else if (index === 13) {
+        } else if (index === 11) {
           chapterHeader = (
             <div className="chapter-marker" key="chap_4" id="chapter-4">
               <div className="chapter-pill">
@@ -316,132 +262,11 @@ export const LearningPath: React.FC<LearningPathProps> = ({
           <React.Fragment key={node.id}>
             {chapterHeader}
             <div className="tree-node-wrapper">
-              <PathNodeCard
-                node={node}
-                onOpenConcept={n => setSelectedConcept(n)}
-              />
+              <PathNodeCard node={node} />
             </div>
           </React.Fragment>
         );
       })}
-
-      {/* Floating Action Controls: Scroll Down Button (v) */}
-      <button
-        className="floating-scroll-btn"
-        onClick={handleScrollToNext}
-        title="Jump to next challenge"
-        aria-label="Scroll to next active challenge"
-      >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
-      </button>
-
-      {/* Concept Reader Modal (No Video Placeholders) */}
-      {selectedConcept && (
-        <div className="modal-overlay" onClick={() => setSelectedConcept(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '30px' }}>{selectedConcept.emoji}</span>
-                <div>
-                  <span className="node-badge concept-badge" style={{ marginBottom: '4px' }}>
-                    {selectedConcept.badgeLabel}
-                  </span>
-                  <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#f8fafc' }}>
-                    {selectedConcept.title}
-                  </h3>
-                </div>
-              </div>
-              <button
-                onClick={() => setSelectedConcept(null)}
-                style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '20px', cursor: 'pointer' }}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Concept Reader Highlight Box */}
-            <div
-              style={{
-                background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '22px',
-                marginBottom: '20px',
-                textAlign: 'center',
-                position: 'relative'
-              }}
-            >
-              <div
-                style={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 12px',
-                  boxShadow: '0 4px 15px rgba(99, 102, 241, 0.25)',
-                  fontSize: '26px'
-                }}
-              >
-                📖
-              </div>
-              <div style={{ fontSize: '15px', fontWeight: 800, color: '#0f172a', marginBottom: '4px' }}>
-                Competitive Programming Concept Guide
-              </div>
-              <div style={{ fontSize: '12.5px', color: '#64748b', fontWeight: 600 }}>
-                Estimated reading time: {selectedConcept.duration}
-              </div>
-            </div>
-
-            <div style={{ fontSize: '14px', lineHeight: 1.7, color: '#334155', marginBottom: '20px' }}>
-              <div style={{ fontWeight: 700, color: '#0f172a', marginBottom: '8px' }}>
-                Key Takeaways & Codeforces Rules of Thumb:
-              </div>
-              <p>{selectedConcept.summary}</p>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-              <button
-                onClick={() => setSelectedConcept(null)}
-                style={{
-                  background: '#f1f5f9',
-                  border: '1px solid #e2e8f0',
-                  color: '#334155',
-                  padding: '8px 16px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  fontSize: '13px'
-                }}
-              >
-                Close
-              </button>
-              <button
-                onClick={() => handleToggleConceptCompleted(selectedConcept.id)}
-                style={{
-                  background: selectedConcept.completed ? '#238636' : '#2563eb',
-                  border: 'none',
-                  color: '#ffffff',
-                  padding: '8px 18px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: 700,
-                  fontSize: '13px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                {selectedConcept.completed ? '✓ Completed' : 'Mark as Completed'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
