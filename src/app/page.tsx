@@ -7,7 +7,6 @@ import { getUserProgress, saveUserProgress } from '../lib/userProgress';
 import { ProblemMetadata, UserProgress } from '../types';
 import { BetaRibbon } from '../components/dashboard/BetaRibbon';
 import { LoginProfileCard } from '../components/dashboard/LoginProfileCard';
-import { ChallengesCard } from '../components/dashboard/ChallengesCard';
 import { LearningPath } from '../components/dashboard/LearningPath';
 import { RoadmapNavigator } from '../components/dashboard/RoadmapNavigator';
 
@@ -166,7 +165,6 @@ export default function DashboardPage() {
               progress={userProgress}
               onUpdateProgress={handleUpdateProgress}
             />
-            <ChallengesCard />
           </aside>
         </div>
       </div>
