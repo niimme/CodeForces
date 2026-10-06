@@ -1901,10 +1901,10 @@ html, body {
 }
 
 .ws-mobile-statement-footer {
+  display: none;
   padding: 16px;
   background: #ffffff;
   border-top: 1px solid #e2e8f0;
-  display: flex;
   justify-content: center;
   position: sticky;
   bottom: 0;
@@ -2116,7 +2116,11 @@ html, body {
 }
 
 @media (max-width: 768px) {
-  /* Workspace Mobile Header */
+  /* Workspace Mobile Footer and Header */
+  .ws-mobile-statement-footer {
+    display: flex !important;
+  }
+
   .workspace-mobile-header {
     display: flex;
     align-items: center;
