@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { getAllProblems } from '../lib/cfScraper';
 import { getUserProgress, saveUserProgress } from '../lib/userProgress';
 import { ProblemMetadata, UserProgress } from '../types';
-import { BetaRibbon } from '../components/dashboard/BetaRibbon';
 import { LoginProfileCard } from '../components/dashboard/LoginProfileCard';
 import { LearningPath } from '../components/dashboard/LearningPath';
 import { RoadmapNavigator } from '../components/dashboard/RoadmapNavigator';
@@ -30,9 +29,6 @@ export default function DashboardPage() {
 
   return (
     <main className="roadmap-bg">
-      {/* Corner Beta Ribbon */}
-      <BetaRibbon />
-
       {/* Symmetrical 3-Column Centered Layout */}
       <div className="roadmap-grid-layout" style={{ paddingTop: '24px' }}>
         {/* Left Column: Quick Chapter Navigation */}

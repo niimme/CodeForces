@@ -138,25 +138,55 @@ export const DEMO_PROFILES: Record<string, UserProgress> = {
   },
 };
 
-export const INITIAL_USER_PROGRESS: UserProgress = DEMO_PROFILES.nicholas;
+export const GUEST_USER: UserProgress = {
+  userId: 'usr_guest',
+  name: 'Guest User',
+  handle: 'guest',
+  isLoggedIn: false,
+  rating: 0,
+  rank: 'Unrated',
+  streakDays: 0,
+  completedProblemIds: [],
+  badges: INITIAL_BADGES.map(b => ({ ...b, unlockedAt: undefined })),
+};
 
-const STORAGE_KEY = 'cf_user_progress_v1';
+export const INITIAL_USER_PROGRESS: UserProgress = GUEST_USER;
+
+const STORAGE_KEY = 'cf_user_progress_v2';
+const AUTH_ACCOUNTS_KEY = 'cf_auth_accounts_v1';
+
+export interface AuthAccount {
+  email: string;
+  passwordHash: string;
+  handle: string;
+  name: string;
+  rating: number;
+  rank: string;
+  avatarUrl?: string;
+}
 
 export function getUserProgress(): UserProgress {
   if (typeof window === 'undefined') {
-    return INITIAL_USER_PROGRESS;
+    return GUEST_USER;
   }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return INITIAL_USER_PROGRESS;
+    if (!raw) return GUEST_USER;
     const parsed = JSON.parse(raw);
+    if (!parsed || parsed.isLoggedIn === false) {
+      return {
+        ...GUEST_USER,
+        completedProblemIds: parsed?.completedProblemIds || [],
+      };
+    }
     return {
-      ...INITIAL_USER_PROGRESS,
+      ...GUEST_USER,
       ...parsed,
+      isLoggedIn: true,
       badges: parsed.badges || INITIAL_BADGES,
     };
   } catch (e) {
-    return INITIAL_USER_PROGRESS;
+    return GUEST_USER;
   }
 }
 
@@ -166,6 +196,133 @@ export function saveUserProgress(progress: UserProgress): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   } catch (e) {
     console.error('Failed to save progress to localStorage', e);
+  }
+}
+
+export function logoutUser(): UserProgress {
+  const current = getUserProgress();
+  const guest: UserProgress = {
+    ...GUEST_USER,
+    completedProblemIds: current.completedProblemIds,
+  };
+  saveUserProgress(guest);
+  return guest;
+}
+
+export function loginUser(profile: UserProgress): UserProgress {
+  const current = getUserProgress();
+  const mergedProblemIds = Array.from(
+    new Set([...(current.completedProblemIds || []), ...(profile.completedProblemIds || [])])
+  );
+  const loggedIn: UserProgress = {
+    ...profile,
+    isLoggedIn: true,
+    completedProblemIds: mergedProblemIds,
+  };
+  saveUserProgress(loggedIn);
+  return loggedIn;
+}
+
+export function registerAccount(email: string, password: string, handle: string): { success: boolean; user?: UserProgress; error?: string } {
+  if (typeof window === 'undefined') return { success: false, error: 'Browser required' };
+  try {
+    const raw = localStorage.getItem(AUTH_ACCOUNTS_KEY);
+    const accounts: Record<string, AuthAccount> = raw ? JSON.parse(raw) : {};
+
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanHandle = handle.trim().replace(/^@/, '');
+
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      return { success: false, error: 'Please enter a valid email address.' };
+    }
+    if (!password || password.length < 6) {
+      return { success: false, error: 'Password must be at least 6 characters.' };
+    }
+    if (!cleanHandle || cleanHandle.length < 2) {
+      return { success: false, error: 'Handle must be at least 2 characters.' };
+    }
+
+    if (accounts[cleanEmail]) {
+      return { success: false, error: 'An account with this email already exists.' };
+    }
+
+    const newAccount: AuthAccount = {
+      email: cleanEmail,
+      passwordHash: btoa(password), // Simple base64 encoding for local demo auth
+      handle: cleanHandle,
+      name: cleanHandle,
+      rating: 1200,
+      rank: 'Pupil',
+    };
+
+    accounts[cleanEmail] = newAccount;
+    localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+
+    const userProfile: UserProgress = {
+      userId: `acc_${cleanHandle}`,
+      name: cleanHandle,
+      handle: cleanHandle,
+      isLoggedIn: true,
+      rating: 1200,
+      rank: 'Pupil',
+      streakDays: 1,
+      completedProblemIds: [],
+      badges: INITIAL_BADGES,
+    };
+
+    loginUser(userProfile);
+    return { success: true, user: userProfile };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Registration failed.' };
+  }
+}
+
+export function loginWithCredentials(emailOrHandle: string, password: string): { success: boolean; user?: UserProgress; error?: string } {
+  if (typeof window === 'undefined') return { success: false, error: 'Browser required' };
+  try {
+    const raw = localStorage.getItem(AUTH_ACCOUNTS_KEY);
+    const accounts: Record<string, AuthAccount> = raw ? JSON.parse(raw) : {};
+
+    const query = emailOrHandle.trim().toLowerCase();
+    let account = accounts[query];
+
+    if (!account) {
+      account = Object.values(accounts).find(
+        acc => acc.handle.toLowerCase() === query || acc.email.toLowerCase() === query
+      )!;
+    }
+
+    if (!account) {
+      // Check built-in demo profiles
+      if (DEMO_PROFILES[query]) {
+        const demo = DEMO_PROFILES[query];
+        loginUser(demo);
+        return { success: true, user: demo };
+      }
+      return { success: false, error: 'Account not found. Please register or check your credentials.' };
+    }
+
+    if (account.passwordHash !== btoa(password)) {
+      return { success: false, error: 'Invalid password. Please try again.' };
+    }
+
+    const userProfile: UserProgress = {
+      userId: `acc_${account.handle}`,
+      name: account.name,
+      handle: account.handle,
+      isLoggedIn: true,
+      rating: account.rating,
+      rank: account.rank,
+      streakDays: 1,
+      avatarUrl: account.avatarUrl,
+      completedProblemIds: [],
+      badges: INITIAL_BADGES,
+    };
+
+    loginUser(userProfile);
+    return { success: true, user: userProfile };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Login failed.' };
   }
 }
 

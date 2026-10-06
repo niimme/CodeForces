@@ -206,14 +206,6 @@ export const LearningPath: React.FC<LearningPathProps> = ({
 
   return (
     <div className="tree-container">
-      {/* Top Journey Ribbon Tag */}
-      <div style={{ textAlign: 'center' }}>
-        <div className="journey-tag">
-          <span>🚩</span>
-          <span>The Start of your Journey</span>
-        </div>
-      </div>
-
       {/* Vertical Connecting Line */}
       <div className="tree-vertical-line" />
 
