@@ -19,6 +19,11 @@ interface TestRunnerConsoleProps {
   problemTitle?: string;
   onResetCode?: () => void;
   nextProblemId?: string | null;
+  onTidyCode?: () => void;
+  isTidied?: boolean;
+  startReviewIteration?: boolean;
+  onReviewCode?: () => void;
+  onOpenSuccessModal?: () => void;
 }
 
 export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
@@ -36,6 +41,11 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
   problemTitle = 'Code Challenge',
   onResetCode,
   nextProblemId,
+  onTidyCode,
+  isTidied = false,
+  startReviewIteration,
+  onReviewCode,
+  onOpenSuccessModal,
 }) => {
   const currentTest = testCases[selectedTestIndex] || testCases[0];
   const currentResult: TestResult | undefined = executionSummary?.results?.[selectedTestIndex];
@@ -46,6 +56,14 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [showFullDetails, setShowFullDetails] = useState(false);
   const playTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Sync startReviewIteration trigger
+  useEffect(() => {
+    if (startReviewIteration) {
+      setIsPlaying(true);
+      onSelectTest(0);
+    }
+  }, [startReviewIteration, onSelectTest]);
 
   // Auto-playback stepping
   useEffect(() => {
@@ -744,30 +762,73 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                     : `✕ Test ${selectedTestIndex + 1} Failed`}
                 </span>
 
-                {/* If all passed: celebration & action to iterate */}
+                {/* If all passed: celebration & action buttons */}
                 {allPassed && (
-                  <div style={{ marginTop: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#16a34a' }}>
-                      All {testCases.length} Tests Passed! 🎉
-                    </span>
-                    {nextProblemId && (
-                      <a
-                        href={`/problem/${nextProblemId}`}
-                        style={{
-                          fontSize: '12px',
-                          color: '#2563eb',
-                          fontWeight: 700,
-                          textDecoration: 'none',
-                          marginTop: '4px',
-                          background: '#eff6ff',
-                          padding: '4px 12px',
-                          borderRadius: '12px',
-                          border: '1px solid #bfdbfe',
+                  <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: '100%', maxWidth: '300px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#16a34a' }}>
+                        All {testCases.length} Tests Passed! 🎉
+                      </span>
+                      {onOpenSuccessModal && (
+                        <button
+                          type="button"
+                          onClick={onOpenSuccessModal}
+                          title="Open celebration summary"
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            padding: '2px',
+                          }}
+                        >
+                          🏆
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Uniform Shape & Size Action Buttons, Distinct Colors */}
+                    <div style={{ display: 'flex', gap: '6px', width: '100%', justifyContent: 'center' }}>
+                      {/* 1. Tidy Code Button (Purple) */}
+                      {onTidyCode && (
+                        <button
+                          type="button"
+                          onClick={onTidyCode}
+                          className="white-square-btn btn-tidy-code"
+                          title="Auto-format code indentation"
+                          id="btn-ws-tidy-code"
+                        >
+                          <span>{isTidied ? '✓ Tidied!' : '🧹 Tidy'}</span>
+                        </button>
+                      )}
+
+                      {/* 2. Review Code Button (Sky Blue) - allows user to iterate through successful code */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsPlaying(true);
+                          onSelectTest(0);
+                          if (onReviewCode) onReviewCode();
                         }}
+                        className="white-square-btn btn-review-code"
+                        title="Iterate and step through passed test cases"
+                        id="btn-ws-review-code"
                       >
-                        Iterate Next Challenge &rarr;
-                      </a>
-                    )}
+                        <span>{isPlaying ? '⏸ Pause' : '🔍 Review'}</span>
+                      </button>
+
+                      {/* 3. Next Challenge Button (Emerald Green) */}
+                      {nextProblemId && (
+                        <a
+                          href={`/problem/${nextProblemId}`}
+                          className="white-square-btn btn-next-challenge"
+                          title="Proceed to next problem"
+                          id="btn-ws-next-challenge"
+                        >
+                          <span>Next &rarr;</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

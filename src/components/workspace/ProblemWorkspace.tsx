@@ -6,6 +6,7 @@ import confetti from 'canvas-confetti';
 import { getProblemById, getAllProblems } from '@/lib/cfScraper';
 import { runTestCases, ExecutionSummary } from '@/lib/codeRunner';
 import { markProblemCompleted } from '@/lib/userProgress';
+import { tidyCode } from '@/lib/codeTidier';
 import { ProblemMetadata } from '@/types';
 import { InstructionsHeader, WorkspaceTab } from '@/components/workspace/InstructionsHeader';
 import { CodeEditor } from '@/components/workspace/CodeEditor';
@@ -26,6 +27,25 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [executionSummary, setExecutionSummary] = useState<ExecutionSummary | null>(null);
   const [showCelebration, setShowCelebration] = useState<boolean>(false);
   const [nextProblemId, setNextProblemId] = useState<string | null>(null);
+  const [isTidied, setIsTidied] = useState<boolean>(false);
+  const [startReviewIteration, setStartReviewIteration] = useState<boolean>(false);
+
+  const handleTidyCode = () => {
+    if (!code) return;
+    const tidied = tidyCode(code, language);
+    setCode(tidied);
+    setIsTidied(true);
+    setTimeout(() => setIsTidied(false), 2500);
+  };
+
+  const handleReviewCode = () => {
+    setShowCelebration(false);
+    setSelectedTestIndex(0);
+    setStartReviewIteration(prev => !prev);
+    if (isMobile) {
+      setMobileTab('tests');
+    }
+  };
 
   // Resizable Windows Sizing State
   // horizontalSplit = % width of left pane (Code + Console)
@@ -447,6 +467,11 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 problemTitle={problem.title}
                 onResetCode={handleResetCode}
                 nextProblemId={nextProblemId}
+                onTidyCode={handleTidyCode}
+                isTidied={isTidied}
+                startReviewIteration={startReviewIteration}
+                onReviewCode={handleReviewCode}
+                onOpenSuccessModal={() => setShowCelebration(true)}
               />
             </div>
           </section>
@@ -515,6 +540,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               userCode={code}
               isMaximized={isMaximizedRight}
               onToggleMaximize={toggleMaximizeStatement}
+              language={language}
             />
 
             {/* Mobile Bottom Button to jump to editor */}
@@ -537,37 +563,79 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
           <div
             className="modal-content"
             onClick={e => e.stopPropagation()}
-            style={{ textAlign: 'center', maxWidth: '440px', padding: '32px 24px' }}
+            style={{ textAlign: 'center', maxWidth: '480px', padding: '32px 28px', borderRadius: '20px' }}
           >
             <div style={{ fontSize: '56px', marginBottom: '12px' }}>🎉</div>
             <h2 style={{ fontSize: '24px', fontWeight: 800, color: '#0f172a', marginBottom: '8px' }}>
               Accepted! (AC)
             </h2>
             <p style={{ color: '#64748b', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-              Congratulations! Your {language === 'cpp' ? 'C++' : language === 'c' ? 'C' : language === 'kotlin' ? 'Kotlin' : language === 'java' ? 'Java' : 'Python'} solution passed all <strong>5 / 5 test cases</strong> for{' '}
+              Congratulations! Your {language === 'cpp' ? 'C++' : language === 'c' ? 'C' : language === 'kotlin' ? 'Kotlin' : language === 'java' ? 'Java' : 'Python'} solution passed all <strong>{problem.testCases?.length || 5} / {problem.testCases?.length || 5} test cases</strong> for{' '}
               <strong style={{ color: '#2563eb' }}>{problem.id} - {problem.title}</strong>!
             </p>
 
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
-              <Link
-                href="/"
-                className="back-dashboard-btn"
-                style={{ padding: '10px 18px', fontSize: '13px' }}
+            {/* Action Buttons: Exact Same Shape & Size, Distinct Colors */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '12px',
+                width: '100%',
+              }}
+            >
+              {/* 1. Tidy Code Button (Purple) */}
+              <button
+                type="button"
+                onClick={handleTidyCode}
+                className="success-screen-btn btn-tidy-code"
+                title="Auto-format indentation and spacing in your code"
+                id="btn-success-tidy-code"
               >
-                &larr; Roadmap
-              </Link>
+                <span>{isTidied ? '✓ Code Tidied!' : '🧹 Tidy Code'}</span>
+              </button>
 
-              {nextProblemId && (
+              {/* 2. Review Code Button (Sky Blue) - allows user to iterate through successful code */}
+              <button
+                type="button"
+                onClick={handleReviewCode}
+                className="success-screen-btn btn-review-code"
+                title="Review and step through your passed test cases"
+                id="btn-success-review-code"
+              >
+                <span>🔍 Review Code</span>
+              </button>
+
+              {/* 3. Next Challenge Button (Emerald Green) */}
+              {nextProblemId ? (
                 <Link
                   href={`/problem/${nextProblemId}`}
-                  className="run-code-btn"
-                  style={{ textDecoration: 'none', padding: '10px 20px', fontSize: '13px' }}
+                  className="success-screen-btn btn-next-challenge"
                   onClick={() => setShowCelebration(false)}
+                  title="Proceed to next problem"
+                  id="btn-success-next-challenge"
                 >
-                  <span>Next Challenge</span>
-                  <span>&rarr;</span>
+                  <span>Next Challenge &rarr;</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/"
+                  className="success-screen-btn btn-next-challenge"
+                  title="All problems completed"
+                  id="btn-success-next-challenge"
+                >
+                  <span>Complete! 🎉</span>
                 </Link>
               )}
+
+              {/* 4. Roadmap Button (Slate) */}
+              <Link
+                href="/"
+                className="success-screen-btn btn-roadmap"
+                title="Return to learning curriculum"
+                id="btn-success-roadmap"
+              >
+                <span>⌂ Roadmap</span>
+              </Link>
             </div>
           </div>
         </div>

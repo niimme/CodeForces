@@ -1856,6 +1856,131 @@ html, body {
 }
 
 /* ==========================================================================
+   SUCCESS SCREEN ACTION BUTTONS: Exact Same Shape & Size, Distinct Colors
+   ========================================================================== */
+.success-screen-btn {
+  height: 44px;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 13.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  width: 100%;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.success-screen-btn:hover {
+  transform: translateY(-1.5px);
+}
+
+.success-screen-btn:active {
+  transform: translateY(0.5px);
+}
+
+/* 1. Tidy Code Button - Royal Purple */
+.success-screen-btn.btn-tidy-code {
+  background: #7c3aed;
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(124, 58, 237, 0.28);
+}
+.success-screen-btn.btn-tidy-code:hover {
+  background: #6d28d9;
+  box-shadow: 0 5px 16px rgba(124, 58, 237, 0.36);
+}
+
+/* 2. Review Code Button - Sky Blue */
+.success-screen-btn.btn-review-code {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(2, 132, 199, 0.28);
+}
+.success-screen-btn.btn-review-code:hover {
+  background: #0369a1;
+  box-shadow: 0 5px 16px rgba(2, 132, 199, 0.36);
+}
+
+/* 3. Next Challenge Button - Emerald Green */
+.success-screen-btn.btn-next-challenge {
+  background: #16a34a;
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(22, 163, 74, 0.28);
+}
+.success-screen-btn.btn-next-challenge:hover {
+  background: #15803d;
+  box-shadow: 0 5px 16px rgba(22, 163, 74, 0.36);
+}
+
+/* 4. Roadmap Button - Slate */
+.success-screen-btn.btn-roadmap {
+  background: #334155;
+  color: #ffffff;
+  box-shadow: 0 3px 12px rgba(51, 65, 85, 0.24);
+}
+.success-screen-btn.btn-roadmap:hover {
+  background: #1e293b;
+  box-shadow: 0 5px 16px rgba(30, 41, 59, 0.32);
+}
+
+/* White Square Mini Action Buttons (Exact Same Shape & Size, Different Colors) */
+.white-square-btn {
+  height: 36px;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  flex: 1;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.white-square-btn:hover {
+  transform: translateY(-1px);
+}
+
+.white-square-btn.btn-tidy-code {
+  background: #7c3aed;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.25);
+}
+.white-square-btn.btn-tidy-code:hover {
+  background: #6d28d9;
+}
+
+.white-square-btn.btn-review-code {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+}
+.white-square-btn.btn-review-code:hover {
+  background: #0369a1;
+}
+
+.white-square-btn.btn-next-challenge {
+  background: #16a34a;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+}
+.white-square-btn.btn-next-challenge:hover {
+  background: #15803d;
+}
+
+/* ==========================================================================
    AUTO-HIDING SCROLLBARS: Disappear when not in use, appear on hover/active
    ========================================================================== */
 * {
