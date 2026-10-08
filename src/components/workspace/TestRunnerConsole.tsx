@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TestCase } from '../../types';
 import { ExecutionSummary, TestResult } from '../../lib/codeRunner';
+import { TraceStep } from '../../lib/codeTracer';
 
 interface TestRunnerConsoleProps {
   testCases: TestCase[];
@@ -19,11 +20,11 @@ interface TestRunnerConsoleProps {
   problemTitle?: string;
   onResetCode?: () => void;
   nextProblemId?: string | null;
-  onTidyCode?: () => void;
-  isTidied?: boolean;
-  startReviewIteration?: boolean;
-  onReviewCode?: () => void;
-  onOpenSuccessModal?: () => void;
+  traceSteps?: TraceStep[];
+  activeTraceStepIndex?: number;
+  onSelectTraceStep?: (stepIndex: number) => void;
+  showTracePopover?: boolean;
+  onToggleTracePopover?: () => void;
 }
 
 export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
@@ -41,54 +42,51 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
   problemTitle = 'Code Challenge',
   onResetCode,
   nextProblemId,
-  onTidyCode,
-  isTidied = false,
-  startReviewIteration,
-  onReviewCode,
-  onOpenSuccessModal,
+  traceSteps = [],
+  activeTraceStepIndex = 0,
+  onSelectTraceStep,
+  showTracePopover = true,
+  onToggleTracePopover,
 }) => {
   const currentTest = testCases[selectedTestIndex] || testCases[0];
   const currentResult: TestResult | undefined = executionSummary?.results?.[selectedTestIndex];
   const hasCompilationError = !!executionSummary?.compilationError;
   const allPassed = !!executionSummary?.allPassed;
 
-  // Auto-play iteration state for scrubbing through tests
+  // Auto-play state for stepping through code execution trace
   const [isPlaying, setIsPlaying] = useState(false);
-  const [showFullDetails, setShowFullDetails] = useState(false);
   const playTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Sync startReviewIteration trigger
-  useEffect(() => {
-    if (startReviewIteration) {
-      setIsPlaying(true);
-      onSelectTest(0);
-    }
-  }, [startReviewIteration, onSelectTest]);
+  const totalSteps = Math.max(1, traceSteps.length);
 
-  // Auto-playback stepping
+  // Auto-stepping through line-by-line code execution
   useEffect(() => {
-    if (isPlaying && testCases.length > 1) {
+    if (isPlaying && traceSteps.length > 1 && onSelectTraceStep) {
       playTimerRef.current = setInterval(() => {
-        onSelectTest((selectedTestIndex + 1) % testCases.length);
-      }, 1400);
+        onSelectTraceStep((activeTraceStepIndex + 1) % traceSteps.length);
+      }, 1500);
     } else {
       if (playTimerRef.current) clearInterval(playTimerRef.current);
     }
     return () => {
       if (playTimerRef.current) clearInterval(playTimerRef.current);
     };
-  }, [isPlaying, selectedTestIndex, testCases.length, onSelectTest]);
+  }, [isPlaying, activeTraceStepIndex, traceSteps.length, onSelectTraceStep]);
 
-  const handlePrevTest = () => {
+  const handlePrevStep = () => {
     setIsPlaying(false);
-    const prev = selectedTestIndex === 0 ? testCases.length - 1 : selectedTestIndex - 1;
-    onSelectTest(prev);
+    if (onSelectTraceStep) {
+      const prev = activeTraceStepIndex <= 0 ? traceSteps.length - 1 : activeTraceStepIndex - 1;
+      onSelectTraceStep(prev);
+    }
   };
 
-  const handleNextTest = () => {
+  const handleNextStep = () => {
     setIsPlaying(false);
-    const next = (selectedTestIndex + 1) % testCases.length;
-    onSelectTest(next);
+    if (onSelectTraceStep) {
+      const next = (activeTraceStepIndex + 1) % traceSteps.length;
+      onSelectTraceStep(next);
+    }
   };
 
   // Determine global run status
@@ -116,7 +114,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
       <div
         className="minimal-console-header"
         style={{
-          height: '50px',
+          height: '52px',
           padding: '0 16px',
           display: 'flex',
           alignItems: 'center',
@@ -125,7 +123,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
           flexShrink: 0,
         }}
       >
-        {/* Left: Test Case Dots with Downward Indicator Caret */}
+        {/* Left: Test Case Dots with Concentric Halo Outline Glow */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', position: 'relative' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             {testCases.map((tc, idx) => {
@@ -133,10 +131,19 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               const isSelected = selectedTestIndex === idx;
 
               let dotColor = '#cbd5e1'; // neutral pending
+              let haloColor = 'rgba(203, 213, 225, 0.55)'; // light surrounding glow
+
               if (hasCompilationError) {
                 dotColor = '#ef4444';
+                haloColor = 'rgba(248, 113, 113, 0.45)';
               } else if (res) {
-                dotColor = res.passed ? '#22c55e' : '#ef4444';
+                if (res.passed) {
+                  dotColor = '#10b981';
+                  haloColor = 'rgba(52, 211, 153, 0.45)'; // exact light green glow from screenshot
+                } else {
+                  dotColor = '#ef4444';
+                  haloColor = 'rgba(248, 113, 113, 0.45)'; // light red glow
+                }
               }
 
               return (
@@ -152,27 +159,27 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                     }}
                     title={`Test ${idx + 1}: ${tc.title || 'Case ' + (idx + 1)}`}
                     style={{
-                      width: isSelected ? '22px' : '20px',
-                      height: isSelected ? '22px' : '20px',
+                      width: '18px',
+                      height: '18px',
                       borderRadius: '50%',
                       backgroundColor: dotColor,
                       border: 'none',
                       cursor: 'pointer',
                       padding: 0,
                       transition: 'all 0.18s ease',
-                      boxShadow: isSelected ? `0 0 0 3px rgba(37, 99, 235, 0.18)` : 'none',
-                      transform: isSelected ? 'scale(1.08)' : 'scale(1)',
+                      // Exact concentric outline glow of a lighter shade surrounding the dot
+                      boxShadow: isSelected ? `0 0 0 5px ${haloColor}` : 'none',
                     }}
                     id={`minimal-test-dot-${idx + 1}`}
                     aria-label={`Select test ${idx + 1}`}
                   />
 
-                  {/* Downward Caret Triangle under the selected dot (exact screenshot match) */}
+                  {/* Downward Caret Triangle under the active dot */}
                   {isSelected && (
                     <div
                       style={{
                         position: 'absolute',
-                        bottom: '-12px',
+                        bottom: '-14px',
                         left: '50%',
                         transform: 'translateX(-50%)',
                         width: 0,
@@ -316,11 +323,11 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
             flex: 1,
             display: 'grid',
             gridTemplateColumns: 'minmax(320px, 1fr) minmax(320px, 1fr)',
-            height: 'calc(100% - 53px)',
+            height: 'calc(100% - 55px)',
             overflow: 'hidden',
           }}
         >
-          {/* Left Column: Test Case Status, Diagnostic & Iteration Stepper */}
+          {/* Left Column: Test Case Status & Line-by-Line Scrubber Stepper */}
           <div
             style={{
               display: 'flex',
@@ -335,33 +342,61 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
             {/* Upper Content Area */}
             <div
               style={{
-                padding: '20px 24px 14px',
+                padding: '18px 22px 14px',
                 overflowY: 'auto',
                 flex: 1,
               }}
             >
-              {/* Test Title & Subtitle */}
-              <h2
-                style={{
-                  fontSize: '18px',
-                  fontWeight: 800,
-                  color: '#1e293b',
-                  margin: '0 0 4px',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                {currentTest?.title || `Test ${selectedTestIndex + 1}`}
-              </h2>
-              <p
-                style={{
-                  fontSize: '13.5px',
-                  color: '#64748b',
-                  margin: '0 0 16px',
-                  lineHeight: 1.4,
-                }}
-              >
-                {currentTest?.description || `A bit of everything across test case #${selectedTestIndex + 1}.`}
-              </p>
+              {/* Test Header & Status Icon matching screenshot */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div>
+                  <h2
+                    style={{
+                      fontSize: '18px',
+                      fontWeight: 800,
+                      color: '#1e293b',
+                      margin: '0 0 4px',
+                      letterSpacing: '-0.01em',
+                    }}
+                  >
+                    {currentTest?.title || `Test Case ${selectedTestIndex + 1}`}
+                  </h2>
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: '#64748b',
+                      margin: 0,
+                      lineHeight: 1.4,
+                    }}
+                  >
+                    {currentTest?.description || `Verification across test case #${selectedTestIndex + 1}.`}
+                  </p>
+                </div>
+
+                {/* Status Indicator Icon (Green Checkmark from screenshot) */}
+                {currentResult && (
+                  <div
+                    style={{
+                      width: '26px',
+                      height: '26px',
+                      borderRadius: '50%',
+                      backgroundColor: currentResult.passed ? '#dcfce7' : '#fee2e2',
+                      color: currentResult.passed ? '#16a34a' : '#dc2626',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '14px',
+                      fontWeight: 800,
+                      border: `1.5px solid ${currentResult.passed ? '#86efac' : '#fca5a5'}`,
+                      flexShrink: 0,
+                      marginLeft: '12px',
+                    }}
+                    title={currentResult.passed ? 'Test Passed' : 'Test Failed'}
+                  >
+                    {currentResult.passed ? '✓' : '✕'}
+                  </div>
+                )}
+              </div>
 
               {/* Compilation Error Alert */}
               {hasCompilationError && executionSummary?.compilationError && (
@@ -369,8 +404,9 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                   style={{
                     backgroundColor: '#fff1f2',
                     borderRadius: '12px',
-                    padding: '14px 18px',
-                    marginBottom: '14px',
+                    padding: '12px 16px',
+                    marginTop: '12px',
+                    marginBottom: '12px',
                     border: '1px solid #fecdd3',
                   }}
                 >
@@ -384,7 +420,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                       borderRadius: '5px',
                       display: 'inline-block',
                       letterSpacing: '0.04em',
-                      marginBottom: '8px',
+                      marginBottom: '6px',
                     }}
                   >
                     ERROR
@@ -392,7 +428,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                   <div
                     style={{
                       color: '#b91c1c',
-                      fontSize: '12.5px',
+                      fontSize: '12px',
                       fontFamily: 'var(--font-mono)',
                       whiteSpace: 'pre-wrap',
                       lineHeight: 1.4,
@@ -403,127 +439,92 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 </div>
               )}
 
-              {/* Status Box matching screenshot */}
+              {/* Clean Table matching screenshot: Code run, Expected, Actual */}
               <div
                 style={{
-                  backgroundColor: !hasRun
-                    ? '#f8fafc'
-                    : currentResult?.passed
-                    ? '#f0fdf4'
-                    : '#fff1f2',
+                  marginTop: '14px',
+                  backgroundColor: '#ffffff',
                   borderRadius: '12px',
-                  padding: '14px 18px',
-                  marginBottom: '16px',
-                  transition: 'background-color 0.2s ease',
+                  border: '1px solid #e2e8f0',
+                  overflow: 'hidden',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
                 }}
               >
-                {/* Status Badge */}
-                <div style={{ marginBottom: '8px' }}>
-                  <span
-                    style={{
-                      backgroundColor: !hasRun
-                        ? '#64748b'
-                        : currentResult?.passed
-                        ? '#22c55e'
-                        : '#ef4444',
-                      color: '#ffffff',
-                      fontSize: '11px',
-                      fontWeight: 800,
-                      padding: '2.5px 8px',
-                      borderRadius: '5px',
-                      display: 'inline-block',
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {!hasRun ? 'READY' : currentResult?.passed ? 'PASS' : 'FAIL'}
-                  </span>
-                </div>
-
-                {/* Status Message Text */}
                 <div
                   style={{
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: !hasRun
-                      ? '#475569'
-                      : currentResult?.passed
-                      ? '#15803d'
-                      : '#b91c1c',
-                    lineHeight: 1.4,
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px 14px',
+                    borderBottom: '1px solid #f1f5f9',
+                    fontSize: '13px',
                   }}
                 >
-                  {!hasRun
-                    ? 'Click Run Code above to compile and evaluate this test case.'
-                    : currentResult?.passed
-                    ? `Output matched expected output! (${currentResult.executionTimeMs}ms)`
-                    : currentResult
-                    ? `Day ${selectedTestIndex + 1}'s output isn't right. Expected "${currentTest?.expectedOutput?.trim()}", but got "${currentResult.actualOutput?.trim() || '(empty)'}".`
-                    : 'Execution failed.'}
+                  <span style={{ width: '90px', fontWeight: 700, color: '#334155' }}>Code run</span>
+                  <code style={{ color: '#0284c7', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                    {currentTest?.input?.trim() ? `run(${currentTest.input.trim().replace(/\n/g, ', ')})` : 'main()'}
+                  </code>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px 14px',
+                    borderBottom: '1px solid #f1f5f9',
+                    fontSize: '13px',
+                  }}
+                >
+                  <span style={{ width: '90px', fontWeight: 700, color: '#334155' }}>Expected</span>
+                  <code style={{ color: '#16a34a', fontFamily: 'var(--font-mono)', fontWeight: 600 }}>
+                    {currentTest?.expectedOutput?.trim() || '(none)'}
+                  </code>
+                </div>
+
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: '10px 14px',
+                    fontSize: '13px',
+                  }}
+                >
+                  <span style={{ width: '90px', fontWeight: 700, color: '#334155' }}>Actual</span>
+                  <code
+                    style={{
+                      color: currentResult?.passed ? '#16a34a' : currentResult ? '#dc2626' : '#94a3b8',
+                      fontFamily: 'var(--font-mono)',
+                      fontWeight: 600,
+                    }}
+                  >
+                    {currentResult?.actualOutput?.trim() || '(not run yet)'}
+                  </code>
                 </div>
               </div>
 
-              {/* Minimalist Input & Output Drawer Toggle */}
-              <div style={{ marginTop: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowFullDetails(!showFullDetails)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#2563eb',
-                    fontSize: '12.5px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    padding: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  <span>{showFullDetails ? '▾ Hide I/O Details' : '▸ Show Test I/O Details'}</span>
-                </button>
-
-                {showFullDetails && (
-                  <div
+              {/* Active Step Line Indicator */}
+              {traceSteps.length > 0 && traceSteps[activeTraceStepIndex] && (
+                <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span
                     style={{
-                      marginTop: '10px',
-                      padding: '12px',
-                      backgroundColor: '#f8fafc',
+                      fontSize: '11px',
+                      fontWeight: 700,
+                      backgroundColor: '#eff6ff',
+                      color: '#2563eb',
+                      padding: '2px 8px',
                       borderRadius: '10px',
-                      border: '1px solid #e2e8f0',
-                      fontSize: '12px',
+                      border: '1px solid #bfdbfe',
                     }}
                   >
-                    <div style={{ marginBottom: '8px' }}>
-                      <span style={{ fontWeight: 700, color: '#475569' }}>Input: </span>
-                      <code style={{ fontFamily: 'var(--font-mono)', color: '#0f172a' }}>
-                        {currentTest?.input?.trim() || '(none)'}
-                      </code>
-                    </div>
-                    <div style={{ marginBottom: '8px' }}>
-                      <span style={{ fontWeight: 700, color: '#475569' }}>Expected Output: </span>
-                      <code style={{ fontFamily: 'var(--font-mono)', color: '#16a34a' }}>
-                        {currentTest?.expectedOutput?.trim() || '(none)'}
-                      </code>
-                    </div>
-                    <div>
-                      <span style={{ fontWeight: 700, color: '#475569' }}>Your Output: </span>
-                      <code
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          color: currentResult?.passed ? '#16a34a' : currentResult ? '#dc2626' : '#94a3b8',
-                        }}
-                      >
-                        {currentResult?.actualOutput?.trim() || '(not run yet)'}
-                      </code>
-                    </div>
-                  </div>
-                )}
-              </div>
+                    Line {traceSteps[activeTraceStepIndex].lineNumber}
+                  </span>
+                  <span style={{ fontSize: '12px', color: '#64748b' }}>
+                    Step {activeTraceStepIndex + 1} of {traceSteps.length}
+                  </span>
+                </div>
+              )}
             </div>
 
-            {/* Bottom Scrubber & Iteration Bar (Matching screenshot bottom controls) */}
+            {/* Bottom Scrubber & Line-by-Line Iteration Bar (Matching screenshot controls) */}
             <div
               className="minimal-scrubber-bar"
               style={{
@@ -537,11 +538,11 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 flexShrink: 0,
               }}
             >
-              {/* Play / Pause button */}
+              {/* Play / Pause button for stepping through lines */}
               <button
                 type="button"
                 onClick={() => setIsPlaying(!isPlaying)}
-                title={isPlaying ? 'Pause Auto-stepping' : 'Iterate / Step Through Test Cases'}
+                title={isPlaying ? 'Pause auto-iteration' : 'Iterate line-by-line through code'}
                 style={{
                   width: '32px',
                   height: '32px',
@@ -563,16 +564,18 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 {isPlaying ? '⏸' : '▶'}
               </button>
 
-              {/* Slider Timeline Scrubber */}
+              {/* Slider Timeline Scrubber for line-by-line stepping */}
               <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
                 <input
                   type="range"
                   min={0}
-                  max={Math.max(0, testCases.length - 1)}
-                  value={selectedTestIndex}
+                  max={Math.max(0, traceSteps.length - 1)}
+                  value={activeTraceStepIndex}
                   onChange={e => {
                     setIsPlaying(false);
-                    onSelectTest(parseInt(e.target.value, 10));
+                    if (onSelectTraceStep) {
+                      onSelectTraceStep(parseInt(e.target.value, 10));
+                    }
                   }}
                   style={{
                     width: '100%',
@@ -581,15 +584,15 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                     height: '6px',
                   }}
                   id="scrubber-range-slider"
-                  aria-label="Scrub through test iterations"
+                  aria-label="Scrub through code lines"
                 />
               </div>
 
               {/* Step Back button */}
               <button
                 type="button"
-                onClick={handlePrevTest}
-                title="Step backward (previous test)"
+                onClick={handlePrevStep}
+                title="Step backward one line"
                 style={{
                   width: '28px',
                   height: '28px',
@@ -606,7 +609,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                   flexShrink: 0,
                 }}
                 id="btn-step-prev"
-                aria-label="Previous test step"
+                aria-label="Previous step"
               >
                 ‹
               </button>
@@ -614,8 +617,8 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               {/* Step Forward button */}
               <button
                 type="button"
-                onClick={handleNextTest}
-                title="Step forward (next test)"
+                onClick={handleNextStep}
+                title="Step forward one line"
                 style={{
                   width: '28px',
                   height: '28px',
@@ -632,47 +635,49 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                   flexShrink: 0,
                 }}
                 id="btn-step-next"
-                aria-label="Next test step"
+                aria-label="Next step"
               >
                 ›
               </button>
 
-              {/* Toggle switch for iterating/auto-loop */}
-              <button
-                type="button"
-                onClick={() => setShowFullDetails(!showFullDetails)}
-                title="Toggle I/O detail view"
-                style={{
-                  width: '38px',
-                  height: '22px',
-                  borderRadius: '11px',
-                  backgroundColor: showFullDetails ? '#3b82f6' : '#cbd5e1',
-                  border: 'none',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  padding: '2px',
-                  transition: 'background-color 0.2s ease',
-                  flexShrink: 0,
-                }}
-                id="toggle-details-switch"
-                aria-label="Toggle details"
-              >
-                <div
+              {/* Toggle switch for What Happened explanation popover */}
+              {onToggleTracePopover && (
+                <button
+                  type="button"
+                  onClick={onToggleTracePopover}
+                  title={showTracePopover ? 'Hide "What happened" explanation' : 'Show "What happened" explanation'}
                   style={{
-                    width: '18px',
-                    height: '18px',
-                    borderRadius: '50%',
-                    backgroundColor: '#ffffff',
-                    transform: showFullDetails ? 'translateX(16px)' : 'translateX(0px)',
-                    transition: 'transform 0.2s ease',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                    width: '38px',
+                    height: '22px',
+                    borderRadius: '11px',
+                    backgroundColor: showTracePopover ? '#3b82f6' : '#cbd5e1',
+                    border: 'none',
+                    cursor: 'pointer',
+                    position: 'relative',
+                    padding: '2px',
+                    transition: 'background-color 0.2s ease',
+                    flexShrink: 0,
                   }}
-                />
-              </button>
+                  id="toggle-details-switch"
+                  aria-label="Toggle explanation popover"
+                >
+                  <div
+                    style={{
+                      width: '18px',
+                      height: '18px',
+                      borderRadius: '50%',
+                      backgroundColor: '#ffffff',
+                      transform: showTracePopover ? 'translateX(16px)' : 'translateX(0px)',
+                      transition: 'transform 0.2s ease',
+                      boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+                    }}
+                  />
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Right Column: Minimalist White Square with the Problem Emoji */}
+          {/* Right Column: Clean White Square with Problem Emoji */}
           <div
             style={{
               backgroundColor: '#f8fafc',
@@ -762,73 +767,33 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                     : `✕ Test ${selectedTestIndex + 1} Failed`}
                 </span>
 
-                {/* If all passed: celebration & action buttons */}
+                {/* If all passed: celebration & link to iterate next */}
                 {allPassed && (
-                  <div style={{ marginTop: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', width: '100%', maxWidth: '300px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#16a34a' }}>
-                        All {testCases.length} Tests Passed! 🎉
-                      </span>
-                      {onOpenSuccessModal && (
-                        <button
-                          type="button"
-                          onClick={onOpenSuccessModal}
-                          title="Open celebration summary"
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            padding: '2px',
-                          }}
-                        >
-                          🏆
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Uniform Shape & Size Action Buttons, Distinct Colors */}
-                    <div style={{ display: 'flex', gap: '6px', width: '100%', justifyContent: 'center' }}>
-                      {/* 1. Tidy Code Button (Purple) */}
-                      {onTidyCode && (
-                        <button
-                          type="button"
-                          onClick={onTidyCode}
-                          className="white-square-btn btn-tidy-code"
-                          title="Auto-format code indentation"
-                          id="btn-ws-tidy-code"
-                        >
-                          <span>{isTidied ? '✓ Tidied!' : '🧹 Tidy'}</span>
-                        </button>
-                      )}
-
-                      {/* 2. Review Code Button (Sky Blue) - allows user to iterate through successful code */}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsPlaying(true);
-                          onSelectTest(0);
-                          if (onReviewCode) onReviewCode();
+                  <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#16a34a' }}>
+                      All {testCases.length} Tests Passed! 🎉
+                    </span>
+                    {nextProblemId && (
+                      <a
+                        href={`/problem/${nextProblemId}`}
+                        style={{
+                          fontSize: '12.5px',
+                          color: '#2563eb',
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          marginTop: '4px',
+                          background: '#eff6ff',
+                          padding: '6px 16px',
+                          borderRadius: '12px',
+                          border: '1px solid #bfdbfe',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
                         }}
-                        className="white-square-btn btn-review-code"
-                        title="Iterate and step through passed test cases"
-                        id="btn-ws-review-code"
                       >
-                        <span>{isPlaying ? '⏸ Pause' : '🔍 Review'}</span>
-                      </button>
-
-                      {/* 3. Next Challenge Button (Emerald Green) */}
-                      {nextProblemId && (
-                        <a
-                          href={`/problem/${nextProblemId}`}
-                          className="white-square-btn btn-next-challenge"
-                          title="Proceed to next problem"
-                          id="btn-ws-next-challenge"
-                        >
-                          <span>Next &rarr;</span>
-                        </a>
-                      )}
-                    </div>
+                        Iterate Next Challenge &rarr;
+                      </a>
+                    )}
                   </div>
                 )}
               </div>

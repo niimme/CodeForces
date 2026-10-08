@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import { getProblemById, getAllProblems } from '@/lib/cfScraper';
 import { runTestCases, ExecutionSummary } from '@/lib/codeRunner';
 import { markProblemCompleted } from '@/lib/userProgress';
-import { tidyCode } from '@/lib/codeTidier';
+import { traceCodeExecution } from '@/lib/codeTracer';
 import { ProblemMetadata } from '@/types';
 import { InstructionsHeader, WorkspaceTab } from '@/components/workspace/InstructionsHeader';
 import { CodeEditor } from '@/components/workspace/CodeEditor';
@@ -27,25 +27,26 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [executionSummary, setExecutionSummary] = useState<ExecutionSummary | null>(null);
   const [showCelebration, setShowCelebration] = useState<boolean>(false);
   const [nextProblemId, setNextProblemId] = useState<string | null>(null);
-  const [isTidied, setIsTidied] = useState<boolean>(false);
-  const [startReviewIteration, setStartReviewIteration] = useState<boolean>(false);
 
-  const handleTidyCode = () => {
-    if (!code) return;
-    const tidied = tidyCode(code, language);
-    setCode(tidied);
-    setIsTidied(true);
-    setTimeout(() => setIsTidied(false), 2500);
-  };
+  // Line-by-line Code Execution Trace state
+  const [activeTraceStepIndex, setActiveTraceStepIndex] = useState<number>(0);
+  const [showTracePopover, setShowTracePopover] = useState<boolean>(true);
 
-  const handleReviewCode = () => {
-    setShowCelebration(false);
-    setSelectedTestIndex(0);
-    setStartReviewIteration(prev => !prev);
-    if (isMobile) {
-      setMobileTab('tests');
-    }
-  };
+  const currentTestCase = problem?.testCases?.[selectedTestIndex] || problem?.testCases?.[0];
+  const currentResult = executionSummary?.results?.[selectedTestIndex];
+  const traceSteps = useMemo(() => {
+    return traceCodeExecution(
+      code,
+      currentTestCase?.input || '',
+      currentTestCase?.expectedOutput || '',
+      currentResult?.actualOutput || '',
+      language
+    );
+  }, [code, currentTestCase, currentResult, language]);
+
+  useEffect(() => {
+    setActiveTraceStepIndex(0);
+  }, [selectedTestIndex, code]);
 
   // Resizable Windows Sizing State
   // horizontalSplit = % width of left pane (Code + Console)
@@ -425,6 +426,9 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 onToggleMaximize={toggleMaximizeEditor}
                 breakpoints={breakpoints}
                 onToggleBreakpoint={handleToggleBreakpoint}
+                activeTraceStep={traceSteps[activeTraceStepIndex] || null}
+                showTracePopover={showTracePopover}
+                onCloseTracePopover={() => setShowTracePopover(false)}
               />
             </div>
 
@@ -467,11 +471,11 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 problemTitle={problem.title}
                 onResetCode={handleResetCode}
                 nextProblemId={nextProblemId}
-                onTidyCode={handleTidyCode}
-                isTidied={isTidied}
-                startReviewIteration={startReviewIteration}
-                onReviewCode={handleReviewCode}
-                onOpenSuccessModal={() => setShowCelebration(true)}
+                traceSteps={traceSteps}
+                activeTraceStepIndex={activeTraceStepIndex}
+                onSelectTraceStep={setActiveTraceStepIndex}
+                showTracePopover={showTracePopover}
+                onToggleTracePopover={() => setShowTracePopover(!showTracePopover)}
               />
             </div>
           </section>
@@ -574,68 +578,32 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               <strong style={{ color: '#2563eb' }}>{problem.id} - {problem.title}</strong>!
             </p>
 
-            {/* Action Buttons: Exact Same Shape & Size, Distinct Colors */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '12px',
-                width: '100%',
-              }}
-            >
-              {/* 1. Tidy Code Button (Purple) */}
-              <button
-                type="button"
-                onClick={handleTidyCode}
-                className="success-screen-btn btn-tidy-code"
-                title="Auto-format indentation and spacing in your code"
-                id="btn-success-tidy-code"
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <Link
+                href="/"
+                className="secondary-btn"
+                style={{ padding: '10px 20px', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
               >
-                <span>{isTidied ? '✓ Code Tidied!' : '🧹 Tidy Code'}</span>
-              </button>
-
-              {/* 2. Review Code Button (Sky Blue) - allows user to iterate through successful code */}
-              <button
-                type="button"
-                onClick={handleReviewCode}
-                className="success-screen-btn btn-review-code"
-                title="Review and step through your passed test cases"
-                id="btn-success-review-code"
-              >
-                <span>🔍 Review Code</span>
-              </button>
-
-              {/* 3. Next Challenge Button (Emerald Green) */}
+                &larr; Roadmap
+              </Link>
               {nextProblemId ? (
                 <Link
                   href={`/problem/${nextProblemId}`}
-                  className="success-screen-btn btn-next-challenge"
+                  className="primary-btn"
                   onClick={() => setShowCelebration(false)}
-                  title="Proceed to next problem"
-                  id="btn-success-next-challenge"
+                  style={{ padding: '10px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
                 >
-                  <span>Next Challenge &rarr;</span>
+                  Next Challenge &rarr;
                 </Link>
               ) : (
                 <Link
                   href="/"
-                  className="success-screen-btn btn-next-challenge"
-                  title="All problems completed"
-                  id="btn-success-next-challenge"
+                  className="primary-btn"
+                  style={{ padding: '10px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
                 >
-                  <span>Complete! 🎉</span>
+                  Completed! 🎉
                 </Link>
               )}
-
-              {/* 4. Roadmap Button (Slate) */}
-              <Link
-                href="/"
-                className="success-screen-btn btn-roadmap"
-                title="Return to learning curriculum"
-                id="btn-success-roadmap"
-              >
-                <span>⌂ Roadmap</span>
-              </Link>
             </div>
           </div>
         </div>
