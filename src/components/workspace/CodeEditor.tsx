@@ -33,8 +33,7 @@ const TOKEN_REGEX = new RegExp(
     // 3: Preprocessor (#include, #define)
     '^\\s*#[a-zA-Z_]+[^\\n]*' +
   ')|(' +
-    // 4: Keywords & control flow (BLUE in screenshot)
-    '\\b(?:let|var|val|const|fun|if|else|while|for|do|switch|case|break|continue|return|when|using|namespace|package|class|struct|union|enum|interface|object|public|private|protected|internal|override|open|data|sealed|companion|init|constructor|suspend|inline|reified|typealias|by|is|in|as|template|typename|int|long|double|float|char|bool|boolean|void|string|auto|static|sizeof|typedef|unsigned|signed|short|volatile|extern|register|goto|def|import|from|function)\\b' +
+    '\\b(?:let|var|val|const|fun|if|else|while|for|do|switch|case|default|break|continue|return|when|using|namespace|package|class|struct|union|enum|interface|object|public|private|protected|internal|override|open|data|sealed|companion|init|constructor|suspend|inline|reified|typealias|by|is|in|as|template|typename|int|long|double|float|char|bool|boolean|byte|short|void|string|String|auto|static|final|abstract|synchronized|transient|volatile|native|strictfp|extends|implements|new|this|super|instanceof|try|catch|finally|throw|throws|assert|sizeof|typedef|unsigned|signed|extern|register|goto|def|import|from)\\b' +
   ')|(' +
     // 5: Booleans & Numbers (RED in screenshot)
     '\\b(?:true|false|null|nil|None)\\b|\\b\\d+(?:\\.\\d+)?\\b' +
@@ -103,6 +102,87 @@ function highlightSyntax(rawCode: string): string {
   return html;
 }
 
+export interface FoldBlock {
+  startLine: number; // 1-indexed
+  endLine: number;   // 1-indexed
+}
+
+/**
+ * Computes all collapsible blocks (functions, classes, control structures) in the source code.
+ * Detects matching braces `{ ... }` across lines and Python indentation-based blocks.
+ */
+export function computeFoldableBlocks(code: string): Map<number, FoldBlock> {
+  const map = new Map<number, FoldBlock>();
+  const lines = code.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i];
+    // Clean string literals and single line comments for accurate brace count
+    const cleanLine = rawLine
+      .replace(/"(?:\\.|[^"\\])*"/g, '""')
+      .replace(/'(?:\\.|[^'\\])*'/g, "''")
+      .replace(/\/\/.*/, '');
+
+    const firstBrace = cleanLine.indexOf('{');
+    if (firstBrace !== -1) {
+      let depth = 0;
+      let matchedEnd = -1;
+
+      for (let j = i; j < lines.length; j++) {
+        const curLine = lines[j]
+          .replace(/"(?:\\.|[^"\\])*"/g, '""')
+          .replace(/'(?:\\.|[^'\\])*'/g, "''")
+          .replace(/\/\/.*/, '');
+
+        const startCol = j === i ? firstBrace : 0;
+        for (let c = startCol; c < curLine.length; c++) {
+          if (curLine[c] === '{') depth++;
+          else if (curLine[c] === '}') {
+            depth--;
+            if (depth === 0) {
+              matchedEnd = j;
+              break;
+            }
+          }
+        }
+        if (matchedEnd !== -1) break;
+      }
+
+      if (matchedEnd > i) {
+        map.set(i + 1, {
+          startLine: i + 1,
+          endLine: matchedEnd + 1,
+        });
+      }
+    } else {
+      // Support Python def/class block folding
+      const isPyBlock = /^\s*(def|class|if|for|while|try|with|elif|else)\b.*:\s*$/.test(cleanLine);
+      if (isPyBlock) {
+        const baseIndent = rawLine.match(/^\s*/)?.[0].length ?? 0;
+        let lastBlockLine = -1;
+        for (let j = i + 1; j < lines.length; j++) {
+          const nextTrimmed = lines[j].trim();
+          if (!nextTrimmed || nextTrimmed.startsWith('#')) continue;
+          const nextIndent = lines[j].match(/^\s*/)?.[0].length ?? 0;
+          if (nextIndent <= baseIndent) {
+            lastBlockLine = j - 1;
+            break;
+          }
+          lastBlockLine = j;
+        }
+        if (lastBlockLine > i) {
+          map.set(i + 1, {
+            startLine: i + 1,
+            endLine: lastBlockLine + 1,
+          });
+        }
+      }
+    }
+  }
+
+  return map;
+}
+
 export const CodeEditor: React.FC<CodeEditorProps> = ({
   code,
   onChange,
@@ -130,14 +210,110 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   const [internalBreakpoints, setInternalBreakpoints] = useState<Set<number>>(new Set());
   const activeBreakpoints = propBreakpoints ?? internalBreakpoints;
 
-  // Compute exact line count matching code lines 1-to-1
-  const lines = code.split('\n');
-  const lineCount = lines.length;
+  // Function folding state: Set of 1-indexed start line numbers that are collapsed
+  const [collapsedLines, setCollapsedLines] = useState<Set<number>>(new Set());
 
-  // Memoize syntax highlighting HTML
-  const highlightedHtml = useMemo(() => highlightSyntax(code), [code]);
+  // Compute all collapsible code blocks
+  const foldableMap = useMemo(() => computeFoldableBlocks(code), [code]);
 
-  // Toggle breakpoint on a line
+  // Compute visible lines and display code representation
+  const { visibleLines, displayCode } = useMemo(() => {
+    const rawLines = code.split('\n');
+
+    if (collapsedLines.size === 0) {
+      const vLines = rawLines.map((text, idx) => {
+        const lineNum = idx + 1;
+        const foldBlock = foldableMap.get(lineNum);
+        return {
+          lineNum,
+          displayText: text,
+          isCollapsed: false,
+          isFoldable: !!foldBlock,
+          endLine: foldBlock?.endLine,
+        };
+      });
+      return { visibleLines: vLines, displayCode: code };
+    }
+
+    // Identify which lines are hidden by collapsed blocks
+    const hiddenSet = new Set<number>();
+    collapsedLines.forEach(startLine => {
+      const block = foldableMap.get(startLine);
+      if (block) {
+        for (let l = startLine + 1; l <= block.endLine; l++) {
+          hiddenSet.add(l);
+        }
+      }
+    });
+
+    const vLines: Array<{
+      lineNum: number;
+      displayText: string;
+      isCollapsed: boolean;
+      isFoldable: boolean;
+      endLine?: number;
+    }> = [];
+
+    for (let idx = 0; idx < rawLines.length; idx++) {
+      const lineNum = idx + 1;
+      if (hiddenSet.has(lineNum)) continue;
+
+      const foldBlock = foldableMap.get(lineNum);
+      const isCollapsed = collapsedLines.has(lineNum) && !!foldBlock;
+
+      if (isCollapsed && foldBlock) {
+        const startText = rawLines[idx] || '';
+        const endText = rawLines[foldBlock.endLine - 1] || '';
+        const lastBraceIdx = endText.lastIndexOf('}');
+        const suffix = lastBraceIdx !== -1 ? endText.substring(lastBraceIdx + 1).trim() : '';
+
+        let summaryText: string;
+        if (startText.includes('{')) {
+          const beforeBrace = startText.substring(0, startText.indexOf('{') + 1);
+          summaryText = `${beforeBrace} /* ... */ }${suffix ? ' ' + suffix : ''}`;
+        } else {
+          summaryText = `${startText}  # [folded]`;
+        }
+
+        vLines.push({
+          lineNum,
+          displayText: summaryText,
+          isCollapsed: true,
+          isFoldable: true,
+          endLine: foldBlock.endLine,
+        });
+      } else {
+        vLines.push({
+          lineNum,
+          displayText: rawLines[idx],
+          isCollapsed: false,
+          isFoldable: !!foldBlock,
+          endLine: foldBlock?.endLine,
+        });
+      }
+    }
+
+    const dispCode = vLines.map(v => v.displayText).join('\n');
+    return { visibleLines: vLines, displayCode: dispCode };
+  }, [code, collapsedLines, foldableMap]);
+
+  // Memoize syntax highlighting HTML for displayed text
+  const highlightedHtml = useMemo(() => highlightSyntax(displayCode), [displayCode]);
+
+  // Toggle function collapse / expand
+  const handleToggleFold = (lineNum: number) => {
+    setCollapsedLines(prev => {
+      const next = new Set(prev);
+      if (next.has(lineNum)) {
+        next.delete(lineNum);
+      } else {
+        next.add(lineNum);
+      }
+      return next;
+    });
+  };
+
+  // Toggle breakpoint on a line (independent from fold)
   const handleToggleBreakpoint = (lineNum: number) => {
     if (propToggleBreakpoint) {
       propToggleBreakpoint(lineNum);
@@ -163,8 +339,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   };
 
   const handleAddFromInput = () => {
+    const rawLines = code.split('\n');
     const num = parseInt(bpInputLine.trim(), 10);
-    if (!isNaN(num) && num >= 1 && num <= lineCount) {
+    if (!isNaN(num) && num >= 1 && num <= rawLines.length) {
       if (!activeBreakpoints.has(num)) {
         handleToggleBreakpoint(num);
       }
@@ -174,8 +351,23 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const jumpToLine = (lineNum: number) => {
     setActiveLine(lineNum);
+    // If the line is hidden inside a collapsed block, expand it so it's visible
+    collapsedLines.forEach(sLine => {
+      const block = foldableMap.get(sLine);
+      if (block && lineNum >= block.startLine && lineNum <= block.endLine) {
+        setCollapsedLines(prev => {
+          const next = new Set(prev);
+          next.delete(sLine);
+          return next;
+        });
+      }
+    });
+
     if (textareaRef.current) {
-      textareaRef.current.scrollTop = Math.max(0, (lineNum - 3) * 24);
+      // Find visible row index
+      const vIndex = visibleLines.findIndex(v => v.lineNum === lineNum);
+      const targetIndex = vIndex !== -1 ? vIndex : lineNum - 1;
+      textareaRef.current.scrollTop = Math.max(0, (targetIndex - 3) * 24);
     }
   };
 
@@ -192,13 +384,16 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   }, [showBpMenu]);
 
-  // Track active line number based on cursor position
+  // Track active line number based on cursor position in visible text
   const updateActiveLine = () => {
     if (!textareaRef.current) return;
     const cursorPos = textareaRef.current.selectionStart;
-    const textBefore = code.substring(0, cursorPos);
-    const currentLine = textBefore.split('\n').length;
-    setActiveLine(currentLine);
+    const textBefore = displayCode.substring(0, cursorPos);
+    const visibleLineIndex = textBefore.split('\n').length - 1;
+    const targetItem = visibleLines[visibleLineIndex];
+    if (targetItem) {
+      setActiveLine(targetItem.lineNum);
+    }
   };
 
   // Synchronize vertical & horizontal scroll between textarea, highlight layer, and gutter
@@ -231,7 +426,56 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       highlightRef.current.scrollTop = textareaRef.current.scrollTop;
       highlightRef.current.scrollLeft = textareaRef.current.scrollLeft;
     }
-  }, [code]);
+  }, [displayCode]);
+
+  // Handle code modifications in textarea with preservation of hidden lines
+  const handleTextareaChange = (newVal: string) => {
+    if (collapsedLines.size > 0) {
+      const rawLines = code.split('\n');
+      const newLines = newVal.split('\n');
+
+      const reconstructed: string[] = [];
+      const preservedCollapsed = new Set<number>();
+
+      for (let i = 0; i < newLines.length; i++) {
+        const curLine = newLines[i];
+        let matchedStartLine: number | null = null;
+
+        collapsedLines.forEach(sLine => {
+          const block = foldableMap.get(sLine);
+          if (block) {
+            const startText = rawLines[sLine - 1] || '';
+            const endText = rawLines[block.endLine - 1] || '';
+            const lastBraceIdx = endText.lastIndexOf('}');
+            const suffix = lastBraceIdx !== -1 ? endText.substring(lastBraceIdx + 1).trim() : '';
+            const expected = startText.includes('{')
+              ? `${startText.substring(0, startText.indexOf('{') + 1)} /* ... */ }${suffix ? ' ' + suffix : ''}`
+              : `${startText}  # [folded]`;
+
+            if (curLine === expected) {
+              matchedStartLine = sLine;
+            }
+          }
+        });
+
+        if (matchedStartLine !== null) {
+          const block = foldableMap.get(matchedStartLine)!;
+          for (let l = block.startLine; l <= block.endLine; l++) {
+            reconstructed.push(rawLines[l - 1] || '');
+          }
+          preservedCollapsed.add(matchedStartLine);
+        } else {
+          reconstructed.push(curLine);
+        }
+      }
+
+      setCollapsedLines(preservedCollapsed);
+      onChange(reconstructed.join('\n'));
+    } else {
+      onChange(newVal);
+    }
+    updateActiveLine();
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // Cmd+Enter or Ctrl+Enter runs the code
@@ -251,8 +495,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       const end = textarea.selectionEnd;
       const indent = '    ';
 
-      const newCode = code.substring(0, start) + indent + code.substring(end);
-      onChange(newCode);
+      const newDispCode = displayCode.substring(0, start) + indent + displayCode.substring(end);
+      handleTextareaChange(newDispCode);
 
       requestAnimationFrame(() => {
         if (textareaRef.current) {
@@ -265,12 +509,18 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const handleCopy = async () => {
     try {
+      // Always copy full source code
       await navigator.clipboard.writeText(code);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy', err);
     }
+  };
+
+  const handleResetWithUnfold = () => {
+    setCollapsedLines(new Set());
+    onReset();
   };
 
   return (
@@ -289,9 +539,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
               >
                 <option value="cpp">⚡ C++ (C++20)</option>
                 <option value="c">⚡ C (C17 / clang)</option>
+                <option value="java">⚡ Java (OpenJDK)</option>
                 <option value="kotlin">⚡ Kotlin (JVM)</option>
                 <option value="python">⚡ Python 3</option>
-                <option value="javascript">⚡ JavaScript (Node.js)</option>
               </select>
             </div>
           ) : (
@@ -336,7 +586,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                     <input
                       type="number"
                       min={1}
-                      max={lineCount}
+                      max={code.split('\n').length}
                       placeholder="Line #"
                       value={bpInputLine}
                       onChange={e => setBpInputLine(e.target.value)}
@@ -394,13 +644,27 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                       </button>
                     )}
                     <span className="bp-hint-text">
-                      💡 Click directly on any line number in the gutter to toggle breakpoints.
+                      💡 Click directly on the orange dot column in the gutter to toggle breakpoints.
                     </span>
                   </div>
                 </div>
               </div>
             )}
           </div>
+
+          {/* Active Collapsed Blocks Indicator */}
+          {collapsedLines.size > 0 && (
+            <button
+              type="button"
+              className="editor-collapsed-badge"
+              onClick={() => setCollapsedLines(new Set())}
+              title="Click to expand all functions"
+              id="btn-expand-all-functions"
+            >
+              <span>▸ {collapsedLines.size} {collapsedLines.size === 1 ? 'function' : 'functions'} collapsed</span>
+              <span style={{ fontSize: '11px', textDecoration: 'underline' }}>Expand all</span>
+            </button>
+          )}
 
           <span style={{ fontSize: '11px', color: '#64748b' }} className="editor-shortcut-hint">
             Press <kbd style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', border: '1px solid #e2e8f0', color: '#475569' }}>⌘/Ctrl + Enter</kbd> to run
@@ -419,7 +683,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
           <button
             className="editor-action-btn"
-            onClick={onReset}
+            onClick={handleResetWithUnfold}
             title="Reset code to original starter template"
             id="btn-reset-code"
           >
@@ -440,7 +704,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         </div>
       </div>
 
-      {/* Editor text area with pixel-locked line numbers, fold arrows & breakpoint gutter */}
+      {/* Editor text area with pixel-locked line numbers, independent fold buttons & breakpoint gutter */}
       <div className="code-editor-area">
         <div
           ref={lineNumbersRef}
@@ -448,35 +712,65 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           onWheel={handleGutterWheel}
           aria-label="Line gutter with breakpoints and folding"
         >
-          {Array.from({ length: lineCount }).map((_, i) => {
-            const lineNum = i + 1;
+          {visibleLines.map((item, visibleIdx) => {
+            const { lineNum, isCollapsed, isFoldable, endLine } = item;
             const hasBreakpoint = activeBreakpoints.has(lineNum);
-            const lineText = lines[i] || '';
-            const hasFold = lineText.includes('{');
             const isActive = activeLine === lineNum;
 
             return (
               <div
-                key={lineNum}
-                className={`line-number-row ${isActive ? 'active' : ''} ${hasBreakpoint ? 'has-bp' : ''}`}
-                onClick={() => handleToggleBreakpoint(lineNum)}
-                title={
-                  hasBreakpoint
-                    ? `Line ${lineNum}: Click to remove breakpoint`
-                    : `Line ${lineNum}: Click to add breakpoint`
-                }
+                key={`${lineNum}-${visibleIdx}`}
+                className={`line-number-row ${isActive ? 'active' : ''} ${hasBreakpoint ? 'has-bp' : ''} ${isCollapsed ? 'is-collapsed' : ''}`}
               >
-                {/* Breakpoint dot column (orange circle matching screenshot) */}
-                <span className="gutter-bp-slot">
+                {/* 1. Left Column: Breakpoint Button (independent click target) */}
+                <button
+                  type="button"
+                  className="gutter-bp-slot"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleBreakpoint(lineNum);
+                  }}
+                  title={
+                    hasBreakpoint
+                      ? `Line ${lineNum}: Click to remove breakpoint`
+                      : `Line ${lineNum}: Click to add breakpoint`
+                  }
+                  id={`gutter-bp-btn-${lineNum}`}
+                  aria-label={`Breakpoint line ${lineNum}`}
+                >
                   <span className={`bp-dot ${hasBreakpoint ? 'filled' : 'ghost'}`} />
+                </button>
+
+                {/* 2. Middle Column: Line Number text (click to jump/focus) */}
+                <span
+                  className="gutter-line-num"
+                  onClick={() => jumpToLine(lineNum)}
+                  title={`Line ${lineNum}: Click to jump`}
+                >
+                  {lineNum}
                 </span>
 
-                {/* Line number text */}
-                <span className="gutter-line-num">{lineNum}</span>
-
-                {/* Block fold indicator (blue triangle ▾ matching screenshot) */}
+                {/* 3. Right Column: Function Fold/Collapse Button (completely separate from breakpoint) */}
                 <span className="gutter-fold-slot">
-                  {hasFold && <span className="fold-arrow">▾</span>}
+                  {isFoldable && (
+                    <button
+                      type="button"
+                      className={`gutter-fold-btn ${isCollapsed ? 'collapsed' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleToggleFold(lineNum);
+                      }}
+                      title={
+                        isCollapsed
+                          ? `Line ${lineNum}: Expand function (lines ${lineNum}–${endLine})`
+                          : `Line ${lineNum}: Collapse function (lines ${lineNum}–${endLine})`
+                      }
+                      id={`gutter-fold-btn-${lineNum}`}
+                      aria-label={isCollapsed ? `Expand function at line ${lineNum}` : `Collapse function at line ${lineNum}`}
+                    >
+                      {isCollapsed ? '▸' : '▾'}
+                    </button>
+                  )}
                 </span>
               </div>
             );
@@ -484,11 +778,11 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         </div>
 
         <div className="code-editor-surface">
-          {/* Active Line Background Tint (matching line 1 in screenshot) */}
+          {/* Active Line Background Tint */}
           <div
             className="active-line-bg"
             style={{
-              top: `${14 + (activeLine - 1) * 24 - scrollTop}px`,
+              top: `${14 + (Math.max(0, visibleLines.findIndex(v => v.lineNum === activeLine))) * 24 - scrollTop}px`,
             }}
           />
 
@@ -505,11 +799,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           {/* Interactive transparent textarea on top */}
           <textarea
             ref={textareaRef}
-            value={code}
-            onChange={e => {
-              onChange(e.target.value);
-              updateActiveLine();
-            }}
+            value={displayCode}
+            onChange={e => handleTextareaChange(e.target.value)}
             onKeyDown={handleKeyDown}
             onClick={updateActiveLine}
             onKeyUp={updateActiveLine}
@@ -529,4 +820,3 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     </div>
   );
 };
-

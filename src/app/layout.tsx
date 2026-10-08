@@ -4,7 +4,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Codeforces Interactive Learning & Practice Platform',
   description: 'Gamified learning path and split-screen workspace for top-solved Codeforces programming challenges.',
-  keywords: ['Codeforces', 'Algorithms', 'Competitive Programming', 'JavaScript', 'Python', 'Learning Path'],
+  keywords: ['Codeforces', 'Algorithms', 'Competitive Programming', 'C++', 'Java', 'Python', 'Learning Path'],
 };
 
 export default function RootLayout({

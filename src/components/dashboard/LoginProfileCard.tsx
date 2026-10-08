@@ -45,8 +45,9 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
   // Login modal tab: 'cf' | 'credentials' | 'demo'
   const [loginTab, setLoginTab] = useState<'cf' | 'credentials' | 'demo'>('cf');
 
-  // CF handle state
+  // Auth form state
   const [handleInput, setHandleInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
@@ -76,7 +77,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
     onUpdateProgress(guest);
   };
 
-  const handleConnectCF = async (customHandle?: string) => {
+  const handleModalSignIn = (customHandle?: string) => {
     const targetHandle = (customHandle || handleInput).trim();
     if (!targetHandle) return;
 
@@ -91,53 +92,38 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
         onUpdateProgress(updated);
         handleCloseModal();
         setHandleInput('');
+        setPasswordInput('');
         return;
       }
 
-      // Live Codeforces user query
-      const res = await fetch(`https://codeforces.com/api/user.info?handles=${encodeURIComponent(targetHandle)}`);
-      if (!res.ok) throw new Error('Could not find Codeforces user');
-      const data = await res.json();
-      if (data.status === 'OK' && data.result?.[0]) {
-        const u = data.result[0];
-        const newProfile: UserProgress = {
-          userId: `cf_${u.handle}`,
-          name: `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.handle,
-          handle: u.handle,
-          avatarUrl: u.titlePhoto || u.avatar,
-          rating: u.rating || 1200,
-          rank: u.rank || 'Specialist',
-          maxRating: u.maxRating,
-          maxRank: u.maxRank,
-          streakDays: 1,
+      // Check registered accounts or local credentials
+      const res = loginWithCredentials(targetHandle, passwordInput);
+      if (res.success && res.user) {
+        onUpdateProgress(res.user);
+        handleCloseModal();
+        setHandleInput('');
+        setPasswordInput('');
+      } else {
+        // Fallback: create quick local guest profile for user
+        const fallbackProfile: UserProgress = {
+          userId: `usr_${targetHandle}`,
+          name: targetHandle,
+          handle: targetHandle,
           isLoggedIn: true,
+          rating: 1200,
+          rank: 'Pupil',
+          streakDays: 1,
           completedProblemIds: progress.completedProblemIds || [],
           badges: progress.badges || INITIAL_BADGES,
         };
-        const updated = loginUser(newProfile);
+        const updated = loginUser(fallbackProfile);
         onUpdateProgress(updated);
         handleCloseModal();
         setHandleInput('');
-      } else {
-        throw new Error(data.comment || 'Codeforces user not found');
+        setPasswordInput('');
       }
     } catch (err: any) {
-      // Fallback local profile
-      const fallbackProfile: UserProgress = {
-        userId: `cf_${targetHandle}`,
-        name: targetHandle,
-        handle: targetHandle,
-        isLoggedIn: true,
-        rating: 1400,
-        rank: 'Specialist',
-        streakDays: 1,
-        completedProblemIds: progress.completedProblemIds || [],
-        badges: progress.badges || INITIAL_BADGES,
-      };
-      const updated = loginUser(fallbackProfile);
-      onUpdateProgress(updated);
-      handleCloseModal();
-      setHandleInput('');
+      setLoginError(err.message || 'Login failed. Please check credentials.');
     } finally {
       setIsLoading(false);
     }
@@ -461,7 +447,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
               id="btn-primary-sign-in"
             >
               <span>🔑</span>
-              <span>Connect Codeforces Handle</span>
+              <span>Sign In / Register</span>
             </button>
 
             <Link
@@ -474,7 +460,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
                 fontWeight: 600,
               }}
             >
-              Open Handle Connect Page &rarr;
+              Go to Account Login Page &rarr;
             </Link>
           </div>
         )}
@@ -545,10 +531,10 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
                   </div>
                   <div>
                     <h3 style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                      Connect Codeforces Handle
+                      Account Sign In
                     </h3>
                     <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0' }}>
-                      Sync your rating, rank, and solved problems
+                      Sign in to save solutions, streaks & achievements
                     </p>
                   </div>
                 </div>
@@ -594,21 +580,21 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
                 </div>
               )}
 
-              {/* Codeforces Handle Input Form */}
+              {/* Account Sign In Form */}
               <div>
-                <div style={{ marginBottom: '14px' }}>
+                <div style={{ marginBottom: '12px' }}>
                   <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                    Codeforces Handle
+                    Username, Handle, or Email
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. tourist, petr, nicholas"
+                    placeholder="e.g. nicholas or your account name"
                     value={handleInput}
                     onChange={e => setHandleInput(e.target.value)}
-                    onKeyDown={e => e.key === 'Enter' && handleConnectCF()}
+                    onKeyDown={e => e.key === 'Enter' && handleModalSignIn()}
                     style={{
                       width: '100%',
-                      padding: '12px 14px',
+                      padding: '11px 14px',
                       borderRadius: '10px',
                       border: '1.5px solid #cbd5e1',
                       fontSize: '14px',
@@ -620,8 +606,32 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
                   />
                 </div>
 
+                <div style={{ marginBottom: '14px' }}>
+                  <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                    Password (Optional for Demo Profiles)
+                  </label>
+                  <input
+                    type="password"
+                    placeholder="Enter password"
+                    value={passwordInput}
+                    onChange={e => setPasswordInput(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleModalSignIn()}
+                    style={{
+                      width: '100%',
+                      padding: '11px 14px',
+                      borderRadius: '10px',
+                      border: '1.5px solid #cbd5e1',
+                      fontSize: '14px',
+                      fontFamily: 'inherit',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                    id="input-password-modal"
+                  />
+                </div>
+
                 <button
-                  onClick={() => handleConnectCF()}
+                  onClick={() => handleModalSignIn()}
                   disabled={isLoading || !handleInput.trim()}
                   style={{
                     width: '100%',
@@ -638,15 +648,26 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
                     alignItems: 'center',
                     justifyContent: 'center',
                     gap: '8px',
-                    marginBottom: '16px',
+                    marginBottom: '12px',
                   }}
                   id="btn-confirm-cf-handle"
                 >
-                  {isLoading ? <span>Verifying with Codeforces API...</span> : <span>Connect Handle &rarr;</span>}
+                  {isLoading ? <span>Signing In...</span> : <span>Sign In &rarr;</span>}
                 </button>
 
-                <div style={{ fontSize: '11px', color: '#64748b', textAlign: 'center', marginBottom: '16px' }}>
-                  Verified live with Codeforces Official Public API
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+                  <Link
+                    href="/login"
+                    onClick={handleCloseModal}
+                    style={{
+                      fontSize: '12px',
+                      color: '#2563eb',
+                      fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Need an account? Open Register Page &rarr;
+                  </Link>
                 </div>
 
                 {/* Quick Select Demo Handles */}

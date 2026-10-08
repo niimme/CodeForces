@@ -24,7 +24,7 @@ export interface ProblemMetadata {
   sampleNotesHtml?: string;
   starterCode: string;
   starterCodeCpp?: string;
-  starterCodeJs?: string;
+  starterCodeJava?: string;
   starterCodePy?: string;
   hints?: string[];
   explanation?: string;

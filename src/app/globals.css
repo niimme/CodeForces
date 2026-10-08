@@ -1161,11 +1161,11 @@ html, body {
   line-height: 1.4;
 }
 
-/* Line Gutter with Breakpoint Dots & Fold Indicators (matching screenshot) */
+/* Line Gutter with Breakpoint Dots & Fold Indicators */
 .line-numbers {
-  width: 58px;
-  min-width: 58px;
-  max-width: 58px;
+  width: 68px;
+  min-width: 68px;
+  max-width: 68px;
   padding: 14px 0;
   color: #94a3b8;
   background-color: #ffffff;
@@ -1181,8 +1181,7 @@ html, body {
   line-height: 24px;
   display: flex;
   align-items: center;
-  padding: 0 4px 0 6px;
-  cursor: pointer;
+  padding: 0 4px;
   box-sizing: border-box;
   transition: background-color 0.12s ease;
   position: relative;
@@ -1197,26 +1196,42 @@ html, body {
   background-color: rgba(2, 132, 199, 0.08);
 }
 
-/* Breakpoint Column (orange dot matching screenshot) */
+.line-number-row.is-collapsed {
+  background-color: rgba(2, 132, 199, 0.04);
+}
+
+/* Breakpoint Column & Button (Independent Left Column) */
 .gutter-bp-slot {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.1s ease;
+}
+
+.gutter-bp-slot:hover {
+  background-color: rgba(249, 115, 22, 0.15);
 }
 
 .bp-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   transition: all 0.12s ease;
+  pointer-events: none;
 }
 
 .bp-dot.filled {
   background: #f97316;
-  box-shadow: 0 0 5px rgba(249, 115, 22, 0.55);
+  box-shadow: 0 0 5px rgba(249, 115, 22, 0.65);
   transform: scale(1);
 }
 
@@ -1226,20 +1241,26 @@ html, body {
   transform: scale(0.75);
 }
 
-.line-number-row:hover .bp-dot.ghost {
+.gutter-bp-slot:hover .bp-dot.ghost {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Line Number text */
+/* Line Number text (Center Column) */
 .gutter-line-num {
   flex: 1;
   text-align: right;
-  padding-right: 4px;
+  padding: 0 4px;
   color: #94a3b8;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   font-family: var(--font-mono);
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.gutter-line-num:hover {
+  color: #0284c7;
 }
 
 .line-number-row.active .gutter-line-num {
@@ -1247,21 +1268,75 @@ html, body {
   font-weight: 700;
 }
 
-/* Fold Icon (blue triangle ▾ matching screenshot) */
-.gutter-fold-slot {
-  width: 12px;
-  text-align: center;
-  font-size: 11px;
+.line-number-row.is-collapsed .gutter-line-num {
   color: #0284c7;
-  flex-shrink: 0;
-  user-select: none;
-  line-height: 1;
+  font-weight: 700;
 }
 
-.fold-arrow {
-  display: inline-block;
+/* Fold Column & Button (Independent Right Column) */
+.gutter-fold-slot {
+  width: 16px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gutter-fold-btn {
+  width: 16px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 4px;
   color: #0284c7;
   font-size: 11px;
+  line-height: 1;
+  transition: all 0.12s ease;
+  user-select: none;
+}
+
+.gutter-fold-btn:hover {
+  background-color: rgba(2, 132, 199, 0.15);
+  color: #0369a1;
+  transform: scale(1.1);
+}
+
+.gutter-fold-btn.collapsed {
+  background-color: rgba(2, 132, 199, 0.18);
+  color: #0284c7;
+  font-weight: 700;
+  box-shadow: 0 0 4px rgba(2, 132, 199, 0.25);
+}
+
+.gutter-fold-btn.collapsed:hover {
+  background-color: rgba(2, 132, 199, 0.28);
+}
+
+.editor-collapsed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.editor-collapsed-badge:hover {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
 }
 
 /* Active line background tint (matching line 1 in screenshot) */
@@ -1330,6 +1405,38 @@ html, body {
 .code-textarea::selection {
   background: rgba(59, 130, 246, 0.22) !important;
   color: transparent !important;
+}
+
+/* Minimalist Test Runner Console (Matching Screenshot) */
+.minimal-test-console {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.minimal-test-console.minimized {
+  height: 52px !important;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.emoji-white-square {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.emoji-white-square:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07) !important;
 }
 
 /* Test Runner Console Pane (Light Mode) */

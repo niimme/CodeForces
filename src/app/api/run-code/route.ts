@@ -139,19 +139,64 @@ export async function POST(req: NextRequest) {
       runCommand = pyBin;
       runArgs = [srcFile];
 
-    } else if (normLang === 'javascript' || normLang === 'js') {
-      const srcFile = path.join(tempDir, 'solution.js');
+    } else if (normLang === 'java') {
+      let className = 'Solution';
+      const publicClassMatch = code.match(/public\s+(?:final\s+)?class\s+([A-Za-z0-9_$]+)/);
+      if (publicClassMatch) {
+        className = publicClassMatch[1];
+      } else {
+        const mainClassMatch = code.match(/class\s+([A-Za-z0-9_$]+)[\s\S]*?public\s+static\s+void\s+main/);
+        if (mainClassMatch) {
+          className = mainClassMatch[1];
+        } else {
+          const anyClassMatch = code.match(/class\s+([A-Za-z0-9_$]+)/);
+          if (anyClassMatch) {
+            className = anyClassMatch[1];
+          }
+        }
+      }
+
+      const srcFile = path.join(tempDir, `${className}.java`);
       await fs.writeFile(srcFile, code, 'utf8');
 
-      const nodeBin = resolveBinary([
-        process.execPath,
-        '/usr/local/bin/node',
-        '/opt/homebrew/bin/node',
-        'node',
+      const javacBin = resolveBinary([
+        '/opt/homebrew/bin/javac',
+        '/usr/bin/javac',
+        '/usr/local/bin/javac',
+        'javac',
       ]);
 
-      runCommand = nodeBin;
-      runArgs = [srcFile];
+      const compileResult = await new Promise<{ ok: boolean; error?: string }>((resolve) => {
+        execFile(
+          javacBin,
+          ['-encoding', 'UTF-8', '-d', tempDir as string, srcFile],
+          { timeout: 15000 },
+          (err, _stdout, stderr) => {
+            if (err) {
+              const cleanErr = (stderr || err.message).replaceAll(tempDir + '/', '');
+              return resolve({ ok: false, error: cleanErr });
+            }
+            resolve({ ok: true });
+          }
+        );
+      });
+
+      if (!compileResult.ok) {
+        return handleCompileError(compileResult.error || 'Java compilation failed', testCases, startTimeTotal);
+      }
+
+      const javaBin = resolveBinary([
+        '/opt/homebrew/bin/java',
+        '/usr/bin/java',
+        '/usr/local/bin/java',
+        'java',
+      ]);
+
+      const pkgMatch = code.match(/^\s*package\s+([a-zA-Z0-9_.]+)\s*;/m);
+      const targetClass = pkgMatch ? `${pkgMatch[1]}.${className}` : className;
+
+      runCommand = javaBin;
+      runArgs = ['-cp', tempDir, targetClass];
 
     } else {
       // Default: C++

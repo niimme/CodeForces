@@ -19,7 +19,7 @@ interface ProblemWorkspaceProps {
 export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [problem, setProblem] = useState<ProblemMetadata | null>(() => getProblemById(problemId) || null);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('instructions');
-  const [language, setLanguage] = useState<'cpp' | 'c' | 'kotlin' | 'javascript' | 'python'>('cpp');
+  const [language, setLanguage] = useState<'cpp' | 'c' | 'kotlin' | 'java' | 'python'>('cpp');
   const [code, setCode] = useState<string>('');
   const [selectedTestIndex, setSelectedTestIndex] = useState<number>(0);
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -107,7 +107,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   // Handle language switching
   const handleLanguageChange = (newLang: string) => {
     if (!problem) return;
-    const typedLang = newLang as 'cpp' | 'c' | 'kotlin' | 'javascript' | 'python';
+    const typedLang = newLang as 'cpp' | 'c' | 'kotlin' | 'java' | 'python';
     setLanguage(typedLang);
     // Keep template blank when switching language
     setCode('');
@@ -443,6 +443,10 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 onToggleMaximize={toggleMaximizeConsole}
                 isMinimized={isMinimizedConsole}
                 onToggleMinimize={toggleMinimizeConsole}
+                problemEmoji={problem.emoji}
+                problemTitle={problem.title}
+                onResetCode={handleResetCode}
+                nextProblemId={nextProblemId}
               />
             </div>
           </section>
@@ -540,7 +544,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               Accepted! (AC)
             </h2>
             <p style={{ color: '#64748b', fontSize: '14px', lineHeight: 1.6, marginBottom: '24px' }}>
-              Congratulations! Your C++ solution passed all <strong>5 / 5 test cases</strong> for{' '}
+              Congratulations! Your {language === 'cpp' ? 'C++' : language === 'c' ? 'C' : language === 'kotlin' ? 'Kotlin' : language === 'java' ? 'Java' : 'Python'} solution passed all <strong>5 / 5 test cases</strong> for{' '}
               <strong style={{ color: '#2563eb' }}>{problem.id} - {problem.title}</strong>!
             </p>
 

@@ -16,8 +16,8 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Install compilers and runtimes for C, C++, Python, and Kotlin in runner container
-RUN apk add --no-cache g++ clang libc6-compat python3 openjdk17-jre curl bash unzip \
+# Install compilers and runtimes for C, C++, Java, Kotlin, and Python in runner container
+RUN apk add --no-cache g++ clang libc6-compat python3 openjdk17 curl bash unzip \
     && curl -sSL https://github.com/JetBrains/kotlin/releases/download/v1.9.23/kotlin-compiler-1.9.23.zip -o /tmp/kotlin.zip \
     && unzip -q /tmp/kotlin.zip -d /opt \
     && ln -s /opt/kotlinc/bin/kotlinc /usr/bin/kotlinc \

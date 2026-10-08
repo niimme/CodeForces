@@ -150,6 +150,7 @@ async function scrape() {
       outputSpecificationHtml: outputSpecHtml,
       sampleNotesHtml: noteHtml,
       starterCode: generateStarterCode(p.name, problemId),
+      starterCodeJava: generateStarterCodeJava(p.name, problemId),
       starterCodePy: generateStarterCodePy(p.name, problemId),
       testCases,
     });
@@ -170,16 +171,28 @@ async function scrape() {
 }
 
 function generateStarterCode(title: string, id: string): string {
-  return `/**
- * Problem: ${id} - ${title}
- * Standard input is provided as a string parameter 'input'.
- * Return your answer as a string (or number/array formatted as string).
- */
-function solve(input) {
-  const lines = input.trim().split('\\n').map(l => l.trim());
-  // TODO: implement your solution here
-  
-  return "";
+  return `// Problem: ${id} - ${title}
+#include <iostream>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    // TODO: implement your solution here
+    return 0;
+}
+`;
+}
+
+function generateStarterCodeJava(title: string, id: string): string {
+  return `// Problem: ${id} - ${title}
+import java.util.Scanner;
+
+public class Solution {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        // TODO: implement your solution here
+    }
 }
 `;
 }

@@ -40,7 +40,7 @@ export function normalizeOutput(output: string): string {
 
 /**
  * Runs code through the backend compilation & execution sandbox (/api/run-code).
- * Supports C++, C, Kotlin, Python, and JavaScript.
+ * Supports C++, C, Java, Kotlin, and Python.
  */
 export async function runBackendTestCases(
   userCode: string,
@@ -84,121 +84,15 @@ export async function runBackendTestCases(
   }
 }
 
-// Backward-compatibility alias
+// Backward-compatibility aliases
 export const runCppTestCases = (userCode: string, testCases: TestCase[]) =>
   runBackendTestCases(userCode, testCases, 'cpp');
 
-/**
- * Safely runs JavaScript in the browser sandbox.
- */
-export async function runJsTestCases(
-  userCode: string,
-  testCases: TestCase[]
-): Promise<ExecutionSummary> {
-  const results: TestResult[] = [];
-  const allLogs: string[] = [];
-  let passedCount = 0;
-  const startTimeTotal = performance.now();
-
-  for (const tc of testCases) {
-    const logs: string[] = [];
-    let actualOutput = '';
-    let error: string | undefined;
-    const testStartTime = performance.now();
-
-    try {
-      const customConsole = {
-        log: (...args: any[]) => {
-          const str = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
-          logs.push(str);
-          allLogs.push(`[Test ${tc.id}] ${str}`);
-        },
-        warn: (...args: any[]) => {
-          const str = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
-          logs.push(`[WARN] ${str}`);
-          allLogs.push(`[Test ${tc.id} WARN] ${str}`);
-        },
-        error: (...args: any[]) => {
-          const str = args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ');
-          logs.push(`[ERROR] ${str}`);
-          allLogs.push(`[Test ${tc.id} ERROR] ${str}`);
-        }
-      };
-
-      const runnerPromise = new Promise<{ output: string }>((resolve, reject) => {
-        try {
-          const wrappedCode = `
-            ${userCode}
-
-            if (typeof solve === 'function') {
-              return solve(__input__);
-            } else {
-              throw new Error("No function named 'solve' was found. Please define 'function solve(input) { ... }'");
-            }
-          `;
-
-          const runnerFn = new Function('__input__', 'console', wrappedCode);
-          const rawResult = runnerFn(tc.input, customConsole);
-
-          if (rawResult !== undefined && rawResult !== null) {
-            resolve({ output: String(rawResult) });
-          } else if (logs.length > 0) {
-            resolve({ output: logs.join('\n') });
-          } else {
-            resolve({ output: '' });
-          }
-        } catch (err: any) {
-          reject(err);
-        }
-      });
-
-      const timeoutPromise = new Promise<{ output: string }>((_, reject) => {
-        setTimeout(() => reject(new Error('Time Limit Exceeded (> 2500ms). Check for infinite loops!')), 2500);
-      });
-
-      const outcome = await Promise.race([runnerPromise, timeoutPromise]);
-      actualOutput = outcome.output;
-    } catch (err: any) {
-      error = err.message || String(err);
-      actualOutput = `Error: ${error}`;
-    }
-
-    const testEndTime = performance.now();
-    const executionTimeMs = Math.round((testEndTime - testStartTime) * 100) / 100;
-
-    const normActual = normalizeOutput(actualOutput);
-    const normExpected = normalizeOutput(tc.expectedOutput);
-    const passed = !error && normActual === normExpected;
-
-    if (passed) passedCount++;
-
-    results.push({
-      testCaseId: tc.id,
-      title: tc.title,
-      passed,
-      actualOutput,
-      expectedOutput: tc.expectedOutput,
-      input: tc.input,
-      executionTimeMs,
-      logs,
-      error,
-    });
-  }
-
-  const totalTimeMs = Math.round((performance.now() - startTimeTotal) * 100) / 100;
-
-  return {
-    allPassed: passedCount === testCases.length,
-    passedCount,
-    totalCount: testCases.length,
-    totalTimeMs,
-    results,
-    capturedLogs: allLogs,
-  };
-}
+export const runJavaTestCases = (userCode: string, testCases: TestCase[]) =>
+  runBackendTestCases(userCode, testCases, 'java');
 
 /**
- * Universal runner dispatching C++, C, Kotlin, Python, and JavaScript.
+ * Universal runner dispatching C++, C, Java, Kotlin, and Python.
  */
 export async function runTestCases(
   userCode: string,
@@ -206,7 +100,6 @@ export async function runTestCases(
   language: string = 'cpp'
 ): Promise<ExecutionSummary> {
   const normLang = language.toLowerCase();
-  // Try backend sandbox first for reliable process execution across all languages
   return runBackendTestCases(userCode, testCases, normLang);
 }
 

@@ -163,6 +163,9 @@ export interface AuthAccount {
   rating: number;
   rank: string;
   avatarUrl?: string;
+  completedProblemIds?: string[];
+  badges?: Badge[];
+  streakDays?: number;
 }
 
 export function getUserProgress(): UserProgress {
@@ -194,6 +197,25 @@ export function saveUserProgress(progress: UserProgress): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+    // Also persist progress to accounts registry if logged into an account
+    if (progress.isLoggedIn && progress.userId?.startsWith('acc_')) {
+      const raw = localStorage.getItem(AUTH_ACCOUNTS_KEY);
+      if (raw) {
+        const accounts: Record<string, AuthAccount> = JSON.parse(raw);
+        for (const key of Object.keys(accounts)) {
+          if (accounts[key].handle.toLowerCase() === progress.handle.toLowerCase()) {
+            accounts[key].completedProblemIds = progress.completedProblemIds;
+            accounts[key].badges = progress.badges;
+            accounts[key].rating = progress.rating ?? 1200;
+            accounts[key].rank = progress.rank ?? 'Pupil';
+            accounts[key].streakDays = progress.streakDays;
+            localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
+            break;
+          }
+        }
+      }
+    }
   } catch (e) {
     console.error('Failed to save progress to localStorage', e);
   }
@@ -313,10 +335,10 @@ export function loginWithCredentials(emailOrHandle: string, password: string): {
       isLoggedIn: true,
       rating: account.rating,
       rank: account.rank,
-      streakDays: 1,
+      streakDays: (account as any).streakDays || 1,
       avatarUrl: account.avatarUrl,
-      completedProblemIds: [],
-      badges: INITIAL_BADGES,
+      completedProblemIds: (account as any).completedProblemIds || [],
+      badges: (account as any).badges || INITIAL_BADGES,
     };
 
     loginUser(userProfile);

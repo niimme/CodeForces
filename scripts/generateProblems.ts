@@ -84,7 +84,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 4A - Watermelon
  * Input: w (integer as string or number)
  * Return: 'YES' or 'NO'
@@ -237,7 +237,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 71A - Way Too Long Words
  * Input: Multiline string containing n, followed by n words
  * Return: Abbreviated words separated by newline
@@ -398,7 +398,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 231A - Team
  * Input: Multiline string with n followed by lines of 3 numbers (0 or 1)
  * Return: Number of problems where sum >= 2
@@ -568,7 +568,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 282A - Bit++
  * Input: Multiline string with n followed by n operations (++X, X++, --X, X--)
  * Return: Final integer value of x
@@ -737,7 +737,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 158A - Next Round
  * Input:
  *   Line 1: "n k"
@@ -886,7 +886,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 50A - Domino piling
  * Input: "M N"
  * Return: Maximum number of 2x1 dominoes that fit
@@ -1031,7 +1031,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 263A - Beautiful Matrix
  * Input: 5 lines representing a 5x5 matrix with a single '1'
  * Return: Minimum row and column swaps to move '1' to (3, 3)
@@ -1197,7 +1197,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 112A - Petya and Strings
  * Input: Two lines with strings of equal length
  * Return: -1, 0, or 1
@@ -1343,7 +1343,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 236A - Boy or Girl
  * Input: A single string with the username
  * Return: 'CHAT WITH HER!' if distinct chars is even, else 'IGNORE HIM!'
@@ -1499,7 +1499,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 339A - Helpful Maths
  * Input: String expression like "3+2+1"
  * Return: Sorted expression like "1+2+3"
@@ -1631,7 +1631,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 281A - Word Capitalization
  * Input: Single word
  * Return: Word with first character capitalized
@@ -1771,7 +1771,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 791A - Bear and Big Brother
  * Input: "a b"
  * Return: Years until a > b (a triples each year, b doubles each year)
@@ -1909,7 +1909,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 617A - Elephant
  * Input: x (distance)
  * Return: Minimum steps of sizes {1, 2, 3, 4, 5}
@@ -2056,7 +2056,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 977A - Wrong Subtraction
  * Input: "n k"
  * Return: Number after k steps of Tanya's subtraction
@@ -2211,7 +2211,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 266A - Stones on the Table
  * Input:
  *   Line 1: n
@@ -2356,7 +2356,7 @@ int main() {
     return 0;
 }
 `,
-    starterCodeJs: `/**
+    starterCodeJava: `/**
  * Problem: 546A - Soldier and Bananas
  * Input: "k n w"
  * Return: Dollars soldier must borrow (or 0 if has enough)
