@@ -1,7 +1,5 @@
 # Codeforces Interactive Learning & Practice Platform 🚀
 
-A modern, high-performance web platform for competitive programming and algorithm practice based on top-solved Codeforces problems.
-
 ## ℹ️ About
 - I created this website to combine all the code forces problems and compiler into one page so I don't have to click through multiple pages or use my own compiler to check the answer as of now this has 20 problems that my ICPC team is currently working on
   
