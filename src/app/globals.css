@@ -936,6 +936,82 @@ button, input, select, textarea {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
+/* Instructions Header Settings & Account Controls */
+.instructions-settings-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 5px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.instructions-settings-btn:hover {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
+}
+
+.ws-settings-lang-badge {
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 8px;
+  letter-spacing: 0.3px;
+}
+
+.instructions-user-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 4px 10px 4px 6px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.instructions-user-btn:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.instructions-user-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb 0%, #6366f1 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.instructions-user-name {
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Code Editor Component in Light Mode */
 /* Code Editor Component in Light Mode - Exclusively JetBrains Mono */
 .code-editor-area {
@@ -1279,6 +1355,20 @@ button, input, select, textarea {
 .gutter-line-num {
   font-family: 'JetBrains Mono', monospace !important;
   font-feature-settings: 'liga' on, 'calt' on;
+  font-variant-ligatures: normal;
+}
+
+/* User Setting: Disabled JetBrains Mono Ligatures */
+.code-editor-area.ligatures-disabled,
+.code-editor-area.ligatures-disabled *,
+.ligatures-disabled,
+.ligatures-disabled *,
+body.cf-no-ligatures .code-editor-area,
+body.cf-no-ligatures .code-editor-area *,
+[data-ligatures="false"] .code-editor-area,
+[data-ligatures="false"] .code-editor-area * {
+  font-feature-settings: 'liga' off, 'calt' off !important;
+  font-variant-ligatures: none !important;
 }
 
 .gutter-line-num:hover {

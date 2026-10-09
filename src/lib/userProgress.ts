@@ -1,4 +1,9 @@
-import { UserProgress, Badge } from '../types';
+import { UserProgress, Badge, SupportedLanguage, UserSettings } from '../types';
+
+export const DEFAULT_USER_SETTINGS: UserSettings = {
+  preferredLanguage: 'cpp',
+  editorLigatures: true,
+};
 
 export const INITIAL_BADGES: Badge[] = [
   {
@@ -107,23 +112,29 @@ export const DEMO_PROFILES: Record<string, UserProgress> = {
     userId: 'usr_nicholas_1',
     name: 'Nicholas I.',
     handle: 'nicholas',
+    email: 'nicholas@codeforces.dev',
     isLoggedIn: true,
     rating: 1540,
     rank: 'Specialist',
     streakDays: 3,
     completedProblemIds: ['4A'],
     badges: INITIAL_BADGES,
+    preferredLanguage: 'cpp',
+    editorLigatures: true,
   },
   tourist: {
     userId: 'usr_tourist',
     name: 'Gennady Korotkevich',
     handle: 'tourist',
+    email: 'tourist@itmo.ru',
     isLoggedIn: true,
     rating: 3979,
     rank: 'Legendary Grandmaster',
     streakDays: 142,
     completedProblemIds: ['4A', '71A', '231A', '282A', '158A', '50A', '263A', '112A', '236A', '339A'],
     badges: INITIAL_BADGES.map(b => ({ ...b, unlockedAt: b.unlockedAt || '2026-09-15' })),
+    preferredLanguage: 'cpp',
+    editorLigatures: true,
   },
   guest: {
     userId: 'usr_guest',
@@ -135,6 +146,8 @@ export const DEMO_PROFILES: Record<string, UserProgress> = {
     streakDays: 1,
     completedProblemIds: [],
     badges: INITIAL_BADGES.map(b => ({ ...b, unlockedAt: undefined })),
+    preferredLanguage: 'cpp',
+    editorLigatures: true,
   },
 };
 
@@ -148,6 +161,8 @@ export const GUEST_USER: UserProgress = {
   streakDays: 0,
   completedProblemIds: [],
   badges: INITIAL_BADGES.map(b => ({ ...b, unlockedAt: undefined })),
+  preferredLanguage: 'cpp',
+  editorLigatures: true,
 };
 
 export const INITIAL_USER_PROGRESS: UserProgress = GUEST_USER;
@@ -166,6 +181,63 @@ export interface AuthAccount {
   completedProblemIds?: string[];
   badges?: Badge[];
   streakDays?: number;
+  preferredLanguage?: SupportedLanguage;
+  editorLigatures?: boolean;
+}
+
+export function getUserSettings(): UserSettings {
+  if (typeof window === 'undefined') return DEFAULT_USER_SETTINGS;
+  try {
+    const rawLang = localStorage.getItem('cf_preferred_lang');
+    const rawLigatures = localStorage.getItem('cf_editor_ligatures');
+    const user = getUserProgress();
+
+    const candidateLang = (rawLang || user.preferredLanguage || 'cpp') as SupportedLanguage;
+    const preferredLanguage: SupportedLanguage = ['cpp', 'c', 'kotlin', 'java', 'python'].includes(candidateLang)
+      ? candidateLang
+      : 'cpp';
+
+    const editorLigatures = rawLigatures !== null
+      ? rawLigatures !== 'false'
+      : (user.editorLigatures ?? true);
+
+    return {
+      preferredLanguage,
+      editorLigatures,
+    };
+  } catch {
+    return DEFAULT_USER_SETTINGS;
+  }
+}
+
+export function saveUserSettings(settings: Partial<UserSettings>): UserSettings {
+  if (typeof window === 'undefined') return DEFAULT_USER_SETTINGS;
+  try {
+    const current = getUserSettings();
+    const updated: UserSettings = {
+      ...current,
+      ...settings,
+    };
+
+    localStorage.setItem('cf_preferred_lang', updated.preferredLanguage);
+    localStorage.setItem('cf_editor_ligatures', String(updated.editorLigatures));
+
+    // Also update current active user progress
+    const user = getUserProgress();
+    if (user) {
+      saveUserProgress({
+        ...user,
+        preferredLanguage: updated.preferredLanguage,
+        editorLigatures: updated.editorLigatures,
+      });
+    }
+
+    // Dispatch event so all components react immediately
+    window.dispatchEvent(new CustomEvent('cf_settings_changed', { detail: updated }));
+    return updated;
+  } catch {
+    return DEFAULT_USER_SETTINGS;
+  }
 }
 
 export function getUserProgress(): UserProgress {
@@ -180,6 +252,8 @@ export function getUserProgress(): UserProgress {
       return {
         ...GUEST_USER,
         completedProblemIds: parsed?.completedProblemIds || [],
+        preferredLanguage: (localStorage.getItem('cf_preferred_lang') as SupportedLanguage) || 'cpp',
+        editorLigatures: localStorage.getItem('cf_editor_ligatures') !== 'false',
       };
     }
     return {
@@ -187,6 +261,10 @@ export function getUserProgress(): UserProgress {
       ...parsed,
       isLoggedIn: true,
       badges: parsed.badges || INITIAL_BADGES,
+      preferredLanguage: (localStorage.getItem('cf_preferred_lang') as SupportedLanguage) || parsed.preferredLanguage || 'cpp',
+      editorLigatures: localStorage.getItem('cf_editor_ligatures') !== null
+        ? localStorage.getItem('cf_editor_ligatures') !== 'false'
+        : (parsed.editorLigatures ?? true),
     };
   } catch (e) {
     return GUEST_USER;
@@ -197,6 +275,13 @@ export function saveUserProgress(progress: UserProgress): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+    if (progress.preferredLanguage) {
+      localStorage.setItem('cf_preferred_lang', progress.preferredLanguage);
+    }
+    if (progress.editorLigatures !== undefined) {
+      localStorage.setItem('cf_editor_ligatures', String(progress.editorLigatures));
+    }
 
     // Also persist progress to accounts registry if logged into an account
     if (progress.isLoggedIn && progress.userId?.startsWith('acc_')) {
@@ -210,6 +295,8 @@ export function saveUserProgress(progress: UserProgress): void {
             accounts[key].rating = progress.rating ?? 1200;
             accounts[key].rank = progress.rank ?? 'Pupil';
             accounts[key].streakDays = progress.streakDays;
+            accounts[key].preferredLanguage = progress.preferredLanguage;
+            accounts[key].editorLigatures = progress.editorLigatures;
             localStorage.setItem(AUTH_ACCOUNTS_KEY, JSON.stringify(accounts));
             break;
           }
@@ -226,6 +313,8 @@ export function logoutUser(): UserProgress {
   const guest: UserProgress = {
     ...GUEST_USER,
     completedProblemIds: current.completedProblemIds,
+    preferredLanguage: current.preferredLanguage || 'cpp',
+    editorLigatures: current.editorLigatures ?? true,
   };
   saveUserProgress(guest);
   return guest;
@@ -242,10 +331,30 @@ export function loginUser(profile: UserProgress): UserProgress {
     completedProblemIds: mergedProblemIds,
   };
   saveUserProgress(loggedIn);
+
+  // Sync settings
+  if (loggedIn.preferredLanguage) {
+    localStorage.setItem('cf_preferred_lang', loggedIn.preferredLanguage);
+  }
+  if (loggedIn.editorLigatures !== undefined) {
+    localStorage.setItem('cf_editor_ligatures', String(loggedIn.editorLigatures));
+  }
+  window.dispatchEvent(new CustomEvent('cf_settings_changed', {
+    detail: {
+      preferredLanguage: loggedIn.preferredLanguage || 'cpp',
+      editorLigatures: loggedIn.editorLigatures ?? true,
+    }
+  }));
+
   return loggedIn;
 }
 
-export function registerAccount(email: string, password: string, handle: string): { success: boolean; user?: UserProgress; error?: string } {
+export function registerAccount(
+  email: string,
+  password: string,
+  handle: string,
+  preferredLanguage: SupportedLanguage = 'cpp'
+): { success: boolean; user?: UserProgress; error?: string } {
   if (typeof window === 'undefined') return { success: false, error: 'Browser required' };
   try {
     const raw = localStorage.getItem(AUTH_ACCOUNTS_KEY);
@@ -275,6 +384,8 @@ export function registerAccount(email: string, password: string, handle: string)
       name: cleanHandle,
       rating: 1200,
       rank: 'Pupil',
+      preferredLanguage,
+      editorLigatures: true,
     };
 
     accounts[cleanEmail] = newAccount;
@@ -284,12 +395,15 @@ export function registerAccount(email: string, password: string, handle: string)
       userId: `acc_${cleanHandle}`,
       name: cleanHandle,
       handle: cleanHandle,
+      email: cleanEmail,
       isLoggedIn: true,
       rating: 1200,
       rank: 'Pupil',
       streakDays: 1,
       completedProblemIds: [],
       badges: INITIAL_BADGES,
+      preferredLanguage,
+      editorLigatures: true,
     };
 
     loginUser(userProfile);
@@ -332,6 +446,7 @@ export function loginWithCredentials(emailOrHandle: string, password: string): {
       userId: `acc_${account.handle}`,
       name: account.name,
       handle: account.handle,
+      email: account.email,
       isLoggedIn: true,
       rating: account.rating,
       rank: account.rank,
@@ -339,6 +454,8 @@ export function loginWithCredentials(emailOrHandle: string, password: string): {
       avatarUrl: account.avatarUrl,
       completedProblemIds: (account as any).completedProblemIds || [],
       badges: (account as any).badges || INITIAL_BADGES,
+      preferredLanguage: account.preferredLanguage || 'cpp',
+      editorLigatures: account.editorLigatures ?? true,
     };
 
     loginUser(userProfile);

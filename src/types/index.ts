@@ -43,10 +43,18 @@ export interface Badge {
   relatedProblemId?: string;
 }
 
+export type SupportedLanguage = 'cpp' | 'c' | 'kotlin' | 'java' | 'python';
+
+export interface UserSettings {
+  preferredLanguage: SupportedLanguage;
+  editorLigatures: boolean;
+}
+
 export interface UserProgress {
   userId: string;
   name: string;
   handle: string;
+  email?: string;
   isLoggedIn?: boolean;
   avatarUrl?: string;
   rating?: number;
@@ -56,6 +64,8 @@ export interface UserProgress {
   streakDays: number;
   completedProblemIds: string[];
   badges: Badge[];
+  preferredLanguage?: SupportedLanguage;
+  editorLigatures?: boolean;
 }
 
 export interface LearningPathNode {

@@ -13,6 +13,7 @@ import {
   registerAccount,
 } from '../../lib/userProgress';
 import { BadgesModal } from './BadgesModal';
+import { UserSettingsModal } from '../settings/UserSettingsModal';
 
 interface LoginProfileCardProps {
   progress: UserProgress;
@@ -29,6 +30,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
 }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showBadgesModal, setShowBadgesModal] = useState(false);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -377,6 +379,31 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
         {isLoggedIn ? (
           <div style={{ display: 'flex', gap: '8px' }}>
             <button
+              onClick={() => setShowSettingsModal(true)}
+              style={{
+                flex: 1.2,
+                background: '#f8fafc',
+                border: '1px solid #cbd5e1',
+                color: '#334155',
+                fontSize: '12px',
+                fontWeight: 700,
+                padding: '8px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                transition: 'all 0.15s ease',
+              }}
+              id="btn-profile-card-settings"
+              title="Language, Ligatures & User Settings"
+            >
+              <span>⚙️</span>
+              <span>Settings</span>
+            </button>
+
+            <button
               onClick={() => setShowLoginModal(true)}
               style={{
                 flex: 1,
@@ -397,7 +424,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
               id="btn-switch-account"
             >
               <span>👤</span>
-              <span>Switch CF</span>
+              <span>Switch</span>
             </button>
 
             <button
@@ -408,7 +435,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
                 color: '#dc2626',
                 fontSize: '12px',
                 fontWeight: 700,
-                padding: '8px 12px',
+                padding: '8px 10px',
                 borderRadius: '10px',
                 cursor: 'pointer',
                 display: 'flex',
@@ -421,11 +448,33 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
               title="Sign Out"
             >
               <span>🚪</span>
-              <span>Sign Out</span>
             </button>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <button
+              onClick={() => setShowSettingsModal(true)}
+              style={{
+                width: '100%',
+                background: '#f8fafc',
+                border: '1px solid #cbd5e1',
+                color: '#334155',
+                fontSize: '12.5px',
+                fontWeight: 700,
+                padding: '9px',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+              }}
+              id="btn-guest-settings"
+            >
+              <span>⚙️</span>
+              <span>Language & Editor Settings</span>
+            </button>
+
             <button
               onClick={() => setShowLoginModal(true)}
               style={{
@@ -724,6 +773,13 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
           </div>,
           document.body
         )}
+
+      <UserSettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        currentUser={progress}
+        onUserUpdate={onUpdateProgress}
+      />
     </>
   );
 };

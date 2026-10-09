@@ -6,7 +6,7 @@ import { TraceStep } from '@/lib/codeTracer';
 interface CodeEditorProps {
   code: string;
   onChange: (newCode: string) => void;
-  onReset: () => void;
+  onReset?: () => void;
   language?: string;
   onLanguageChange?: (lang: string) => void;
   onRun?: () => void;
@@ -17,6 +17,7 @@ interface CodeEditorProps {
   activeTraceStep?: TraceStep | null;
   showTracePopover?: boolean;
   onCloseTracePopover?: () => void;
+  ligatures?: boolean;
 }
 
 // Tokenizer regex matching the exact font & syntax colors from the user screenshot:
@@ -201,17 +202,14 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   activeTraceStep = null,
   showTracePopover = false,
   onCloseTracePopover,
+  ligatures = true,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
   const highlightRef = useRef<HTMLPreElement>(null);
-  const bpMenuRef = useRef<HTMLDivElement>(null);
 
-  const [copied, setCopied] = useState(false);
   const [activeLine, setActiveLine] = useState<number>(1);
   const [scrollTop, setScrollTop] = useState<number>(0);
-  const [showBpMenu, setShowBpMenu] = useState(false);
-  const [bpInputLine, setBpInputLine] = useState('');
 
   // Breakpoints empty by default
   const [internalBreakpoints, setInternalBreakpoints] = useState<Set<number>>(new Set());
@@ -337,24 +335,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  const handleClearAllBreakpoints = () => {
-    if (propToggleBreakpoint) {
-      activeBreakpoints.forEach(line => propToggleBreakpoint(line));
-    } else {
-      setInternalBreakpoints(new Set());
-    }
-  };
 
-  const handleAddFromInput = () => {
-    const rawLines = code.split('\n');
-    const num = parseInt(bpInputLine.trim(), 10);
-    if (!isNaN(num) && num >= 1 && num <= rawLines.length) {
-      if (!activeBreakpoints.has(num)) {
-        handleToggleBreakpoint(num);
-      }
-      setBpInputLine('');
-    }
-  };
 
   const jumpToLine = (lineNum: number) => {
     setActiveLine(lineNum);
@@ -378,18 +359,6 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  // Close breakpoint menu on outside click
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (bpMenuRef.current && !bpMenuRef.current.contains(e.target as Node)) {
-        setShowBpMenu(false);
-      }
-    };
-    if (showBpMenu) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [showBpMenu]);
 
   // Track active line number based on cursor position in visible text
   const updateActiveLine = () => {
@@ -529,205 +498,15 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   }, [activeTraceStep, showTracePopover, visibleLines]);
 
-  const handleCopy = async () => {
-    try {
-      // Always copy full source code
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy', err);
-    }
-  };
 
-  const handleResetWithUnfold = () => {
-    setCollapsedLines(new Set());
-    onReset();
-  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
-      {/* Editor Toolbar with Language, Breakpoints Manager & Actions */}
-      <div className="editor-toolbar">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {onLanguageChange ? (
-            <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-              <select
-                value={language}
-                onChange={e => onLanguageChange(e.target.value)}
-                className="editor-lang-select"
-                aria-label="Select Programming Language"
-                id="select-programming-language"
-              >
-                <option value="cpp">⚡ C++ (C++20)</option>
-                <option value="c">⚡ C (C17 / clang)</option>
-                <option value="java">⚡ Java (OpenJDK)</option>
-                <option value="kotlin">⚡ Kotlin (JVM)</option>
-                <option value="python">⚡ Python 3</option>
-              </select>
-            </div>
-          ) : (
-            <span className="editor-lang-badge">
-              <span>⚡</span>
-              <span>{language}</span>
-            </span>
-          )}
-
-          {/* Breakpoints Popover Trigger */}
-          <div style={{ position: 'relative' }} ref={bpMenuRef}>
-            <button
-              className={`editor-bp-btn ${activeBreakpoints.size > 0 ? 'has-active' : ''}`}
-              onClick={() => setShowBpMenu(!showBpMenu)}
-              title="Add or manage breakpoints"
-              id="btn-manage-breakpoints"
-            >
-              <span className="bp-indicator-dot" />
-              <span>Breakpoints {activeBreakpoints.size > 0 ? `(${activeBreakpoints.size})` : ''}</span>
-              <span style={{ fontSize: '10px', opacity: 0.7 }}>▾</span>
-            </button>
-
-            {/* Breakpoints Management Menu */}
-            {showBpMenu && (
-              <div className="bp-dropdown-menu">
-                <div className="bp-dropdown-header">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: '#0f172a' }}>
-                    <span style={{ color: '#f97316' }}>●</span>
-                    <span>Breakpoints ({activeBreakpoints.size})</span>
-                  </div>
-                  <button
-                    onClick={() => setShowBpMenu(false)}
-                    className="bp-dropdown-close"
-                    title="Close"
-                  >
-                    ✕
-                  </button>
-                </div>
-
-                <div className="bp-dropdown-body">
-                  <div className="bp-add-row">
-                    <input
-                      type="number"
-                      min={1}
-                      max={code.split('\n').length}
-                      placeholder="Line #"
-                      value={bpInputLine}
-                      onChange={e => setBpInputLine(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') handleAddFromInput();
-                      }}
-                      className="bp-input"
-                      id="input-add-breakpoint"
-                    />
-                    <button
-                      onClick={handleAddFromInput}
-                      className="bp-add-btn"
-                      id="btn-add-breakpoint-line"
-                    >
-                      + Add
-                    </button>
-                  </div>
-
-                  {activeBreakpoints.size > 0 ? (
-                    <div className="bp-list">
-                      {Array.from(activeBreakpoints)
-                        .sort((a, b) => a - b)
-                        .map(lineNum => (
-                          <div key={lineNum} className="bp-list-item">
-                            <button
-                              className="bp-tag"
-                              onClick={() => jumpToLine(lineNum)}
-                              title={`Jump to line ${lineNum}`}
-                            >
-                              <span className="bp-dot-tiny" />
-                              <span>Line {lineNum}</span>
-                            </button>
-                            <button
-                              onClick={() => handleToggleBreakpoint(lineNum)}
-                              className="bp-delete-btn"
-                              title={`Remove breakpoint on line ${lineNum}`}
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                    </div>
-                  ) : (
-                    <p className="bp-empty-text">No active breakpoints.</p>
-                  )}
-
-                  <div className="bp-dropdown-footer">
-                    {activeBreakpoints.size > 0 && (
-                      <button
-                        onClick={handleClearAllBreakpoints}
-                        className="bp-clear-btn"
-                        id="btn-clear-all-breakpoints"
-                      >
-                        Clear All
-                      </button>
-                    )}
-                    <span className="bp-hint-text">
-                      💡 Click directly on the orange dot column in the gutter to toggle breakpoints.
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Active Collapsed Blocks Indicator */}
-          {collapsedLines.size > 0 && (
-            <button
-              type="button"
-              className="editor-collapsed-badge"
-              onClick={() => setCollapsedLines(new Set())}
-              title="Click to expand all functions"
-              id="btn-expand-all-functions"
-            >
-              <span>▸ {collapsedLines.size} {collapsedLines.size === 1 ? 'function' : 'functions'} collapsed</span>
-              <span style={{ fontSize: '11px', textDecoration: 'underline' }}>Expand all</span>
-            </button>
-          )}
-
-          <span style={{ fontSize: '11px', color: '#64748b' }} className="editor-shortcut-hint">
-            Press <kbd style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '4px', border: '1px solid #e2e8f0', color: '#475569' }}>⌘/Ctrl + Enter</kbd> to run
-          </span>
-        </div>
-
-        <div className="editor-actions">
-          <button
-            className="editor-action-btn"
-            onClick={handleCopy}
-            title="Copy code to clipboard"
-            id="btn-copy-code"
-          >
-            <span>{copied ? '✓ Copied' : '📋 Copy'}</span>
-          </button>
-
-          <button
-            className="editor-action-btn"
-            onClick={handleResetWithUnfold}
-            title="Reset code to original starter template"
-            id="btn-reset-code"
-          >
-            <span>🔄 Reset</span>
-          </button>
-
-          {onToggleMaximize && (
-            <button
-              className="editor-action-btn"
-              onClick={onToggleMaximize}
-              title={isMaximized ? 'Restore Editor Height' : 'Maximize Editor Height'}
-              id="btn-maximize-editor"
-              style={{ fontWeight: 600 }}
-            >
-              <span>{isMaximized ? '🗗 Restore' : '⛶ Maximize'}</span>
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Editor text area with pixel-locked line numbers, independent fold buttons & breakpoint gutter */}
-      <div className="code-editor-area">
+      <div
+        className={`code-editor-area ${ligatures === false ? 'ligatures-disabled' : ''}`}
+        style={{ height: '100%' }}
+      >
         <div
           ref={lineNumbersRef}
           className="line-numbers"

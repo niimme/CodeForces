@@ -5,13 +5,14 @@ import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import { getProblemById, getAllProblems } from '@/lib/cfScraper';
 import { runTestCases, ExecutionSummary } from '@/lib/codeRunner';
-import { markProblemCompleted } from '@/lib/userProgress';
+import { markProblemCompleted, getUserProgress, getUserSettings } from '@/lib/userProgress';
 import { traceCodeExecution } from '@/lib/codeTracer';
-import { ProblemMetadata } from '@/types';
+import { ProblemMetadata, UserProgress, SupportedLanguage } from '@/types';
 import { InstructionsHeader, WorkspaceTab } from '@/components/workspace/InstructionsHeader';
 import { CodeEditor } from '@/components/workspace/CodeEditor';
 import { TestRunnerConsole } from '@/components/workspace/TestRunnerConsole';
 import { ProblemStatement } from '@/components/workspace/ProblemStatement';
+import { UserSettingsModal } from '@/components/settings/UserSettingsModal';
 
 interface ProblemWorkspaceProps {
   problemId: string;
@@ -27,6 +28,12 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [executionSummary, setExecutionSummary] = useState<ExecutionSummary | null>(null);
   const [showCelebration, setShowCelebration] = useState<boolean>(false);
   const [nextProblemId, setNextProblemId] = useState<string | null>(null);
+
+  // User Settings & Account Modal State
+  const [currentUser, setCurrentUser] = useState<UserProgress>(() => getUserProgress());
+  const [editorLigatures, setEditorLigatures] = useState<boolean>(() => getUserSettings().editorLigatures);
+  const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
+  const [settingsModalInitialTab, setSettingsModalInitialTab] = useState<'preferences' | 'profile' | 'auth'>('preferences');
 
   // Line-by-line Code Execution Trace state (hidden by default at start of code)
   const [activeTraceStepIndex, setActiveTraceStepIndex] = useState<number>(0);
@@ -487,6 +494,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 activeTraceStep={traceSteps[activeTraceStepIndex] || null}
                 showTracePopover={showTracePopover}
                 onCloseTracePopover={() => setShowTracePopover(false)}
+                ligatures={editorLigatures}
               />
             </div>
 
@@ -593,6 +601,16 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               activeTab={activeTab}
               onSelectTab={setActiveTab}
               logCount={executionSummary?.capturedLogs?.length || 0}
+              currentLanguage={language}
+              onOpenSettings={() => {
+                setSettingsModalInitialTab('preferences');
+                setShowSettingsModal(true);
+              }}
+              onOpenAccount={() => {
+                setSettingsModalInitialTab(currentUser?.isLoggedIn ? 'profile' : 'auth');
+                setShowSettingsModal(true);
+              }}
+              currentUser={currentUser}
             />
 
             <ProblemStatement
@@ -618,6 +636,19 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
           </section>
         )}
       </div>
+
+      {/* User Settings & Full Account Authentication Modal */}
+      <UserSettingsModal
+        isOpen={showSettingsModal}
+        onClose={() => setShowSettingsModal(false)}
+        initialTab={settingsModalInitialTab}
+        currentLanguage={language}
+        onLanguageChange={(newLang) => handleLanguageChange(newLang)}
+        editorLigatures={editorLigatures}
+        onLigaturesChange={(val) => setEditorLigatures(val)}
+        currentUser={currentUser}
+        onUserUpdate={(u) => setCurrentUser(u)}
+      />
 
       {/* All Tests Passed Celebration Modal */}
       {showCelebration && (
