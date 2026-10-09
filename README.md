@@ -8,7 +8,7 @@
   - Seamless navigation to hands-on problem workspaces
 
 - **💻 Multi-Language Code Editor**:
-  -  **Menlo / Monaco / JetBrains Mono** font stack
+  -  **JetBrains Mono** font stack
   - High-fidelity syntax highlighting matching macOS developer toolkits
   - **Interactive Breakpoints**: Click directly on the line gutter to toggle breakpoints (with orange breakpoint markers), or manage them via the editor toolbar
   - Code folding (`▾`) on block structures
