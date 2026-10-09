@@ -1,8 +1,9 @@
 @import "katex/dist/katex.min.css";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,700&display=swap');
 
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  --font-mono: Menlo, Monaco, Consolas, 'JetBrains Mono', 'Courier New', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
 
   /* Crisp Light Mode Colors */
   --bg-primary: #ffffff;
@@ -931,12 +932,12 @@ html, body {
 }
 
 /* Code Editor Component in Light Mode */
-/* Code Editor Component in Light Mode */
+/* Code Editor Component in Light Mode - Exclusively JetBrains Mono */
 .code-editor-area {
   flex: 1;
   position: relative;
   display: flex;
-  font-family: var(--font-mono);
+  font-family: 'JetBrains Mono', monospace !important;
   background-color: #ffffff;
   overflow: hidden; /* Only ONE scrollbar on the textarea, never on the container! */
   height: 100%;
@@ -1254,9 +1255,25 @@ html, body {
   color: #94a3b8;
   font-size: 13px;
   font-weight: 500;
-  font-family: var(--font-mono);
+  font-family: 'JetBrains Mono', monospace !important;
+  font-feature-settings: 'liga' on, 'calt' on;
   cursor: pointer;
   transition: color 0.12s ease;
+}
+
+/* Enforce JetBrains Mono exclusively across Code Editor surface and gutter */
+.code-editor-area,
+.code-editor-surface,
+.code-highlight-layer,
+.code-highlight-layer pre,
+.code-highlight-layer code,
+.code-textarea,
+.line-numbers-gutter,
+.line-numbers-col,
+.line-number-row,
+.gutter-line-num {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-feature-settings: 'liga' on, 'calt' on;
 }
 
 .gutter-line-num:hover {
@@ -1371,7 +1388,8 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 14px 16px;
-  font-family: var(--font-mono);
+  font-family: 'JetBrains Mono', monospace !important;
+  font-feature-settings: 'liga' on, 'calt' on;
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
