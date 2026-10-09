@@ -8,12 +8,12 @@
   - Seamless navigation to hands-on problem workspaces
 
 - **💻 Multi-Language Code Editor**:
-  - Pixel-perfect typography with native **Menlo / Monaco / JetBrains Mono** font stack
+  -  **Menlo / Monaco / JetBrains Mono** font stack
   - High-fidelity syntax highlighting matching macOS developer toolkits
   - **Interactive Breakpoints**: Click directly on the line gutter to toggle breakpoints (with orange breakpoint markers), or manage them via the editor toolbar
   - Code folding (`▾`) on block structures
   - Active line highlighting
-  - Multi-language support: **C++ (C++20 / clang++)**, **Java (OpenJDK)**, **Kotlin (JVM)**, **C (C17 / clang)**, and **Python 3**
+  - Multi-language support for ICPC approved languages: **C++ (C++20 / clang++)**, **Java (OpenJDK)**, **Kotlin (JVM)**, **C (C17 / clang)**, and **Python 3**
 
 - **⚡ Split-Screen Problem Workspace**:
   - Minimalist 1px sizable dividers for flexible window resizing
