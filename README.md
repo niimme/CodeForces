@@ -25,6 +25,6 @@
 
 - **Framework**: Next.js 14+ (App Router)
 - **Language**: TypeScript & React
-- **Styling**: Vanilla CSS Design System with CSS Variables
+- **Styling**: CSS
 - **Math Rendering**: KaTeX
 - **Icons & Effects**: Canvas Confetti
