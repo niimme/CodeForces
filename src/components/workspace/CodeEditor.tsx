@@ -199,7 +199,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   breakpoints: propBreakpoints,
   onToggleBreakpoint: propToggleBreakpoint,
   activeTraceStep = null,
-  showTracePopover = true,
+  showTracePopover = false,
   onCloseTracePopover,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -514,9 +514,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  // Scroll active trace line into view when scrubbing
+  // Scroll active trace line into view when scrubbing with popover enabled
   useEffect(() => {
-    if (activeTraceStep && textareaRef.current) {
+    if (activeTraceStep && showTracePopover && textareaRef.current) {
       const targetIdx = visibleLines.findIndex(v => v.lineNum === activeTraceStep.lineNumber);
       if (targetIdx !== -1) {
         const targetTop = 14 + targetIdx * 24;
@@ -527,7 +527,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         }
       }
     }
-  }, [activeTraceStep, visibleLines]);
+  }, [activeTraceStep, showTracePopover, visibleLines]);
 
   const handleCopy = async () => {
     try {
@@ -808,8 +808,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             }}
           />
 
-          {/* Active Trace Step Outline Box & Popover */}
-          {activeTraceStep && (() => {
+          {/* Active Trace Step Outline Box & Popover (Only when showTracePopover is enabled) */}
+          {activeTraceStep && showTracePopover && (() => {
             const traceLineIdx = visibleLines.findIndex(v => v.lineNum === activeTraceStep.lineNumber);
             if (traceLineIdx === -1) return null;
             const topPos = 14 + traceLineIdx * 24 - scrollTop;

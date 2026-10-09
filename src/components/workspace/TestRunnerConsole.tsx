@@ -45,7 +45,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
   traceSteps = [],
   activeTraceStepIndex = 0,
   onSelectTraceStep,
-  showTracePopover = true,
+  showTracePopover = false,
   onToggleTracePopover,
 }) => {
   const currentTest = testCases[selectedTestIndex] || testCases[0];
@@ -576,6 +576,9 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                     if (onSelectTraceStep) {
                       onSelectTraceStep(parseInt(e.target.value, 10));
                     }
+                    if (!showTracePopover && onToggleTracePopover) {
+                      onToggleTracePopover();
+                    }
                   }}
                   style={{
                     width: '100%',
@@ -591,7 +594,12 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               {/* Step Back button */}
               <button
                 type="button"
-                onClick={handlePrevStep}
+                onClick={() => {
+                  handlePrevStep();
+                  if (!showTracePopover && onToggleTracePopover) {
+                    onToggleTracePopover();
+                  }
+                }}
                 title="Step backward one line"
                 style={{
                   width: '28px',
@@ -617,7 +625,12 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               {/* Step Forward button */}
               <button
                 type="button"
-                onClick={handleNextStep}
+                onClick={() => {
+                  handleNextStep();
+                  if (!showTracePopover && onToggleTracePopover) {
+                    onToggleTracePopover();
+                  }
+                }}
                 title="Step forward one line"
                 style={{
                   width: '28px',

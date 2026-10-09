@@ -28,9 +28,9 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [showCelebration, setShowCelebration] = useState<boolean>(false);
   const [nextProblemId, setNextProblemId] = useState<string | null>(null);
 
-  // Line-by-line Code Execution Trace state
+  // Line-by-line Code Execution Trace state (hidden by default at start of code)
   const [activeTraceStepIndex, setActiveTraceStepIndex] = useState<number>(0);
-  const [showTracePopover, setShowTracePopover] = useState<boolean>(true);
+  const [showTracePopover, setShowTracePopover] = useState<boolean>(false);
 
   const currentTestCase = problem?.testCases?.[selectedTestIndex] || problem?.testCases?.[0];
   const currentResult = executionSummary?.results?.[selectedTestIndex];
@@ -92,13 +92,42 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Load problem and persisted layout splits
+  // Storage keys for persisting code and preferred language per problem
+  const getSavedCodeKey = (pId: string, lang: string) => `cf_code_${pId.toUpperCase()}_${lang}`;
+  const getSavedLangKey = (pId: string) => `cf_lang_${pId.toUpperCase()}`;
+
+  // Load problem, restore saved code & language, and load persisted layout splits
   useEffect(() => {
     const p = getProblemById(problemId);
     if (p) {
       setProblem(p);
-      // Templates are blank by default
-      setCode('');
+
+      // Restore saved language if user previously worked in a specific language
+      let effectiveLang = language;
+      try {
+        const savedLang = localStorage.getItem(getSavedLangKey(p.id)) || localStorage.getItem('cf_preferred_lang');
+        if (savedLang && ['cpp', 'c', 'kotlin', 'java', 'python'].includes(savedLang)) {
+          effectiveLang = savedLang as 'cpp' | 'c' | 'kotlin' | 'java' | 'python';
+          setLanguage(effectiveLang);
+        }
+      } catch (e) {}
+
+      // Restore saved code when going back to this problem, or default to empty
+      try {
+        const savedCode = localStorage.getItem(getSavedCodeKey(p.id, effectiveLang));
+        if (savedCode !== null && savedCode !== undefined) {
+          setCode(savedCode);
+        } else {
+          setCode('');
+        }
+      } catch (e) {
+        setCode('');
+      }
+
+      // Keep "What happened" popover and active box hidden at start of code
+      setShowTracePopover(false);
+      setActiveTraceStepIndex(0);
+      setExecutionSummary(null);
 
       // Find next problem for quick continuation
       const all = getAllProblems();
@@ -125,14 +154,39 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
     }
   }, [problemId]);
 
-  // Handle language switching
+  // Persist code on change
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode);
+    if (problem) {
+      try {
+        localStorage.setItem(getSavedCodeKey(problem.id, language), newCode);
+      } catch (e) {}
+    }
+  };
+
+  // Handle language switching with saved code restoration
   const handleLanguageChange = (newLang: string) => {
     if (!problem) return;
     const typedLang = newLang as 'cpp' | 'c' | 'kotlin' | 'java' | 'python';
     setLanguage(typedLang);
-    // Keep template blank when switching language
-    setCode('');
+    try {
+      localStorage.setItem(getSavedLangKey(problem.id), typedLang);
+      localStorage.setItem('cf_preferred_lang', typedLang);
+    } catch (e) {}
+
+    // Restore saved code for newly selected language if present
+    try {
+      const savedCode = localStorage.getItem(getSavedCodeKey(problem.id, typedLang));
+      if (savedCode !== null && savedCode !== undefined) {
+        setCode(savedCode);
+      } else {
+        setCode('');
+      }
+    } catch (e) {
+      setCode('');
+    }
     setExecutionSummary(null);
+    setShowTracePopover(false);
   };
 
   const handleResetCode = () => {
@@ -140,6 +194,10 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
       if (confirm('Are you sure you want to clear your code?')) {
         setCode('');
         setExecutionSummary(null);
+        setShowTracePopover(false);
+        try {
+          localStorage.removeItem(getSavedCodeKey(problem.id, language));
+        } catch (e) {}
       }
     }
   };
@@ -414,7 +472,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
             >
               <CodeEditor
                 code={code}
-                onChange={setCode}
+                onChange={handleCodeChange}
                 onReset={handleResetCode}
                 language={language}
                 onLanguageChange={handleLanguageChange}
@@ -578,20 +636,42 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
               <strong style={{ color: '#2563eb' }}>{problem.id} - {problem.title}</strong>!
             </p>
 
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link
                 href="/"
                 className="secondary-btn"
                 style={{ padding: '10px 20px', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
+                id="btn-modal-roadmap"
               >
                 &larr; Roadmap
               </Link>
+              <button
+                type="button"
+                onClick={() => setShowCelebration(false)}
+                className="secondary-btn"
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '10px',
+                  border: '1.5px solid #cbd5e1',
+                  backgroundColor: '#ffffff',
+                  color: '#0f172a',
+                  fontWeight: 600,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                }}
+                id="btn-continue-problem"
+                title="Continue working on or reviewing this problem"
+              >
+                Continue Problem
+              </button>
               {nextProblemId ? (
                 <Link
                   href={`/problem/${nextProblemId}`}
                   className="primary-btn"
                   onClick={() => setShowCelebration(false)}
                   style={{ padding: '10px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
+                  id="btn-modal-next-challenge"
                 >
                   Next Challenge &rarr;
                 </Link>
@@ -600,6 +680,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                   href="/"
                   className="primary-btn"
                   style={{ padding: '10px 24px', borderRadius: '10px', textDecoration: 'none', fontWeight: 600, fontSize: '14px' }}
+                  id="btn-modal-next-challenge"
                 >
                   Completed! 🎉
                 </Link>
