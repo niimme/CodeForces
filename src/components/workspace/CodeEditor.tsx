@@ -19,6 +19,7 @@ interface CodeEditorProps {
   showTracePopover?: boolean;
   onCloseTracePopover?: () => void;
   ligatures?: boolean;
+  onActiveLinePosChange?: (topPos: number) => void;
 }
 
 // Tokenizer regex matching the exact font & syntax colors from the user screenshot:
@@ -335,6 +336,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   showTracePopover = false,
   onCloseTracePopover,
   ligatures = true,
+  onActiveLinePosChange,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
@@ -671,20 +673,26 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     }
   };
 
-  // Scroll active trace line into view when scrubbing with popover enabled
+  // Scroll active trace line into view and notify parent of line offset
   useEffect(() => {
-    if (activeTraceStep && showTracePopover && textareaRef.current) {
+    if (activeTraceStep) {
       const targetIdx = visibleLines.findIndex(v => v.lineNum === activeTraceStep.lineNumber);
       if (targetIdx !== -1) {
         const targetTop = 14 + targetIdx * 24;
-        const currentScroll = textareaRef.current.scrollTop;
-        const viewHeight = textareaRef.current.clientHeight;
-        if (targetTop < currentScroll + 20 || targetTop > currentScroll + viewHeight - 60) {
-          textareaRef.current.scrollTop = Math.max(0, targetTop - Math.floor(viewHeight / 3));
+        if (showTracePopover && textareaRef.current) {
+          const currentScroll = textareaRef.current.scrollTop;
+          const viewHeight = textareaRef.current.clientHeight;
+          if (targetTop < currentScroll + 20 || targetTop > currentScroll + viewHeight - 60) {
+            textareaRef.current.scrollTop = Math.max(0, targetTop - Math.floor(viewHeight / 3));
+          }
+        }
+        if (onActiveLinePosChange) {
+          const topPos = 40 + targetTop - scrollTop;
+          onActiveLinePosChange(topPos);
         }
       }
     }
-  }, [activeTraceStep, showTracePopover, visibleLines]);
+  }, [activeTraceStep, showTracePopover, visibleLines, scrollTop, onActiveLinePosChange]);
 
 
 
@@ -776,130 +784,29 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             }}
           />
 
-          {/* Active Trace Step Outline Box & Popover (Only when showTracePopover is enabled) */}
-          {activeTraceStep && showTracePopover && (() => {
+          {/* Active Trace Step Outline Box (Light blue box around current executed line) */}
+          {activeTraceStep && (() => {
             const traceLineIdx = visibleLines.findIndex(v => v.lineNum === activeTraceStep.lineNumber);
             if (traceLineIdx === -1) return null;
             const topPos = 14 + traceLineIdx * 24 - scrollTop;
 
             return (
-              <>
-                <div
-                  className="trace-active-line-box"
-                  style={{
-                    position: 'absolute',
-                    top: `${topPos}px`,
-                    left: '8px',
-                    right: '8px',
-                    height: '24px',
-                    border: '1.5px solid #3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.08)',
-                    borderRadius: '5px',
-                    pointerEvents: 'none',
-                    zIndex: 4,
-                    boxShadow: '0 0 0 1px rgba(59, 130, 246, 0.25)',
-                  }}
-                />
-
-                {/* What happened Speech-Bubble Popover */}
-                {showTracePopover && (
-                  <div
-                    className="trace-what-happened-popover"
-                    style={{
-                      position: 'absolute',
-                      top: `${Math.max(8, topPos - 8)}px`,
-                      right: '16px',
-                      width: '380px',
-                      maxWidth: 'calc(100% - 32px)',
-                      backgroundColor: '#ffffff',
-                      border: '1.5px solid #bfdbfe',
-                      borderRadius: '16px',
-                      boxShadow: '0 16px 40px rgba(37, 99, 235, 0.16), 0 4px 12px rgba(0,0,0,0.06)',
-                      padding: '16px 18px',
-                      zIndex: 25,
-                      animation: 'fadeIn 0.15s ease-out',
-                    }}
-                  >
-                    {/* Speech bubble pointer */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '-8px',
-                        top: '16px',
-                        width: 0,
-                        height: 0,
-                        borderTop: '7px solid transparent',
-                        borderBottom: '7px solid transparent',
-                        borderRight: '8px solid #bfdbfe',
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '-6.5px',
-                        top: '16px',
-                        width: 0,
-                        height: 0,
-                        borderTop: '7px solid transparent',
-                        borderBottom: '7px solid transparent',
-                        borderRight: '8px solid #ffffff',
-                      }}
-                    />
-
-                    {/* Header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '15px', color: '#0284c7' }}>⚡</span>
-                        <span style={{ fontSize: '14.5px', fontWeight: 800, color: '#0f172a' }}>
-                          What happened
-                        </span>
-                      </div>
-                      {onCloseTracePopover && (
-                        <button
-                          type="button"
-                          onClick={onCloseTracePopover}
-                          title="Close explanation"
-                          style={{
-                            width: '22px',
-                            height: '22px',
-                            borderRadius: '50%',
-                            border: 'none',
-                            background: '#f1f5f9',
-                            color: '#64748b',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Main Description */}
-                    <p style={{ fontSize: '13px', color: '#1e293b', margin: '0 0 10px', lineHeight: 1.45, fontWeight: 500 }}>
-                      {activeTraceStep.whatHappened}
-                    </p>
-
-                    {/* Steps Took */}
-                    <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '8px' }}>
-                      <div style={{ fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                        Steps Took
-                      </div>
-                      <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.55 }}>
-                        {activeTraceStep.stepsTaken.map((st, i) => (
-                          <li key={i} style={{ marginBottom: '3px' }}>
-                            {st}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </>
+              <div
+                className="trace-active-line-box"
+                style={{
+                  position: 'absolute',
+                  top: `${topPos}px`,
+                  left: '8px',
+                  right: '8px',
+                  height: '24px',
+                  border: '1.5px solid #3b82f6',
+                  backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                  borderRadius: '5px',
+                  pointerEvents: 'none',
+                  zIndex: 4,
+                  boxShadow: '0 0 0 1px rgba(59, 130, 246, 0.25)',
+                }}
+              />
             );
           })()}
 

@@ -18,6 +18,52 @@ interface ProblemWorkspaceProps {
   problemId: string;
 }
 
+function renderStepTokens(text: string): React.ReactNode[] {
+  const regex = /("[^"]*"|\b\d+\b|\b[A-Za-z0-9_$]+(?:\([^)]*\))?)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIdx = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIdx) {
+      parts.push(text.substring(lastIdx, match.index));
+    }
+    const token = match[0];
+    const isSpecial =
+      token.startsWith('"') ||
+      /^\d+$/.test(token) ||
+      token.includes('(') ||
+      ['tempString', 'word', 'loopLength', 'i', 'temp', 'ans', 'count'].includes(token);
+
+    if (isSpecial) {
+      parts.push(
+        <span
+          key={match.index}
+          style={{
+            backgroundColor: '#eff6ff',
+            color: '#2563eb',
+            padding: '1px 5px',
+            borderRadius: '4px',
+            fontFamily: 'var(--font-mono)',
+            fontWeight: 600,
+            fontSize: '11.5px',
+            border: '1px solid #dbeafe',
+          }}
+        >
+          {token}
+        </span>
+      );
+    } else {
+      parts.push(token);
+    }
+    lastIdx = regex.lastIndex;
+  }
+  if (lastIdx < text.length) {
+    parts.push(text.substring(lastIdx));
+  }
+  return parts;
+}
+
 export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [problem, setProblem] = useState<ProblemMetadata | null>(() => getProblemById(problemId) || null);
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('instructions');
@@ -59,6 +105,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   // Line-by-line Code Execution Trace state (hidden by default at start of code)
   const [activeTraceStepIndex, setActiveTraceStepIndex] = useState<number>(0);
   const [showTracePopover, setShowTracePopover] = useState<boolean>(false);
+  const [activeLineTop, setActiveLineTop] = useState<number>(75);
 
   const currentTestCase = problem?.testCases?.[selectedTestIndex] || problem?.testCases?.[0];
   const currentResult = executionSummary?.results?.[selectedTestIndex];
@@ -516,6 +563,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 showTracePopover={showTracePopover}
                 onCloseTracePopover={() => setShowTracePopover(false)}
                 ligatures={editorLigatures}
+                onActiveLinePosChange={setActiveLineTop}
               />
             </div>
 
@@ -656,6 +704,115 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
             </div>
           </section>
         )}
+
+        {/* Floating "What happened" Popover on the Right Side (Matching Screenshot 1) */}
+        {showTracePopover && traceSteps[activeTraceStepIndex] && (() => {
+          const step = traceSteps[activeTraceStepIndex];
+          const popoverTop = Math.max(52, Math.min(activeLineTop - 14, 460));
+          const arrowOffset = Math.max(16, Math.min(activeLineTop - popoverTop + 4, 260));
+
+          return (
+            <div
+              className="trace-what-happened-popover"
+              style={{
+                position: 'absolute',
+                top: `${popoverTop}px`,
+                left: isMobile || isMaximizedEditor ? 'auto' : `calc(${actualLeftWidth}% + 14px)`,
+                right: isMobile || isMaximizedEditor ? '16px' : 'auto',
+                width: '400px',
+                maxWidth: isMobile || isMaximizedEditor ? 'calc(100% - 32px)' : `calc(100% - ${actualLeftWidth}% - 28px)`,
+                backgroundColor: '#ffffff',
+                border: '1.5px solid #bfdbfe',
+                borderRadius: '16px',
+                boxShadow: '0 16px 40px rgba(37, 99, 235, 0.16), 0 4px 12px rgba(0,0,0,0.06)',
+                padding: '16px 18px',
+                zIndex: 60,
+                animation: 'fadeIn 0.15s ease-out',
+              }}
+            >
+              {/* Speech bubble pointer pointing left towards the active line */}
+              {!isMobile && !isMaximizedEditor && (
+                <>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: '-8px',
+                      top: `${arrowOffset}px`,
+                      width: 0,
+                      height: 0,
+                      borderTop: '7px solid transparent',
+                      borderBottom: '7px solid transparent',
+                      borderRight: '8px solid #bfdbfe',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'absolute',
+                      left: '-6.5px',
+                      top: `${arrowOffset}px`,
+                      width: 0,
+                      height: 0,
+                      borderTop: '7px solid transparent',
+                      borderBottom: '7px solid transparent',
+                      borderRight: '8px solid #ffffff',
+                    }}
+                  />
+                </>
+              )}
+
+              {/* Header */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '15px', color: '#0284c7' }}>⚡</span>
+                  <span style={{ fontSize: '14.5px', fontWeight: 800, color: '#0f172a' }}>
+                    What happened
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowTracePopover(false)}
+                  title="Close explanation"
+                  style={{
+                    width: '22px',
+                    height: '22px',
+                    borderRadius: '50%',
+                    border: 'none',
+                    background: '#f1f5f9',
+                    color: '#64748b',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                  }}
+                  id="btn-close-trace-popover"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Main Description */}
+              <p style={{ fontSize: '13px', color: '#1e293b', margin: '0 0 10px', lineHeight: 1.45, fontWeight: 500 }}>
+                {step.whatHappened}
+              </p>
+
+              {/* Steps Took */}
+              <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '8px' }}>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+                  Steps Took
+                </div>
+                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.55 }}>
+                  {step.stepsTaken.map((st, i) => (
+                    <li key={i} style={{ marginBottom: '4px' }}>
+                      {renderStepTokens(st)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* User Settings & Full Account Authentication Modal */}
