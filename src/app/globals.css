@@ -2065,6 +2065,14 @@ body.cf-no-ligatures .code-textarea,
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.roadmap-fixed-viewport::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .roadmap-grid-layout {
@@ -2078,6 +2086,14 @@ body.cf-no-ligatures .code-textarea,
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.roadmap-grid-layout::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .roadmap-left-col {
@@ -2103,28 +2119,19 @@ body.cf-no-ligatures .code-textarea,
   height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
   padding-top: 24px;
   padding-bottom: 96px;
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
 
-/* Custom sleek scrollbar for center roadmap column */
+/* Completely hide scrollbar for center roadmap column */
 .roadmap-center-col::-webkit-scrollbar {
-  width: 6px;
-}
-
-.roadmap-center-col::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.roadmap-center-col::-webkit-scrollbar-thumb {
-  background-color: rgba(203, 213, 225, 0.7);
-  border-radius: 9999px;
-}
-
-.roadmap-center-col::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(148, 163, 184, 0.95);
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .roadmap-right-col {
