@@ -26,7 +26,7 @@
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript & React
 - **Styling**: Vanilla CSS
-- **Scraper & Data Pipeline**: BeautifulSoup 4 (Python) (Automated ingestion of problem statements, LaTeX math, and test suites)
+- **Scraper & Data Pipeline**: Python script (`scripts/scrape.py`) with BeautifulSoup to parse official Codeforces problem pages into structured `src/data/problems.json`.
 - **Containerization & Hosting**: Docker & Google Cloud Run (Serverless container deployment with native C++, Python, Java, and Kotlin compilers)
 - **Math Rendering**: KaTeX
 - **Typography**: Inter & JetBrains Mono
