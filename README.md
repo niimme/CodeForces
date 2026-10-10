@@ -23,8 +23,11 @@
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14+ (App Router)
+- **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript & React
-- **Styling**: CSS
+- **Styling**: Vanilla CSS
+- **Scraper & Data Pipeline**: BeautifulSoup 4 & Cheerio (Automated ingestion of problem statements, LaTeX math, and test suites)
+- **Containerization & Hosting**: Docker & Google Cloud Run (Serverless container deployment with native C++, Python, Java, and Kotlin compilers)
 - **Math Rendering**: KaTeX
+- **Typography**: Inter & JetBrains Mono
 - **Icons & Effects**: Canvas Confetti
