@@ -215,7 +215,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <h1 style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                  Account & Workspace Settings
+                  Account Settings
                 </h1>
                 <p style={{ fontSize: '13px', color: '#64748b', margin: '2px 0 0 0' }}>
                   Manage your default programming language, typography, and Codeforces account
@@ -258,22 +258,24 @@ export default function SettingsPage() {
             >
               👤 Profile
             </button>
-            <button
-              onClick={() => setActiveTab('auth')}
-              style={{
-                padding: '12px 18px',
-                background: 'none',
-                border: 'none',
-                borderBottom: activeTab === 'auth' ? '2.5px solid #2563eb' : '2.5px solid transparent',
-                color: activeTab === 'auth' ? '#2563eb' : '#64748b',
-                fontWeight: activeTab === 'auth' ? 700 : 600,
-                fontSize: '14px',
-                cursor: 'pointer',
-              }}
-              id="tab-page-auth"
-            >
-              🔑 {user.isLoggedIn ? 'Account & Security' : 'Sign In / Register'}
-            </button>
+            {!user.isLoggedIn && (
+              <button
+                onClick={() => setActiveTab('auth')}
+                style={{
+                  padding: '12px 18px',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: activeTab === 'auth' ? '2.5px solid #2563eb' : '2.5px solid transparent',
+                  color: activeTab === 'auth' ? '#2563eb' : '#64748b',
+                  fontWeight: activeTab === 'auth' ? 700 : 600,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                }}
+                id="tab-page-auth"
+              >
+                🔑 Sign In / Register
+              </button>
+            )}
           </div>
 
           {/* Card Body */}

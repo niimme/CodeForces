@@ -82,8 +82,9 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
       const s = getUserSettings();
       setSelectedLang(currentLanguage || s.preferredLanguage);
       setLigaturesEnabled(editorLigatures !== undefined ? editorLigatures : s.editorLigatures);
-      setUser(propUser || getUserProgress());
-      setActiveTab(initialTab);
+      const currentUserData = propUser || getUserProgress();
+      setUser(currentUserData);
+      setActiveTab(currentUserData.isLoggedIn && initialTab === 'auth' ? 'profile' : initialTab);
       setAuthError(null);
     }
   }, [isOpen, currentLanguage, editorLigatures, propUser, initialTab]);
@@ -287,7 +288,7 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
             </div>
             <div>
               <h2 style={{ fontSize: '17px', fontWeight: 800, color: '#0f172a', margin: 0 }}>
-                User Account & Settings
+                Account Settings
               </h2>
               <p style={{ fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' }}>
                 Manage coding language, typography, and account profile
@@ -375,28 +376,30 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
             <span>User Profile</span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveTab('auth')}
-            style={{
-              padding: '10px 16px',
-              background: 'none',
-              border: 'none',
-              borderBottom: activeTab === 'auth' ? '2.5px solid #2563eb' : '2.5px solid transparent',
-              color: activeTab === 'auth' ? '#2563eb' : '#64748b',
-              fontWeight: activeTab === 'auth' ? 700 : 600,
-              fontSize: '13.5px',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              transition: 'all 0.15s ease',
-            }}
-            id="tab-settings-auth"
-          >
-            <span>🔑</span>
-            <span>{user.isLoggedIn ? 'Account & Security' : 'Sign In / Register'}</span>
-          </button>
+          {!user.isLoggedIn && (
+            <button
+              type="button"
+              onClick={() => setActiveTab('auth')}
+              style={{
+                padding: '10px 16px',
+                background: 'none',
+                border: 'none',
+                borderBottom: activeTab === 'auth' ? '2.5px solid #2563eb' : '2.5px solid transparent',
+                color: activeTab === 'auth' ? '#2563eb' : '#64748b',
+                fontWeight: activeTab === 'auth' ? 700 : 600,
+                fontSize: '13.5px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                transition: 'all 0.15s ease',
+              }}
+              id="tab-settings-auth"
+            >
+              <span>🔑</span>
+              <span>Sign In / Register</span>
+            </button>
+          )}
         </div>
 
         {/* Modal Body */}
