@@ -195,28 +195,6 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               );
             })}
           </div>
-
-          {/* Star circle badge matching screenshot */}
-          <div
-            style={{
-              width: '18px',
-              height: '18px',
-              borderRadius: '50%',
-              backgroundColor: '#ec4899',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '11px',
-              boxShadow: '0 1px 3px rgba(236, 72, 153, 0.4)',
-              cursor: 'default',
-              flexShrink: 0,
-            }}
-            title="Challenge star test"
-            aria-label="Star test"
-          >
-            ★
-          </div>
         </div>
 
         {/* Right: Reset Button & Run Code Button */}
