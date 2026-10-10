@@ -5,7 +5,7 @@ import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import { getProblemById, getAllProblems } from '@/lib/cfScraper';
 import { runTestCases, ExecutionSummary } from '@/lib/codeRunner';
-import { markProblemCompleted, getUserProgress, getUserSettings } from '@/lib/userProgress';
+import { markProblemCompleted, getUserProgress, getUserSettings, UserSettings } from '@/lib/userProgress';
 import { traceCodeExecution } from '@/lib/codeTracer';
 import { ProblemMetadata, UserProgress, SupportedLanguage } from '@/types';
 import { InstructionsHeader, WorkspaceTab } from '@/components/workspace/InstructionsHeader';
@@ -34,6 +34,20 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [editorLigatures, setEditorLigatures] = useState<boolean>(() => getUserSettings().editorLigatures);
   const [showSettingsModal, setShowSettingsModal] = useState<boolean>(false);
   const [settingsModalInitialTab, setSettingsModalInitialTab] = useState<'preferences' | 'profile' | 'auth'>('preferences');
+
+  // Sync settings when changed anywhere
+  useEffect(() => {
+    const handleSettingsChange = (e: Event) => {
+      const customEvent = e as CustomEvent<UserSettings>;
+      if (customEvent.detail) {
+        if (typeof customEvent.detail.editorLigatures === 'boolean') {
+          setEditorLigatures(customEvent.detail.editorLigatures);
+        }
+      }
+    };
+    window.addEventListener('cf_settings_changed', handleSettingsChange);
+    return () => window.removeEventListener('cf_settings_changed', handleSettingsChange);
+  }, []);
 
   // Line-by-line Code Execution Trace state (hidden by default at start of code)
   const [activeTraceStepIndex, setActiveTraceStepIndex] = useState<number>(0);

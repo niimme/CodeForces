@@ -381,7 +381,7 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
             <button
               onClick={() => setShowSettingsModal(true)}
               style={{
-                flex: 1.2,
+                flex: 1,
                 background: '#f8fafc',
                 border: '1px solid #cbd5e1',
                 color: '#334155',
@@ -401,30 +401,6 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
             >
               <span>⚙️</span>
               <span>Settings</span>
-            </button>
-
-            <button
-              onClick={() => setShowLoginModal(true)}
-              style={{
-                flex: 1,
-                background: 'none',
-                border: '1px dashed #cbd5e1',
-                color: '#64748b',
-                fontSize: '12px',
-                fontWeight: 600,
-                padding: '8px',
-                borderRadius: '10px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                transition: 'all 0.15s ease',
-              }}
-              id="btn-switch-account"
-            >
-              <span>👤</span>
-              <span>Switch</span>
             </button>
 
             <button

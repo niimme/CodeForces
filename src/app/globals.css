@@ -1354,21 +1354,43 @@ button, input, select, textarea {
 .line-number-row,
 .gutter-line-num {
   font-family: 'JetBrains Mono', monospace !important;
-  font-feature-settings: 'liga' on, 'calt' on;
-  font-variant-ligatures: normal;
+}
+
+/* Default / Enabled JetBrains Mono Ligatures */
+.code-editor-area.ligatures-enabled,
+.code-editor-area.ligatures-enabled *,
+.code-editor-area[data-ligatures="true"],
+.code-editor-area[data-ligatures="true"] *,
+[data-ligatures="true"] .code-highlight-layer,
+[data-ligatures="true"] .code-highlight-layer *,
+[data-ligatures="true"] .code-textarea {
+  font-variant-ligatures: normal !important;
+  -webkit-font-variant-ligatures: normal !important;
+  font-feature-settings: "liga" 1, "calt" 1, "clig" 1, "dlig" 1 !important;
+  -webkit-font-feature-settings: "liga" 1, "calt" 1, "clig" 1, "dlig" 1 !important;
 }
 
 /* User Setting: Disabled JetBrains Mono Ligatures */
 .code-editor-area.ligatures-disabled,
 .code-editor-area.ligatures-disabled *,
+.code-editor-area[data-ligatures="false"],
+.code-editor-area[data-ligatures="false"] *,
 .ligatures-disabled,
 .ligatures-disabled *,
 body.cf-no-ligatures .code-editor-area,
 body.cf-no-ligatures .code-editor-area *,
+body.cf-no-ligatures .code-highlight-layer,
+body.cf-no-ligatures .code-highlight-layer *,
+body.cf-no-ligatures .code-textarea,
 [data-ligatures="false"] .code-editor-area,
-[data-ligatures="false"] .code-editor-area * {
-  font-feature-settings: 'liga' off, 'calt' off !important;
+[data-ligatures="false"] .code-editor-area *,
+[data-ligatures="false"] .code-highlight-layer,
+[data-ligatures="false"] .code-highlight-layer *,
+[data-ligatures="false"] .code-textarea {
   font-variant-ligatures: none !important;
+  -webkit-font-variant-ligatures: none !important;
+  font-feature-settings: "liga" 0, "calt" 0, "clig" 0, "dlig" 0 !important;
+  -webkit-font-feature-settings: "liga" 0, "calt" 0, "clig" 0, "dlig" 0 !important;
 }
 
 .gutter-line-num:hover {
@@ -1484,7 +1506,6 @@ body.cf-no-ligatures .code-editor-area *,
   margin: 0;
   padding: 14px 16px;
   font-family: 'JetBrains Mono', monospace !important;
-  font-feature-settings: 'liga' on, 'calt' on;
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;

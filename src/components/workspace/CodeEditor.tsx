@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { TraceStep } from '@/lib/codeTracer';
+import { getUserSettings, UserSettings } from '@/lib/userProgress';
 
 interface CodeEditorProps {
   code: string;
@@ -210,6 +211,46 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   const [activeLine, setActiveLine] = useState<number>(1);
   const [scrollTop, setScrollTop] = useState<number>(0);
+
+  // Active ligatures state synced with prop, user settings, and global events
+  const [effectiveLigatures, setEffectiveLigatures] = useState<boolean>(() => {
+    if (typeof ligatures === 'boolean') return ligatures;
+    if (typeof window !== 'undefined') return getUserSettings().editorLigatures;
+    return true;
+  });
+
+  useEffect(() => {
+    if (typeof ligatures === 'boolean') {
+      setEffectiveLigatures(ligatures);
+    }
+  }, [ligatures]);
+
+  useEffect(() => {
+    const handleSettingsChange = (e: Event) => {
+      const customEvent = e as CustomEvent<UserSettings>;
+      if (customEvent.detail && typeof customEvent.detail.editorLigatures === 'boolean') {
+        setEffectiveLigatures(customEvent.detail.editorLigatures);
+      }
+    };
+    window.addEventListener('cf_settings_changed', handleSettingsChange);
+    return () => window.removeEventListener('cf_settings_changed', handleSettingsChange);
+  }, []);
+
+  const ligatureStyle: React.CSSProperties = useMemo(() => {
+    return effectiveLigatures
+      ? {
+          fontVariantLigatures: 'normal',
+          WebkitFontVariantLigatures: 'normal',
+          fontFeatureSettings: '"liga" 1, "calt" 1, "clig" 1, "dlig" 1',
+          WebkitFontFeatureSettings: '"liga" 1, "calt" 1, "clig" 1, "dlig" 1',
+        }
+      : {
+          fontVariantLigatures: 'none',
+          WebkitFontVariantLigatures: 'none',
+          fontFeatureSettings: '"liga" 0, "calt" 0, "clig" 0, "dlig" 0',
+          WebkitFontFeatureSettings: '"liga" 0, "calt" 0, "clig" 0, "dlig" 0',
+        };
+  }, [effectiveLigatures]);
 
   // Breakpoints empty by default
   const [internalBreakpoints, setInternalBreakpoints] = useState<Set<number>>(new Set());
@@ -504,8 +545,9 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       {/* Editor text area with pixel-locked line numbers, independent fold buttons & breakpoint gutter */}
       <div
-        className={`code-editor-area ${ligatures === false ? 'ligatures-disabled' : ''}`}
-        style={{ height: '100%' }}
+        className={`code-editor-area ${!effectiveLigatures ? 'ligatures-disabled' : 'ligatures-enabled'}`}
+        data-ligatures={effectiveLigatures ? 'true' : 'false'}
+        style={{ height: '100%', ...ligatureStyle }}
       >
         <div
           ref={lineNumbersRef}
@@ -695,10 +737,10 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                       {activeTraceStep.whatHappened}
                     </p>
 
-                    {/* Steps Jiki Took */}
+                    {/* Steps Took */}
                     <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '8px' }}>
                       <div style={{ fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                        Steps Jiki Took
+                        Steps Took
                       </div>
                       <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '12px', color: '#475569', lineHeight: 1.55 }}>
                         {activeTraceStep.stepsTaken.map((st, i) => (
@@ -718,9 +760,10 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           <pre
             ref={highlightRef}
             className="code-highlight-layer"
+            style={ligatureStyle}
             aria-hidden="true"
           >
-            <code dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
+            <code style={ligatureStyle} dangerouslySetInnerHTML={{ __html: highlightedHtml }} />
             {'\n'}
           </pre>
 
@@ -735,6 +778,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             onSelect={updateActiveLine}
             onScroll={handleScroll}
             className="code-textarea"
+            style={ligatureStyle}
             spellCheck={false}
             autoCapitalize="off"
             autoComplete="off"

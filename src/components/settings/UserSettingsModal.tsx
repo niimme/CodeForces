@@ -11,7 +11,6 @@ import {
   logoutUser,
   loginWithCredentials,
   registerAccount,
-  DEMO_PROFILES,
 } from '../../lib/userProgress';
 
 export interface UserSettingsModalProps {
@@ -53,7 +52,7 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
 }) => {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<'preferences' | 'profile' | 'auth'>(initialTab);
-  const [authSubTab, setAuthSubTab] = useState<'signin' | 'register' | 'demo'>('signin');
+  const [authSubTab, setAuthSubTab] = useState<'signin' | 'register'>('signin');
 
   // Local settings state
   const [selectedLang, setSelectedLang] = useState<SupportedLanguage>(currentLanguage || 'cpp');
@@ -112,6 +111,14 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
     setLigaturesEnabled(enabled);
     saveUserSettings({ editorLigatures: enabled });
     onLigaturesChange?.(enabled);
+    if (typeof document !== 'undefined') {
+      document.body.setAttribute('data-ligatures', enabled ? 'true' : 'false');
+      if (enabled) {
+        document.body.classList.remove('cf-no-ligatures');
+      } else {
+        document.body.classList.add('cf-no-ligatures');
+      }
+    }
     showFeedback(`JetBrains Mono ligatures ${enabled ? 'enabled' : 'disabled'}`);
   };
 
@@ -196,21 +203,6 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
       setAuthError(err.message || 'Registration failed.');
     } finally {
       setAuthLoading(false);
-    }
-  };
-
-  const handleDemoSignIn = (key: string) => {
-    const profile = DEMO_PROFILES[key];
-    if (profile) {
-      const loggedIn = loginUser(profile);
-      setUser(loggedIn);
-      onUserUpdate?.(loggedIn);
-      if (loggedIn.preferredLanguage) {
-        setSelectedLang(loggedIn.preferredLanguage);
-        onLanguageChange?.(loggedIn.preferredLanguage);
-      }
-      setActiveTab('profile');
-      showFeedback(`Switched to demo profile @${loggedIn.handle}`);
     }
   };
 
@@ -403,7 +395,7 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
             id="tab-settings-auth"
           >
             <span>🔑</span>
-            <span>{user.isLoggedIn ? 'Switch Account' : 'Sign In / Register'}</span>
+            <span>{user.isLoggedIn ? 'Account & Security' : 'Sign In / Register'}</span>
           </button>
         </div>
 
@@ -540,47 +532,54 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                     </p>
                   </div>
 
-                  <label
-                    style={{
-                      position: 'relative',
-                      display: 'inline-block',
-                      width: '48px',
-                      height: '26px',
-                      cursor: 'pointer',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={ligaturesEnabled}
-                      onChange={e => handleToggleLigatures(e.target.checked)}
-                      style={{ opacity: 0, width: 0, height: 0 }}
-                      id="toggle-jetbrains-ligatures"
-                    />
-                    <span
+                  <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                    <button
+                      type="button"
+                      id="btn-ligatures-on"
+                      onClick={() => handleToggleLigatures(true)}
                       style={{
-                        position: 'absolute',
-                        inset: 0,
-                        backgroundColor: ligaturesEnabled ? '#2563eb' : '#cbd5e1',
-                        borderRadius: '26px',
-                        transition: 'background-color 0.2s ease',
+                        padding: '8px 14px',
+                        borderRadius: '8px',
+                        border: ligaturesEnabled ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                        backgroundColor: ligaturesEnabled ? '#eff6ff' : '#ffffff',
+                        color: ligaturesEnabled ? '#1d4ed8' : '#64748b',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: ligaturesEnabled ? '0 1px 3px rgba(37,99,235,0.15)' : 'none',
+                        transition: 'all 0.15s ease',
                       }}
                     >
-                      <span
-                        style={{
-                          position: 'absolute',
-                          height: '20px',
-                          width: '20px',
-                          left: ligaturesEnabled ? '24px' : '3px',
-                          bottom: '3px',
-                          backgroundColor: '#ffffff',
-                          borderRadius: '50%',
-                          transition: 'left 0.2s ease',
-                          boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                        }}
-                      />
-                    </span>
-                  </label>
+                      {ligaturesEnabled && <span style={{ fontSize: '11px' }}>✓</span>}
+                      Ligatures ON
+                    </button>
+                    <button
+                      type="button"
+                      id="btn-ligatures-off"
+                      onClick={() => handleToggleLigatures(false)}
+                      style={{
+                        padding: '8px 14px',
+                        borderRadius: '8px',
+                        border: !ligaturesEnabled ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                        backgroundColor: !ligaturesEnabled ? '#eff6ff' : '#ffffff',
+                        color: !ligaturesEnabled ? '#1d4ed8' : '#64748b',
+                        fontWeight: 700,
+                        fontSize: '13px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '6px',
+                        boxShadow: !ligaturesEnabled ? '0 1px 3px rgba(37,99,235,0.15)' : 'none',
+                        transition: 'all 0.15s ease',
+                      }}
+                    >
+                      {!ligaturesEnabled && <span style={{ fontSize: '11px' }}>✓</span>}
+                      Ligatures OFF
+                    </button>
+                  </div>
                 </div>
 
                 {/* Live Preview Box */}
@@ -718,31 +717,13 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
 
               {/* Account Actions */}
               <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('auth')}
-                  style={{
-                    flex: 1,
-                    padding: '10px',
-                    borderRadius: '10px',
-                    border: '1px solid #cbd5e1',
-                    background: '#ffffff',
-                    color: '#334155',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                  }}
-                  id="btn-switch-account-tab"
-                >
-                  👥 Switch Account
-                </button>
-
                 {user.isLoggedIn ? (
                   <button
                     type="button"
                     onClick={handleSignOut}
                     style={{
-                      padding: '10px 18px',
+                      flex: 1,
+                      padding: '12px 18px',
                       borderRadius: '10px',
                       border: '1px solid #fecaca',
                       background: '#fef2f2',
@@ -760,7 +741,8 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                     type="button"
                     onClick={() => setActiveTab('auth')}
                     style={{
-                      padding: '10px 18px',
+                      flex: 1,
+                      padding: '12px 18px',
                       borderRadius: '10px',
                       border: 'none',
                       background: '#2563eb',
@@ -771,7 +753,7 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                     }}
                     id="btn-sign-in-modal"
                   >
-                    🔑 Sign In
+                    🔑 Sign In / Create Account
                   </button>
                 )}
               </div>
@@ -821,26 +803,6 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                   id="btn-subtab-register"
                 >
                   Create Account
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => { setAuthSubTab('demo'); setAuthError(null); }}
-                  style={{
-                    flex: 1,
-                    padding: '8px',
-                    borderRadius: '8px',
-                    border: 'none',
-                    backgroundColor: authSubTab === 'demo' ? '#ffffff' : 'transparent',
-                    color: authSubTab === 'demo' ? '#0f172a' : '#64748b',
-                    fontWeight: authSubTab === 'demo' ? 700 : 600,
-                    fontSize: '13px',
-                    cursor: 'pointer',
-                    boxShadow: authSubTab === 'demo' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                  }}
-                  id="btn-subtab-demo"
-                >
-                  Demo Profiles
                 </button>
               </div>
 
@@ -1072,92 +1034,6 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                 </form>
               )}
 
-              {/* DEMO PROFILES SUB-TAB */}
-              {authSubTab === 'demo' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <p style={{ fontSize: '12.5px', color: '#64748b', margin: '0 0 4px 0' }}>
-                    Quickly switch to a pre-configured competitive programming profile with 1 click:
-                  </p>
-
-                  <div
-                    onClick={() => handleDemoSignIn('nicholas')}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      borderRadius: '12px',
-                      border: '1px solid #e2e8f0',
-                      cursor: 'pointer',
-                      backgroundColor: '#ffffff',
-                    }}
-                    id="btn-demo-nicholas"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#2563eb', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
-                        N
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: '14px', color: '#0f172a' }}>Nicholas I.</div>
-                        <div style={{ fontSize: '12px', color: '#64748b' }}>@nicholas • Specialist (1540)</div>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '12px', fontWeight: 700, color: '#2563eb' }}>Switch →</span>
-                  </div>
-
-                  <div
-                    onClick={() => handleDemoSignIn('tourist')}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      borderRadius: '12px',
-                      border: '1px solid #e2e8f0',
-                      cursor: 'pointer',
-                      backgroundColor: '#ffffff',
-                    }}
-                    id="btn-demo-tourist"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
-                        T
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: '14px', color: '#0f172a' }}>Gennady Korotkevich</div>
-                        <div style={{ fontSize: '12px', color: '#64748b' }}>@tourist • Legendary Grandmaster (3979)</div>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '12px', fontWeight: 700, color: '#ef4444' }}>Switch →</span>
-                  </div>
-
-                  <div
-                    onClick={() => handleDemoSignIn('guest')}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '12px 14px',
-                      borderRadius: '12px',
-                      border: '1px solid #e2e8f0',
-                      cursor: 'pointer',
-                      backgroundColor: '#ffffff',
-                    }}
-                    id="btn-demo-guest"
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#64748b', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>
-                        G
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: 800, fontSize: '14px', color: '#0f172a' }}>Guest Explorer</div>
-                        <div style={{ fontSize: '12px', color: '#64748b' }}>@guest • Unrated Explorer</div>
-                      </div>
-                    </div>
-                    <span style={{ fontSize: '12px', fontWeight: 700, color: '#64748b' }}>Switch →</span>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>

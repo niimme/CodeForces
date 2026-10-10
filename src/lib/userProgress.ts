@@ -1,4 +1,5 @@
 import { UserProgress, Badge, SupportedLanguage, UserSettings } from '../types';
+export type { UserSettings };
 
 export const DEFAULT_USER_SETTINGS: UserSettings = {
   preferredLanguage: 'cpp',
@@ -230,6 +231,16 @@ export function saveUserSettings(settings: Partial<UserSettings>): UserSettings 
         preferredLanguage: updated.preferredLanguage,
         editorLigatures: updated.editorLigatures,
       });
+    }
+
+    // Also update document attributes for instant styling
+    if (typeof document !== 'undefined') {
+      document.body.setAttribute('data-ligatures', String(updated.editorLigatures));
+      if (updated.editorLigatures) {
+        document.body.classList.remove('cf-no-ligatures');
+      } else {
+        document.body.classList.add('cf-no-ligatures');
+      }
     }
 
     // Dispatch event so all components react immediately

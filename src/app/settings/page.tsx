@@ -11,7 +11,6 @@ import {
   logoutUser,
   loginWithCredentials,
   registerAccount,
-  DEMO_PROFILES,
 } from '@/lib/userProgress';
 import { SupportedLanguage, UserProgress } from '@/types';
 
@@ -38,7 +37,7 @@ export default function SettingsPage() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   // Auth form states
-  const [authSubTab, setAuthSubTab] = useState<'signin' | 'register' | 'demo'>('signin');
+  const [authSubTab, setAuthSubTab] = useState<'signin' | 'register'>('signin');
   const [signInIdentifier, setSignInIdentifier] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
   const [registerHandle, setRegisterHandle] = useState('');
@@ -66,6 +65,14 @@ export default function SettingsPage() {
   const handleToggleLigatures = (enabled: boolean) => {
     setLigaturesEnabled(enabled);
     saveUserSettings({ editorLigatures: enabled });
+    if (typeof document !== 'undefined') {
+      document.body.setAttribute('data-ligatures', enabled ? 'true' : 'false');
+      if (enabled) {
+        document.body.classList.remove('cf-no-ligatures');
+      } else {
+        document.body.classList.add('cf-no-ligatures');
+      }
+    }
     setStatusMessage(`JetBrains Mono ligatures ${enabled ? 'enabled' : 'disabled'}.`);
     setTimeout(() => setStatusMessage(null), 2500);
   };
@@ -137,18 +144,6 @@ export default function SettingsPage() {
       setAuthError(err.message || 'Registration failed.');
     } finally {
       setAuthLoading(false);
-    }
-  };
-
-  const handleDemoSignIn = (key: string) => {
-    const profile = DEMO_PROFILES[key];
-    if (profile) {
-      const loggedIn = loginUser(profile);
-      setUser(loggedIn);
-      if (loggedIn.preferredLanguage) setSelectedLang(loggedIn.preferredLanguage);
-      setActiveTab('account');
-      setStatusMessage(`Switched to demo profile @${loggedIn.handle}`);
-      setTimeout(() => setStatusMessage(null), 2500);
     }
   };
 
@@ -277,7 +272,7 @@ export default function SettingsPage() {
               }}
               id="tab-page-auth"
             >
-              🔑 {user.isLoggedIn ? 'Switch Account' : 'Sign In / Register'}
+              🔑 {user.isLoggedIn ? 'Account & Security' : 'Sign In / Register'}
             </button>
           </div>
 
@@ -378,36 +373,54 @@ export default function SettingsPage() {
                       </p>
                     </div>
 
-                    <label style={{ position: 'relative', display: 'inline-block', width: '48px', height: '26px', cursor: 'pointer', flexShrink: 0 }}>
-                      <input
-                        type="checkbox"
-                        checked={ligaturesEnabled}
-                        onChange={e => handleToggleLigatures(e.target.checked)}
-                        style={{ opacity: 0, width: 0, height: 0 }}
-                      />
-                      <span
+                    <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                      <button
+                        type="button"
+                        id="btn-ligatures-on"
+                        onClick={() => handleToggleLigatures(true)}
                         style={{
-                          position: 'absolute',
-                          inset: 0,
-                          backgroundColor: ligaturesEnabled ? '#2563eb' : '#cbd5e1',
-                          borderRadius: '26px',
-                          transition: 'background-color 0.2s ease',
+                          padding: '9px 16px',
+                          borderRadius: '8px',
+                          border: ligaturesEnabled ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                          backgroundColor: ligaturesEnabled ? '#eff6ff' : '#ffffff',
+                          color: ligaturesEnabled ? '#1d4ed8' : '#64748b',
+                          fontWeight: 700,
+                          fontSize: '13.5px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: ligaturesEnabled ? '0 1px 3px rgba(37,99,235,0.15)' : 'none',
+                          transition: 'all 0.15s ease',
                         }}
                       >
-                        <span
-                          style={{
-                            position: 'absolute',
-                            height: '20px',
-                            width: '20px',
-                            left: ligaturesEnabled ? '24px' : '3px',
-                            bottom: '3px',
-                            backgroundColor: '#ffffff',
-                            borderRadius: '50%',
-                            transition: 'left 0.2s ease',
-                          }}
-                        />
-                      </span>
-                    </label>
+                        {ligaturesEnabled && <span style={{ fontSize: '11px' }}>✓</span>}
+                        Ligatures ON
+                      </button>
+                      <button
+                        type="button"
+                        id="btn-ligatures-off"
+                        onClick={() => handleToggleLigatures(false)}
+                        style={{
+                          padding: '9px 16px',
+                          borderRadius: '8px',
+                          border: !ligaturesEnabled ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                          backgroundColor: !ligaturesEnabled ? '#eff6ff' : '#ffffff',
+                          color: !ligaturesEnabled ? '#1d4ed8' : '#64748b',
+                          fontWeight: 700,
+                          fontSize: '13.5px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          boxShadow: !ligaturesEnabled ? '0 1px 3px rgba(37,99,235,0.15)' : 'none',
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        {!ligaturesEnabled && <span style={{ fontSize: '11px' }}>✓</span>}
+                        Ligatures OFF
+                      </button>
+                    </div>
                   </div>
 
                   <div style={{ marginTop: '16px', padding: '16px', borderRadius: '12px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0' }}>
@@ -489,25 +502,19 @@ export default function SettingsPage() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
-                  <button
-                    onClick={() => setActiveTab('auth')}
-                    style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid #cbd5e1', background: '#ffffff', color: '#0f172a', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}
-                  >
-                    👥 Switch Account
-                  </button>
                   {user.isLoggedIn ? (
                     <button
                       onClick={handleSignOut}
-                      style={{ padding: '12px 20px', borderRadius: '10px', border: '1px solid #fecaca', background: '#fef2f2', color: '#dc2626', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}
+                      style={{ flex: 1, padding: '12px 20px', borderRadius: '10px', border: '1px solid #fecaca', background: '#fef2f2', color: '#dc2626', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}
                     >
                       🚪 Sign Out
                     </button>
                   ) : (
                     <button
                       onClick={() => setActiveTab('auth')}
-                      style={{ padding: '12px 20px', borderRadius: '10px', border: 'none', background: '#2563eb', color: '#ffffff', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}
+                      style={{ flex: 1, padding: '12px 20px', borderRadius: '10px', border: 'none', background: '#2563eb', color: '#ffffff', fontWeight: 700, fontSize: '14px', cursor: 'pointer' }}
                     >
-                      🔑 Sign In
+                      🔑 Sign In / Create Account
                     </button>
                   )}
                 </div>
@@ -529,12 +536,6 @@ export default function SettingsPage() {
                     style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: authSubTab === 'register' ? '#ffffff' : 'transparent', fontWeight: 700, fontSize: '13.5px', cursor: 'pointer' }}
                   >
                     Create Account
-                  </button>
-                  <button
-                    onClick={() => { setAuthSubTab('demo'); setAuthError(null); }}
-                    style={{ flex: 1, padding: '10px', borderRadius: '8px', border: 'none', backgroundColor: authSubTab === 'demo' ? '#ffffff' : 'transparent', fontWeight: 700, fontSize: '13.5px', cursor: 'pointer' }}
-                  >
-                    Demo Logins
                   </button>
                 </div>
 
@@ -652,51 +653,6 @@ export default function SettingsPage() {
                   </form>
                 )}
 
-                {authSubTab === 'demo' && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    <div
-                      onClick={() => handleDemoSignIn('nicholas')}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', cursor: 'pointer' }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#2563eb', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>N</div>
-                        <div>
-                          <div style={{ fontWeight: 800, fontSize: '14.5px', color: '#0f172a' }}>Nicholas I.</div>
-                          <div style={{ fontSize: '12.5px', color: '#64748b' }}>@nicholas • Specialist (1540)</div>
-                        </div>
-                      </div>
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: '#2563eb' }}>Switch →</span>
-                    </div>
-
-                    <div
-                      onClick={() => handleDemoSignIn('tourist')}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', cursor: 'pointer' }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ef4444', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>T</div>
-                        <div>
-                          <div style={{ fontWeight: 800, fontSize: '14.5px', color: '#0f172a' }}>Gennady Korotkevich</div>
-                          <div style={{ fontSize: '12.5px', color: '#64748b' }}>@tourist • Legendary Grandmaster (3979)</div>
-                        </div>
-                      </div>
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: '#ef4444' }}>Switch →</span>
-                    </div>
-
-                    <div
-                      onClick={() => handleDemoSignIn('guest')}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', cursor: 'pointer' }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#64748b', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800 }}>G</div>
-                        <div>
-                          <div style={{ fontWeight: 800, fontSize: '14.5px', color: '#0f172a' }}>Guest Explorer</div>
-                          <div style={{ fontSize: '12.5px', color: '#64748b' }}>@guest • Unrated Explorer</div>
-                        </div>
-                      </div>
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: '#64748b' }}>Switch →</span>
-                    </div>
-                  </div>
-                )}
               </div>
             )}
           </div>
