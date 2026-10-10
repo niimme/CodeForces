@@ -9,14 +9,13 @@ import {
   logoutUser,
   loginWithCredentials,
   registerAccount,
-  DEMO_PROFILES,
 } from '../../lib/userProgress';
 import { UserProgress } from '../../types';
 
 export default function LoginPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<UserProgress>(getUserProgress());
-  const [activeTab, setActiveTab] = useState<'signin' | 'register' | 'demo'>('signin');
+  const [activeTab, setActiveTab] = useState<'signin' | 'register'>('signin');
 
   // Sign In form state
   const [signInIdentifier, setSignInIdentifier] = useState('');
@@ -112,18 +111,6 @@ export default function LoginPage() {
       setErrorMessage(err.message || 'An unexpected error occurred.');
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleDemoLogin = (key: string) => {
-    if (DEMO_PROFILES[key]) {
-      const profile = DEMO_PROFILES[key];
-      loginUser(profile);
-      setCurrentUser(profile);
-      setSuccessMessage(`Signed in as @${profile.handle}! Redirecting...`);
-      setTimeout(() => {
-        router.push('/');
-      }, 500);
     }
   };
 
@@ -426,29 +413,6 @@ export default function LoginPage() {
             >
               Create Account
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab('demo');
-                setErrorMessage(null);
-              }}
-              style={{
-                flex: 1,
-                padding: '8px 12px',
-                border: 'none',
-                borderRadius: '9px',
-                background: activeTab === 'demo' ? '#ffffff' : 'transparent',
-                color: activeTab === 'demo' ? '#0f172a' : '#64748b',
-                fontWeight: activeTab === 'demo' ? 700 : 600,
-                fontSize: '13px',
-                cursor: 'pointer',
-                boxShadow: activeTab === 'demo' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                transition: 'all 0.15s ease',
-              }}
-              id="tab-btn-demo"
-            >
-              Quick Demos
-            </button>
           </div>
 
           {/* TAB 1: Sign In Form */}
@@ -742,167 +706,6 @@ export default function LoginPage() {
             </form>
           )}
 
-          {/* TAB 3: Quick Demo Accounts */}
-          {activeTab === 'demo' && (
-            <div>
-              <div
-                style={{
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  color: '#64748b',
-                  marginBottom: '10px',
-                }}
-              >
-                Select an instant test profile:
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('nicholas')}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '12px 14px',
-                    borderRadius: '12px',
-                    border: '1.5px solid #e2e8f0',
-                    background: '#f8fafc',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.15s ease',
-                  }}
-                  id="btn-demo-nicholas"
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div
-                      style={{
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '9px',
-                        background: '#0284c7',
-                        color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 800,
-                        fontSize: '13px',
-                      }}
-                    >
-                      N
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: '13.5px', color: '#0f172a' }}>
-                        @nicholas
-                      </div>
-                      <div style={{ fontSize: '11px', color: '#0284c7', fontWeight: 600 }}>
-                        Specialist • 1540 rating • 3-day streak
-                      </div>
-                    </div>
-                  </div>
-                  <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: 700 }}>
-                    Select &rarr;
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('tourist')}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '12px 14px',
-                    borderRadius: '12px',
-                    border: '1.5px solid #e2e8f0',
-                    background: '#f8fafc',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.15s ease',
-                  }}
-                  id="btn-demo-tourist"
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div
-                      style={{
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '9px',
-                        background: '#dc2626',
-                        color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 800,
-                        fontSize: '13px',
-                      }}
-                    >
-                      T
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: '13.5px', color: '#0f172a' }}>
-                        @tourist
-                      </div>
-                      <div style={{ fontSize: '11px', color: '#dc2626', fontWeight: 600 }}>
-                        Legendary Grandmaster • 3979 rating
-                      </div>
-                    </div>
-                  </div>
-                  <span style={{ fontSize: '12px', color: '#2563eb', fontWeight: 700 }}>
-                    Select &rarr;
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleDemoLogin('guest')}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '12px 14px',
-                    borderRadius: '12px',
-                    border: '1.5px solid #e2e8f0',
-                    background: '#f8fafc',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.15s ease',
-                  }}
-                  id="btn-demo-guest"
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div
-                      style={{
-                        width: '34px',
-                        height: '34px',
-                        borderRadius: '9px',
-                        background: '#94a3b8',
-                        color: '#ffffff',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontWeight: 800,
-                        fontSize: '13px',
-                      }}
-                    >
-                      G
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: '13.5px', color: '#0f172a' }}>
-                        Guest Mode
-                      </div>
-                      <div style={{ fontSize: '11px', color: '#64748b' }}>
-                        Unrated • Reset / Guest test session
-                      </div>
-                    </div>
-                  </div>
-                  <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 700 }}>
-                    Select &rarr;
-                  </span>
-                </button>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Footer info note */}
