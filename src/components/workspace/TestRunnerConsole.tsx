@@ -346,27 +346,29 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 </p>
               </div>
 
-              {/* Status Indicator Icon (Green Checkmark from screenshot) */}
-              <div
-                style={{
-                  width: '26px',
-                  height: '26px',
-                  borderRadius: '50%',
-                  backgroundColor: '#ffffff',
-                  color: currentResult && !currentResult.passed ? '#dc2626' : '#10b981',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '14px',
-                  fontWeight: 800,
-                  border: `1.5px solid ${currentResult && !currentResult.passed ? '#fca5a5' : '#86efac'}`,
-                  flexShrink: 0,
-                  marginLeft: '12px',
-                }}
-                title={currentResult?.passed ? 'Test Passed' : 'Test Status'}
-              >
-                {currentResult && !currentResult.passed ? '✕' : '✓'}
-              </div>
+              {/* Status Indicator Icon (Green Checkmark from screenshot) - only when tested */}
+              {hasRun && currentResult && (
+                <div
+                  style={{
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '50%',
+                    backgroundColor: '#ffffff',
+                    color: !currentResult.passed ? '#dc2626' : '#10b981',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '14px',
+                    fontWeight: 800,
+                    border: `1.5px solid ${!currentResult.passed ? '#fca5a5' : '#86efac'}`,
+                    flexShrink: 0,
+                    marginLeft: '12px',
+                  }}
+                  title={currentResult.passed ? 'Test Passed' : 'Test Failed'}
+                >
+                  {!currentResult.passed ? '✕' : '✓'}
+                </div>
+              )}
             </div>
 
             {/* Compilation Error Alert */}
@@ -480,8 +482,8 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               </div>
             </div>
 
-            {/* Active Step Line Indicator */}
-            {traceSteps.length > 0 && traceSteps[activeTraceStepIndex] && (
+            {/* Active Step Line Indicator (only when tests have run) */}
+            {hasRun && traceSteps.length > 0 && traceSteps[activeTraceStepIndex] && (
               <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span
                   style={{
@@ -520,22 +522,27 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
             {/* Play / Pause button */}
             <button
               type="button"
-              onClick={() => setIsPlaying(!isPlaying)}
-              title={isPlaying ? 'Pause playback' : 'Step line-by-line through code'}
+              disabled={!hasRun}
+              onClick={() => {
+                if (!hasRun) return;
+                setIsPlaying(!isPlaying);
+              }}
+              title={!hasRun ? 'Run tests first to step through code' : isPlaying ? 'Pause playback' : 'Step line-by-line through code'}
               style={{
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                backgroundColor: isPlaying ? '#bfdbfe' : '#dbeafe',
-                color: '#2563eb',
+                backgroundColor: !hasRun ? '#f1f5f9' : isPlaying ? '#bfdbfe' : '#dbeafe',
+                color: !hasRun ? '#94a3b8' : '#2563eb',
                 border: 'none',
-                cursor: 'pointer',
+                cursor: !hasRun ? 'not-allowed' : 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: '13px',
                 transition: 'all 0.15s ease',
                 flexShrink: 0,
+                opacity: !hasRun ? 0.6 : 1,
               }}
               id="btn-scrubber-play"
               aria-label={isPlaying ? 'Pause' : 'Play'}
@@ -548,9 +555,11 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               <input
                 type="range"
                 min={0}
-                max={Math.max(0, traceSteps.length - 1)}
-                value={activeTraceStepIndex}
+                max={hasRun ? Math.max(0, traceSteps.length - 1) : 0}
+                value={hasRun ? activeTraceStepIndex : 0}
+                disabled={!hasRun}
                 onChange={e => {
+                  if (!hasRun) return;
                   setIsPlaying(false);
                   if (onSelectTraceStep) {
                     onSelectTraceStep(parseInt(e.target.value, 10));
@@ -562,8 +571,9 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 style={{
                   width: '100%',
                   accentColor: '#3b82f6',
-                  cursor: 'pointer',
+                  cursor: !hasRun ? 'not-allowed' : 'pointer',
                   height: '6px',
+                  opacity: !hasRun ? 0.45 : 1,
                 }}
                 id="scrubber-range-slider"
                 aria-label="Scrub through code lines"
@@ -573,27 +583,30 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
             {/* Step Back button */}
             <button
               type="button"
+              disabled={!hasRun}
               onClick={() => {
+                if (!hasRun) return;
                 handlePrevStep();
                 if (!showTracePopover && onToggleTracePopover) {
                   onToggleTracePopover();
                 }
               }}
-              title="Step backward one line"
+              title={!hasRun ? 'Run tests first' : 'Step backward one line'}
               style={{
                 width: '28px',
                 height: '28px',
                 borderRadius: '8px',
-                border: '1.5px solid #93c5fd',
-                backgroundColor: '#ffffff',
-                color: '#3b82f6',
+                border: `1.5px solid ${!hasRun ? '#cbd5e1' : '#93c5fd'}`,
+                backgroundColor: !hasRun ? '#f8fafc' : '#ffffff',
+                color: !hasRun ? '#94a3b8' : '#3b82f6',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer',
+                cursor: !hasRun ? 'not-allowed' : 'pointer',
                 fontSize: '15px',
                 fontWeight: 700,
                 flexShrink: 0,
+                opacity: !hasRun ? 0.6 : 1,
               }}
               id="btn-step-prev"
               aria-label="Previous step"
@@ -604,27 +617,30 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
             {/* Step Forward button */}
             <button
               type="button"
+              disabled={!hasRun}
               onClick={() => {
+                if (!hasRun) return;
                 handleNextStep();
                 if (!showTracePopover && onToggleTracePopover) {
                   onToggleTracePopover();
                 }
               }}
-              title="Step forward one line"
+              title={!hasRun ? 'Run tests first' : 'Step forward one line'}
               style={{
                 width: '28px',
                 height: '28px',
                 borderRadius: '8px',
-                border: '1.5px solid #93c5fd',
-                backgroundColor: '#ffffff',
-                color: '#3b82f6',
+                border: `1.5px solid ${!hasRun ? '#cbd5e1' : '#93c5fd'}`,
+                backgroundColor: !hasRun ? '#f8fafc' : '#ffffff',
+                color: !hasRun ? '#94a3b8' : '#3b82f6',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                cursor: 'pointer',
+                cursor: !hasRun ? 'not-allowed' : 'pointer',
                 fontSize: '15px',
                 fontWeight: 700,
                 flexShrink: 0,
+                opacity: !hasRun ? 0.6 : 1,
               }}
               id="btn-step-next"
               aria-label="Next step"

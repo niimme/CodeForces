@@ -109,6 +109,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
 
   const currentTestCase = problem?.testCases?.[selectedTestIndex] || problem?.testCases?.[0];
   const currentResult = executionSummary?.results?.[selectedTestIndex];
+  const hasRun = Boolean(executionSummary && executionSummary.results && executionSummary.results.length > 0);
   const traceSteps = useMemo(() => {
     return traceCodeExecution(
       code,
@@ -559,7 +560,8 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
                 onToggleMaximize={toggleMaximizeEditor}
                 breakpoints={breakpoints}
                 onToggleBreakpoint={handleToggleBreakpoint}
-                activeTraceStep={traceSteps[activeTraceStepIndex] || null}
+                activeTraceStep={hasRun ? (traceSteps[activeTraceStepIndex] || null) : null}
+                hasRun={hasRun}
                 showTracePopover={showTracePopover}
                 onCloseTracePopover={() => setShowTracePopover(false)}
                 ligatures={editorLigatures}
@@ -706,7 +708,7 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
         )}
 
         {/* Floating "What happened" Popover on the Right Side (Matching Screenshot 1) */}
-        {showTracePopover && traceSteps[activeTraceStepIndex] && (() => {
+        {hasRun && showTracePopover && traceSteps[activeTraceStepIndex] && (() => {
           const step = traceSteps[activeTraceStepIndex];
           const popoverTop = Math.max(52, Math.min(activeLineTop - 14, 460));
           const arrowOffset = Math.max(16, Math.min(activeLineTop - popoverTop + 4, 260));

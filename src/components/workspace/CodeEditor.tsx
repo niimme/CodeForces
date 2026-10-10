@@ -11,6 +11,8 @@ interface CodeEditorProps {
   language?: string;
   onLanguageChange?: (lang: string) => void;
   onRun?: () => void;
+  isRunning?: boolean;
+  hasRun?: boolean;
   isMaximized?: boolean;
   onToggleMaximize?: () => void;
   breakpoints?: Set<number>;
@@ -337,6 +339,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
   onCloseTracePopover,
   ligatures = true,
   onActiveLinePosChange,
+  hasRun = false,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const lineNumbersRef = useRef<HTMLDivElement>(null);
@@ -675,7 +678,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
 
   // Scroll active trace line into view and notify parent of line offset
   useEffect(() => {
-    if (activeTraceStep) {
+    if (hasRun && activeTraceStep) {
       const targetIdx = visibleLines.findIndex(v => v.lineNum === activeTraceStep.lineNumber);
       if (targetIdx !== -1) {
         const targetTop = 14 + targetIdx * 24;
@@ -692,7 +695,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         }
       }
     }
-  }, [activeTraceStep, showTracePopover, visibleLines, scrollTop, onActiveLinePosChange]);
+  }, [hasRun, activeTraceStep, showTracePopover, visibleLines, scrollTop, onActiveLinePosChange]);
 
 
 
@@ -713,7 +716,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           {visibleLines.map((item, visibleIdx) => {
             const { lineNum, isCollapsed, isFoldable, endLine } = item;
             const hasBreakpoint = activeBreakpoints.has(lineNum);
-            const isActive = activeLine === lineNum;
+            const isActive = Boolean(hasRun && activeLine === lineNum);
 
             return (
               <div
@@ -776,16 +779,18 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         </div>
 
         <div className="code-editor-surface">
-          {/* Active Line Background Tint */}
-          <div
-            className="active-line-bg"
-            style={{
-              top: `${14 + (Math.max(0, visibleLines.findIndex(v => v.lineNum === activeLine))) * 24 - scrollTop}px`,
-            }}
-          />
+          {/* Active Line Background Tint (only when tests have run) */}
+          {hasRun && (
+            <div
+              className="active-line-bg"
+              style={{
+                top: `${14 + (Math.max(0, visibleLines.findIndex(v => v.lineNum === activeLine))) * 24 - scrollTop}px`,
+              }}
+            />
+          )}
 
-          {/* Active Trace Step Outline Box (Light blue box around current executed line) */}
-          {activeTraceStep && (() => {
+          {/* Active Trace Step Outline Box (only when tests have run) */}
+          {hasRun && activeTraceStep && (() => {
             const traceLineIdx = visibleLines.findIndex(v => v.lineNum === activeTraceStep.lineNumber);
             if (traceLineIdx === -1) return null;
             const topPos = 14 + traceLineIdx * 24 - scrollTop;
