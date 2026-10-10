@@ -35,10 +35,17 @@ export default function DashboardPage() {
     }
   };
 
+  const handleSideWheel = (e: React.WheelEvent) => {
+    const center = document.getElementById('roadmap-center-scroll');
+    if (center) {
+      center.scrollTop += e.deltaY;
+    }
+  };
+
   const completedCount = (userProgress.completedProblemIds || []).length;
 
   return (
-    <main className="roadmap-bg">
+    <main className="roadmap-bg roadmap-fixed-viewport">
       {/* Mobile Sticky Top App Bar (Only visible on screens <= 860px) */}
       <header className="mobile-top-bar" aria-label="Mobile Navigation">
         <div className="mobile-brand">
@@ -95,14 +102,14 @@ export default function DashboardPage() {
       </nav>
 
       {/* Symmetrical 3-Column Centered Layout */}
-      <div className="roadmap-grid-layout" style={{ paddingTop: '20px' }}>
+      <div className="roadmap-grid-layout">
         {/* Left Column: Quick Chapter Navigation (Desktop) */}
-        <div className="roadmap-left-col">
+        <div className="roadmap-left-col" onWheel={handleSideWheel}>
           <RoadmapNavigator progress={userProgress} />
         </div>
 
-        {/* Center Column: Perfectly Centered Vertical Learning Tree */}
-        <div className="roadmap-center-col">
+        {/* Center Column: Perfectly Centered Vertical Learning Tree (Independent Scroll) */}
+        <div className="roadmap-center-col" id="roadmap-center-scroll">
           <section aria-label="Learning Path Roadmap" style={{ width: '100%' }}>
             <LearningPath
               problems={problems}
@@ -113,11 +120,11 @@ export default function DashboardPage() {
         </div>
 
         {/* Right Column: User Profile with Login & Badges (Desktop sidebar, mobile bottom section) */}
-        <div className="roadmap-right-col">
+        <div className="roadmap-right-col" onWheel={handleSideWheel}>
           <aside
             style={{
-              position: 'sticky',
-              top: '24px',
+              position: 'relative',
+              top: 0,
               maxWidth: '340px',
               width: '100%',
               display: 'flex',

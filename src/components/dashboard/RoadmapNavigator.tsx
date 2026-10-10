@@ -52,8 +52,8 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
     <aside
       className="roadmap-left-nav"
       style={{
-        position: 'sticky',
-        top: '24px',
+        position: 'relative',
+        top: 0,
         maxWidth: '280px',
         marginLeft: 'auto',
         width: '100%',
