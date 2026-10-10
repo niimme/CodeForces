@@ -716,7 +716,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
           {visibleLines.map((item, visibleIdx) => {
             const { lineNum, isCollapsed, isFoldable, endLine } = item;
             const hasBreakpoint = activeBreakpoints.has(lineNum);
-            const isActive = Boolean(hasRun && activeLine === lineNum);
+            const isActive = activeLine === lineNum;
 
             return (
               <div
@@ -779,15 +779,13 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
         </div>
 
         <div className="code-editor-surface">
-          {/* Active Line Background Tint (only when tests have run) */}
-          {hasRun && (
-            <div
-              className="active-line-bg"
-              style={{
-                top: `${14 + (Math.max(0, visibleLines.findIndex(v => v.lineNum === activeLine))) * 24 - scrollTop}px`,
-              }}
-            />
-          )}
+          {/* Active Line Background Tint (tracks current cursor line) */}
+          <div
+            className="active-line-bg"
+            style={{
+              top: `${14 + (Math.max(0, visibleLines.findIndex(v => v.lineNum === activeLine))) * 24 - scrollTop}px`,
+            }}
+          />
 
           {/* Active Trace Step Outline Box (only when tests have run) */}
           {hasRun && activeTraceStep && (() => {
@@ -801,8 +799,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
                 style={{
                   position: 'absolute',
                   top: `${topPos}px`,
-                  left: '8px',
-                  right: '8px',
+                  left: '2px',
+                  right: '4px',
                   height: '24px',
                   border: '1.5px solid #3b82f6',
                   backgroundColor: 'rgba(59, 130, 246, 0.08)',
