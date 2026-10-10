@@ -195,23 +195,6 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               );
             })}
           </div>
-
-          {executionSummary && (
-            <span
-              style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                color: allPassed ? '#16a34a' : '#dc2626',
-                marginLeft: '8px',
-              }}
-            >
-              {allPassed
-                ? `✓ All ${executionSummary.totalCount} Passed (${executionSummary.totalTimeMs}ms)`
-                : hasCompilationError
-                ? '⚠️ Error'
-                : `${executionSummary.passedCount}/${executionSummary.totalCount} Passed`}
-            </span>
-          )}
         </div>
 
         {/* Right: Reset Button & Run Code Button */}
@@ -542,7 +525,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
               <button
                 type="button"
                 onClick={() => setIsPlaying(!isPlaying)}
-                title={isPlaying ? 'Pause auto-iteration' : 'Iterate line-by-line through code'}
+                title={isPlaying ? 'Pause playback' : 'Step line-by-line through code'}
                 style={{
                   width: '32px',
                   height: '32px',
@@ -774,41 +757,41 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                   }}
                 >
                   {!hasRun
-                    ? `Iteration ${selectedTestIndex + 1} of ${testCases.length}`
+                    ? `Test ${selectedTestIndex + 1} of ${testCases.length}`
                     : currentResult?.passed
                     ? `✓ Test ${selectedTestIndex + 1} Passed`
                     : `✕ Test ${selectedTestIndex + 1} Failed`}
                 </span>
 
-                {/* If all passed: celebration & link to iterate next */}
+                {/* If all passed: celebration */}
                 {allPassed && (
-                  <div style={{ marginTop: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '13px', fontWeight: 800, color: '#16a34a' }}>
-                      All {testCases.length} Tests Passed! 🎉
-                    </span>
-                    {nextProblemId && (
-                      <a
-                        href={`/problem/${nextProblemId}`}
-                        style={{
-                          fontSize: '12.5px',
-                          color: '#2563eb',
-                          fontWeight: 700,
-                          textDecoration: 'none',
-                          marginTop: '4px',
-                          background: '#eff6ff',
-                          padding: '6px 16px',
-                          borderRadius: '12px',
-                          border: '1px solid #bfdbfe',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                        }}
-                      >
-                        Iterate Next Challenge &rarr;
-                      </a>
-                    )}
-                  </div>
+                  <span style={{ fontSize: '13px', fontWeight: 800, color: '#16a34a', marginTop: '6px' }}>
+                    All {testCases.length} Tests Passed! 🎉
+                  </span>
                 )}
+
+                {/* Next challenge button: stays even before completing the problem */}
+                <a
+                  href={nextProblemId ? `/problem/${nextProblemId}` : '/'}
+                  style={{
+                    fontSize: '12.5px',
+                    color: '#2563eb',
+                    fontWeight: 700,
+                    textDecoration: 'none',
+                    marginTop: allPassed ? '4px' : '8px',
+                    background: '#eff6ff',
+                    padding: '6px 16px',
+                    borderRadius: '12px',
+                    border: '1px solid #bfdbfe',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'all 0.15s ease',
+                  }}
+                  id="btn-next-challenge-console"
+                >
+                  Next Challenge &rarr;
+                </a>
               </div>
             </div>
           </div>

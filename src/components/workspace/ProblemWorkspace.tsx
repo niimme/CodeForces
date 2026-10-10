@@ -27,7 +27,14 @@ export default function ProblemWorkspace({ problemId }: ProblemWorkspaceProps) {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [executionSummary, setExecutionSummary] = useState<ExecutionSummary | null>(null);
   const [showCelebration, setShowCelebration] = useState<boolean>(false);
-  const [nextProblemId, setNextProblemId] = useState<string | null>(null);
+  const [nextProblemId, setNextProblemId] = useState<string | null>(() => {
+    const all = getAllProblems();
+    const currentIndex = all.findIndex(item => item.id.toUpperCase() === problemId.toUpperCase());
+    if (currentIndex !== -1 && currentIndex < all.length - 1) {
+      return all[currentIndex + 1].id;
+    }
+    return null;
+  });
 
   // User Settings & Account Modal State
   const [currentUser, setCurrentUser] = useState<UserProgress>(() => getUserProgress());
