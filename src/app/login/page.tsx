@@ -46,7 +46,7 @@ export default function LoginPage() {
 
     const query = signInIdentifier.trim();
     if (!query) {
-      setErrorMessage('Please enter your username, handle, or email.');
+      setErrorMessage('Please enter your username or email.');
       return;
     }
 
@@ -79,7 +79,7 @@ export default function LoginPage() {
     const cleanEmail = registerEmail.trim();
 
     if (!cleanHandle || cleanHandle.length < 2) {
-      setErrorMessage('Handle must be at least 2 characters long.');
+      setErrorMessage('Username must be at least 2 characters long.');
       return;
     }
     if (!cleanEmail || !cleanEmail.includes('@')) {
@@ -428,11 +428,11 @@ export default function LoginPage() {
                     marginBottom: '6px',
                   }}
                 >
-                  Username, Handle, or Email
+                  Username or Email
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. nicholas or dev@example.com"
+                  placeholder="Enter your username"
                   value={signInIdentifier}
                   onChange={e => setSignInIdentifier(e.target.value)}
                   style={{
@@ -532,7 +532,7 @@ export default function LoginPage() {
                   lineHeight: 1.4,
                 }}
               >
-                💡 <strong>Quick Access:</strong> Built-in handles like <code>nicholas</code> or <code>tourist</code> require no password. Registered accounts use the password you created.
+                💡 <strong>Quick Access:</strong> Built-in accounts like <code>nicholas</code> or <code>tourist</code> require no password. Registered accounts use the password you created.
               </div>
             </form>
           )}
@@ -550,11 +550,11 @@ export default function LoginPage() {
                     marginBottom: '6px',
                   }}
                 >
-                  Desired Username / Handle
+                  Username
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. coder_pro, alice, dev101"
+                  placeholder="Enter your username"
                   value={registerHandle}
                   onChange={e => setRegisterHandle(e.target.value)}
                   style={{

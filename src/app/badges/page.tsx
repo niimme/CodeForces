@@ -142,7 +142,7 @@ export default function BadgesPage() {
                   {userProgress.name}&apos;s Trophy Room
                 </h1>
                 <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>
-                  Codeforces Handle: <strong style={{ color: '#2563eb' }}>{userProgress.handle}</strong> &bull; {userProgress.rank || 'Specialist'} ({userProgress.rating || 1540})
+                  Username: <strong style={{ color: '#2563eb' }}>{userProgress.handle}</strong> &bull; {userProgress.rank || 'Specialist'} ({userProgress.rating || 1540})
                 </p>
               </div>
             </div>

@@ -551,13 +551,13 @@ export default function SettingsPage() {
                   <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                        Username, Handle, or Email
+                        Username or Email
                       </label>
                       <input
                         type="text"
                         value={signInIdentifier}
                         onChange={e => setSignInIdentifier(e.target.value)}
-                        placeholder="e.g. nicholas or tourist"
+                        placeholder="Enter your username"
                         required
                         style={{ width: '100%', padding: '11px 14px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '14px', boxSizing: 'border-box' }}
                       />
@@ -588,12 +588,12 @@ export default function SettingsPage() {
                 {authSubTab === 'register' && (
                   <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Handle</label>
+                      <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Username</label>
                       <input
                         type="text"
                         value={registerHandle}
                         onChange={e => setRegisterHandle(e.target.value)}
-                        placeholder="e.g. coder_dev"
+                        placeholder="Enter your username"
                         required
                         style={{ width: '100%', padding: '10px 12px', borderRadius: '10px', border: '1px solid #cbd5e1', fontSize: '14px', boxSizing: 'border-box' }}
                       />

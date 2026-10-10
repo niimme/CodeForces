@@ -56,7 +56,121 @@ const TOKEN_REGEX = new RegExp(
   'gm'
 );
 
-function highlightSyntax(rawCode: string): string {
+const BRACKET_PAIRS: Record<string, string> = { '(': ')', '{': '}', '[': ']' };
+const REVERSE_BRACKET_PAIRS: Record<string, string> = { ')': '(', '}': '{', ']': '[' };
+
+function getIgnoredRanges(code: string): Array<[number, number]> {
+  const ranges: Array<[number, number]> = [];
+  const len = code.length;
+  let i = 0;
+  while (i < len) {
+    const ch = code[i];
+    const next = i + 1 < len ? code[i + 1] : '';
+    if ((ch === '/' && next === '/') || ch === '#') {
+      const start = i;
+      while (i < len && code[i] !== '\n') i++;
+      ranges.push([start, i]);
+      continue;
+    }
+    if (ch === '/' && next === '*') {
+      const start = i;
+      i += 2;
+      while (i < len && !(code[i - 1] === '*' && code[i] === '/')) i++;
+      if (i < len) i++;
+      ranges.push([start, i]);
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === '`') {
+      const quote = ch;
+      const start = i;
+      i++;
+      while (i < len) {
+        if (code[i] === '\\') {
+          i += 2;
+          continue;
+        }
+        if (code[i] === quote) {
+          i++;
+          break;
+        }
+        if (quote !== '`' && code[i] === '\n') break;
+        i++;
+      }
+      ranges.push([start, i]);
+      continue;
+    }
+    i++;
+  }
+  return ranges;
+}
+
+function isIgnored(idx: number, ranges: Array<[number, number]>): boolean {
+  for (const [start, end] of ranges) {
+    if (idx >= start && idx < end) return true;
+    if (start > idx) break;
+  }
+  return false;
+}
+
+export function findMatchingBracketIndices(
+  code: string,
+  selStart: number,
+  selEnd: number
+): Set<number> | null {
+  if (!code || selStart < 0) return null;
+  const isBracket = (ch: string) => ch in BRACKET_PAIRS || ch in REVERSE_BRACKET_PAIRS;
+  const ranges = getIgnoredRanges(code);
+
+  let target = -1;
+  if (selStart !== selEnd) {
+    if (isBracket(code[selStart]) && !isIgnored(selStart, ranges)) {
+      target = selStart;
+    } else if (selEnd > 0 && isBracket(code[selEnd - 1]) && !isIgnored(selEnd - 1, ranges)) {
+      target = selEnd - 1;
+    } else if (selStart > 0 && isBracket(code[selStart - 1]) && !isIgnored(selStart - 1, ranges)) {
+      target = selStart - 1;
+    }
+  } else {
+    // If collapsed cursor, check immediately after (selStart - 1) first to match screenshot
+    if (selStart > 0 && isBracket(code[selStart - 1]) && !isIgnored(selStart - 1, ranges)) {
+      target = selStart - 1;
+    } else if (selStart < code.length && isBracket(code[selStart]) && !isIgnored(selStart, ranges)) {
+      target = selStart;
+    }
+  }
+
+  if (target === -1) return null;
+
+  const ch = code[target];
+  if (ch in BRACKET_PAIRS) {
+    const openChar = ch;
+    const closeChar = BRACKET_PAIRS[ch];
+    let depth = 1;
+    for (let i = target + 1; i < code.length; i++) {
+      if (isIgnored(i, ranges)) continue;
+      if (code[i] === openChar) depth++;
+      else if (code[i] === closeChar) {
+        depth--;
+        if (depth === 0) return new Set([target, i]);
+      }
+    }
+  } else if (ch in REVERSE_BRACKET_PAIRS) {
+    const closeChar = ch;
+    const openChar = REVERSE_BRACKET_PAIRS[ch];
+    let depth = 1;
+    for (let i = target - 1; i >= 0; i--) {
+      if (isIgnored(i, ranges)) continue;
+      if (code[i] === closeChar) depth++;
+      else if (code[i] === openChar) {
+        depth--;
+        if (depth === 0) return new Set([i, target]);
+      }
+    }
+  }
+  return null;
+}
+
+function highlightSyntax(rawCode: string, matchingBrackets?: Set<number> | null): string {
   const escapeHtml = (str: string) =>
     str
       .replace(/&/g, '&amp;')
@@ -64,6 +178,23 @@ function highlightSyntax(rawCode: string): string {
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
+
+  const renderChunk = (chunk: string, startOffset: number): string => {
+    if (!matchingBrackets || matchingBrackets.size === 0) {
+      return escapeHtml(chunk);
+    }
+    let res = '';
+    for (let i = 0; i < chunk.length; i++) {
+      const globalPos = startOffset + i;
+      const ch = chunk[i];
+      if (matchingBrackets.has(globalPos)) {
+        res += `<span class="matching-bracket-highlight">${escapeHtml(ch)}</span>`;
+      } else {
+        res += escapeHtml(ch);
+      }
+    }
+    return res;
+  };
 
   TOKEN_REGEX.lastIndex = 0;
 
@@ -73,7 +204,7 @@ function highlightSyntax(rawCode: string): string {
 
   while ((match = TOKEN_REGEX.exec(rawCode)) !== null) {
     if (match.index > lastIndex) {
-      html += escapeHtml(rawCode.substring(lastIndex, match.index));
+      html += renderChunk(rawCode.substring(lastIndex, match.index), lastIndex);
     }
 
     const [full, comment, str, preproc, keyword, boolNum, op, fnCall, ident] = match;
@@ -95,14 +226,14 @@ function highlightSyntax(rawCode: string): string {
     } else if (ident) {
       html += `<span style="color: #7c3aed; font-weight: 500;">${escapeHtml(ident)}</span>`;
     } else {
-      html += escapeHtml(full);
+      html += renderChunk(full, match.index);
     }
 
     lastIndex = TOKEN_REGEX.lastIndex;
   }
 
   if (lastIndex < rawCode.length) {
-    html += escapeHtml(rawCode.substring(lastIndex));
+    html += renderChunk(rawCode.substring(lastIndex), lastIndex);
   }
 
   return html;
@@ -343,8 +474,19 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     return { visibleLines: vLines, displayCode: dispCode };
   }, [code, collapsedLines, foldableMap]);
 
-  // Memoize syntax highlighting HTML for displayed text
-  const highlightedHtml = useMemo(() => highlightSyntax(displayCode), [displayCode]);
+  // Cursor selection tracking for bracket matching
+  const [cursorSelection, setCursorSelection] = useState<{ start: number; end: number }>({ start: -1, end: -1 });
+
+  // Compute matching bracket indices based on cursor position or selection
+  const matchingBrackets = useMemo(() => {
+    return findMatchingBracketIndices(displayCode, cursorSelection.start, cursorSelection.end);
+  }, [displayCode, cursorSelection]);
+
+  // Memoize syntax highlighting HTML for displayed text with bracket pairs highlighted
+  const highlightedHtml = useMemo(
+    () => highlightSyntax(displayCode, matchingBrackets),
+    [displayCode, matchingBrackets]
+  );
 
   // Toggle function collapse / expand
   const handleToggleFold = (lineNum: number) => {
@@ -397,14 +539,18 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       const vIndex = visibleLines.findIndex(v => v.lineNum === lineNum);
       const targetIndex = vIndex !== -1 ? vIndex : lineNum - 1;
       textareaRef.current.scrollTop = Math.max(0, (targetIndex - 3) * 24);
+      updateCursorAndLine();
     }
   };
 
 
-  // Track active line number based on cursor position in visible text
-  const updateActiveLine = () => {
+  // Track active line number and cursor selection in visible text
+  const updateCursorAndLine = () => {
     if (!textareaRef.current) return;
     const cursorPos = textareaRef.current.selectionStart;
+    const endPos = textareaRef.current.selectionEnd;
+    setCursorSelection({ start: cursorPos, end: endPos });
+
     const textBefore = displayCode.substring(0, cursorPos);
     const visibleLineIndex = textBefore.split('\n').length - 1;
     const targetItem = visibleLines[visibleLineIndex];
@@ -491,7 +637,8 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
     } else {
       onChange(newVal);
     }
-    updateActiveLine();
+    updateCursorAndLine();
+    requestAnimationFrame(updateCursorAndLine);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -518,7 +665,7 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
       requestAnimationFrame(() => {
         if (textareaRef.current) {
           textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + indent.length;
-          updateActiveLine();
+          updateCursorAndLine();
         }
       });
     }
@@ -772,10 +919,15 @@ export const CodeEditor: React.FC<CodeEditorProps> = ({
             ref={textareaRef}
             value={displayCode}
             onChange={e => handleTextareaChange(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onClick={updateActiveLine}
-            onKeyUp={updateActiveLine}
-            onSelect={updateActiveLine}
+            onKeyDown={e => {
+              handleKeyDown(e);
+              requestAnimationFrame(updateCursorAndLine);
+            }}
+            onClick={updateCursorAndLine}
+            onKeyUp={updateCursorAndLine}
+            onSelect={updateCursorAndLine}
+            onPointerUp={updateCursorAndLine}
+            onFocus={updateCursorAndLine}
             onScroll={handleScroll}
             className="code-textarea"
             style={ligatureStyle}

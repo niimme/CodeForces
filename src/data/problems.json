@@ -8,21 +8,17 @@
     "category": "Math / Brute Force",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 735683,
-    "timeLimit": "1.0s",
-    "memoryLimit": "64MB",
-    "descriptionHtml": "\n      <p>One hot summer day Pete and his friend Billy decided to buy a watermelon. They chose the biggest and the ripest one, in their opinion. After that the watermelon was weighed, and the scales showed $w$ kilos.</p>\n      <p>They rushed home, dying of thirst, and decided to divide the berry, however they faced a hard problem.</p>\n      <p>Pete and Billy are great fans of even numbers, that's why they want to divide the watermelon in such a way that each of the two parts weighs an <strong>even number of kilos</strong>, at the same time it is not obligatory that the parts are equal.</p>\n      <p>The boys are extremely tired and want to start their meal as soon as possible, that's why you should help them and find out, if they can divide the watermelon in the way they want. For sure, each of them should get a part of positive weight.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first (and the only) input line contains integer number $w$ ($1 \\le w \\le 100$) &mdash; the weight of the watermelon bought by the boys.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print <code>YES</code>, if the boys can divide the watermelon into two parts, each of them weighing even number of kilos; and <code>NO</code> in the opposite case.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>For example, the boys can divide the watermelon into two parts of $2$ and $6$ kilos respectively (another variant &mdash; two parts of $4$ and $4$ kilos).</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Both parts must be even positive integers: part1 >= 2 and part2 >= 2.",
-      "The sum of two even numbers is always even. So if w is odd, it's impossible!",
-      "Beware of small even numbers: what happens when w = 2? The only positive division is 1 + 1, but 1 is odd!"
-    ],
-    "explanation": "For the watermelon to be split into two positive even integers, say $2k$ and $2m$, the total weight must be $w = 2k + 2m = 2(k+m)$, which is even. Furthermore, since $k \\ge 1$ and $m \\ge 1$, $w \\ge 4$. Therefore, any even number strictly greater than 2 can be split into $2$ and $w - 2$. Hence, answer is YES if $w > 2$ and $w \\% 2 == 0$, else NO.",
+    "solvedCount": 738492,
+    "timeLimit": "1 second",
+    "memoryLimit": "64 megabytes",
+    "descriptionHtml": "<p>One hot summer day Pete and his friend Billy decided to buy a watermelon. They chose the biggest and the ripest one, in their opinion. After that the watermelon was weighed, and the scales showed <span class=\"tex-span\"><i>w</i></span> kilos. They rushed home, dying of thirst, and decided to divide the berry, however they faced a hard problem.</p><p>Pete and Billy are great fans of even numbers, that's why they want to divide the watermelon in such a way that each of the two parts weighs even number of kilos, at the same time it is not obligatory that the parts are equal. The boys are extremely tired and want to start their meal as soon as possible, that's why you should help them and find out, if they can divide the watermelon in the way they want. For sure, each of them should get a part of positive weight.</p>",
+    "inputSpecificationHtml": "<p>The first (and the only) input line contains integer number <span class=\"tex-span\"><i>w</i></span> (<span class=\"tex-span\">1 ≤ <i>w</i> ≤ 100</span>) — the weight of the watermelon bought by the boys.</p>",
+    "outputSpecificationHtml": "<p>Print <span class=\"tex-font-style-tt\">YES</span>, if the boys can divide the watermelon into two parts, each of them weighing even number of kilos; and <span class=\"tex-font-style-tt\">NO</span> in the opposite case.</p>",
+    "sampleNotesHtml": "<p>For example, the boys can divide the watermelon into two parts of 2 and 6 kilos respectively (another variant — two parts of 4 and 4 kilos).</p>",
+    "starterCode": "// Problem: 4A - Watermelon\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 4A - Watermelon\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 4A - Watermelon\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 4A - Watermelon\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
@@ -60,8 +56,12 @@
         "expectedOutput": "YES"
       }
     ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    "hints": [
+      "Both parts must be even positive integers: part1 >= 2 and part2 >= 2.",
+      "The sum of two even numbers is always even. So if w is odd, it's impossible!",
+      "Beware of small even numbers: what happens when w = 2? The only positive division is 1 + 1, but 1 is odd!"
+    ],
+    "explanation": "For the watermelon to be split into two positive even integers, say $2k$ and $2m$, the total weight must be $w = 2k + 2m = 2(k+m)$, which is even. Furthermore, since $k \\ge 1$ and $m \\ge 1$, $w \\ge 4$. Therefore, any even number strictly greater than 2 can be split into $2$ and $w - 2$. Hence, answer is YES if $w > 2$ and $w \\% 2 == 0$, else NO."
   },
   {
     "id": "71A",
@@ -72,60 +72,26 @@
     "category": "Strings",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 535956,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Sometimes some words like <em>\"localization\"</em> or <em>\"internationalization\"</em> are so long that writing them many times in one text is quite tiresome.</p>\n      <p>Let's consider a word <strong>too long</strong>, if its length is <strong>strictly more than 10 characters</strong>. All too long words should be replaced with a special abbreviation.</p>\n      <p>This abbreviation is made like this: we write down the first and the last letter of a word and between them we write the number of letters between the first and the last letters. That number is in decimal system and doesn't contain any leading zeroes.</p>\n      <p>Thus, <em>\"localization\"</em> will be spelt as <em>\"l10n\"</em>, and <em>\"internationalization\"</em> will be spelt as <em>\"i18n\"</em>.</p>\n      <p>You are suggested to automatize the process of changing the words with abbreviations. At that all too long words should be replaced by the abbreviation and the words that are not too long should not undergo any changes.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains an integer $n$ ($1 \\le n \\le 100$). Each of the following $n$ lines contains one word. All the words consist of lowercase Latin letters and possess lengths from $1$ to $100$ characters.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print $n$ lines. The $i$-th line should contain the result of replacing of the $i$-th word from the input data.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>For a word of length $\\le 10$, output it as is. For a word of length $> 10$, abbreviation is <code>word[0] + (length - 2) + word[last]</code>.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Check length: is length strictly greater than 10? (> 10, not >= 10).",
-      "If length <= 10, print the word untouched.",
-      "The abbreviation formula is: word[0] + (word.length - 2) + word[word.length - 1]."
-    ],
-    "explanation": "Iterate through each word. Check its character length. If length is greater than 10, format as the first char, the number (length - 2), and the last char. Otherwise output the original word.",
+    "solvedCount": 537626,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Sometimes some words like \"<span class=\"tex-font-style-tt\">localization</span>\" or \"<span class=\"tex-font-style-tt\">internationalization</span>\" are so long that writing them many times in one text is quite tiresome.</p><p>Let's consider a word <span class=\"tex-font-style-it\">too long</span>, if its length is <span class=\"tex-font-style-bf\">strictly more</span> than <span class=\"tex-span\">10</span> characters. All too long words should be replaced with a special abbreviation.</p><p>This abbreviation is made like this: we write down the first and the last letter of a word and between them we write the number of letters between the first and the last letters. That number is in decimal system and doesn't contain any leading zeroes.</p><p>Thus, \"<span class=\"tex-font-style-tt\">localization</span>\" will be spelt as \"<span class=\"tex-font-style-tt\">l10n</span>\", and \"<span class=\"tex-font-style-tt\">internationalization</span>» will be spelt as \"<span class=\"tex-font-style-tt\">i18n</span>\".</p><p>You are suggested to automatize the process of changing the words with abbreviations. At that all too long words should be replaced by the abbreviation and the words that are not too long should not undergo any changes.</p>",
+    "inputSpecificationHtml": "<p>The first line contains an integer <span class=\"tex-span\"><i>n</i></span> (<span class=\"tex-span\">1 ≤ <i>n</i> ≤ 100</span>). Each of the following <span class=\"tex-span\"><i>n</i></span> lines contains one word. All the words consist of lowercase Latin letters and possess the lengths of from <span class=\"tex-span\">1</span> to <span class=\"tex-span\">100</span> characters.</p>",
+    "outputSpecificationHtml": "<p>Print <span class=\"tex-span\"><i>n</i></span> lines. The <span class=\"tex-span\"><i>i</i></span>-th line should contain the result of replacing of the <span class=\"tex-span\"><i>i</i></span>-th word from the input data.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 71A - Way Too Long Words\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 71A - Way Too Long Words\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 71A - Way Too Long Words\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 71A - Way Too Long Words\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: Mixed Lengths",
-        "description": "Official sample with short words and extremely long words.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "4\nword\nlocalization\ninternationalization\npneumonoultramicroscopicsilicovolcanoconiosis",
         "expectedOutput": "word\nl10n\ni18n\np43s"
-      },
-      {
-        "id": 2,
-        "title": "Boundary Test: Exact Length 10",
-        "description": "Words with exactly 10 letters must NOT be abbreviated.",
-        "input": "2\nautomobile\nrevolution",
-        "expectedOutput": "automobile\nrevolution"
-      },
-      {
-        "id": 3,
-        "title": "Boundary Test: Length 11",
-        "description": "Words with 11 letters are the smallest to be abbreviated (11 - 2 = 9).",
-        "input": "1\nexceptional",
-        "expectedOutput": "e9l"
-      },
-      {
-        "id": 4,
-        "title": "Single Character Words",
-        "description": "Very short single-letter words.",
-        "input": "3\na\nb\nz",
-        "expectedOutput": "a\nb\nz"
-      },
-      {
-        "id": 5,
-        "title": "Long Words With Repeating Letters",
-        "description": "Words with identical start and end letters.",
-        "input": "2\nabcdefghijka\nzzzzzzzzzzz",
-        "expectedOutput": "a10a\nz9z"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
     "id": "231A",
@@ -136,188 +102,33 @@
     "category": "Greedy / Brute Force",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 458979,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>One day three best friends Petya, Vasya and Tonya decided to form a team and take part in programming contests. Participants are usually offered several problems during programming contests. Long before the start the friends decided that they will implement a problem if at least two of them are sure about the solution. Otherwise, the friends won't write the problem's solution.</p>\n      <p>This contest offers $n$ problems to the participants. For each problem we know, which friend is sure about the solution. Help the friends find the number of problems for which they will write a solution.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first input line contains a single integer $n$ ($1 \\le n \\le 1000$) &mdash; the number of problems in the contest. Then $n$ lines contain three integers each, each integer is either $0$ or $1$. If the first number in the line equals $1$, then Petya is sure about the problem's solution, otherwise he isn't sure. The second number shows Vasya's view on the solution, the third number shows Tonya's view. The numbers on the lines are separated by spaces.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the number of problems the friends will implement on the contest.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>In the first sample, Petya and Vasya are sure on problem 1, all three are sure on problem 2, and only Petya on problem 3. Total solved = 2.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "For each problem, sum up the three values: Petya + Vasya + Tonya.",
-      "If the sum is >= 2, increment your answer counter.",
-      "Print the final total count."
-    ],
-    "explanation": "For each problem, check whether at least two friends are confident (i.e. $a + b + c \\ge 2$). If yes, increment the answer.",
+    "solvedCount": 460556,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>One day three best friends Petya, Vasya and Tonya decided to form a team and take part in programming contests. Participants are usually offered several problems during programming contests. Long before the start the friends decided that they will implement a problem if at least two of them are sure about the solution. Otherwise, the friends won't write the problem's solution.</p><p>This contest offers <span class=\"tex-span\"><i>n</i></span> problems to the participants. For each problem we know, which friend is sure about the solution. Help the friends find the number of problems for which they will write a solution.</p>",
+    "inputSpecificationHtml": "<p>The first input line contains a single integer <span class=\"tex-span\"><i>n</i></span> (<span class=\"tex-span\">1 ≤ <i>n</i> ≤ 1000</span>) — the number of problems in the contest. Then <span class=\"tex-span\"><i>n</i></span> lines contain three integers each, each integer is either <span class=\"tex-span\">0</span> or <span class=\"tex-span\">1</span>. If the first number in the line equals <span class=\"tex-span\">1</span>, then Petya is sure about the problem's solution, otherwise he isn't sure. The second number shows Vasya's view on the solution, the third number shows Tonya's view. The numbers on the lines are separated by spaces.</p>",
+    "outputSpecificationHtml": "<p>Print a single integer — the number of problems the friends will implement on the contest.</p>",
+    "sampleNotesHtml": "<p>In the first sample Petya and Vasya are sure that they know how to solve the first problem and all three of them know how to solve the second problem. That means that they will write solutions for these problems. Only Petya is sure about the solution for the third problem, but that isn't enough, so the friends won't take it. </p><p>In the second sample the friends will only implement the second problem, as Vasya and Tonya are sure about the solution.</p>",
+    "starterCode": "// Problem: 231A - Team\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 231A - Team\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 231A - Team\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 231A - Team\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: 3 Problems",
-        "description": "Official sample 1: two problems have >= 2 confident friends.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "3\n1 1 0\n1 1 1\n1 0 0",
         "expectedOutput": "2"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: 2 Problems",
-        "description": "Official sample 2: one problem has >= 2 confident friends.",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
         "input": "2\n1 0 0\n0 1 1",
         "expectedOutput": "1"
-      },
-      {
-        "id": 3,
-        "title": "No Agreement: All Single Votes",
-        "description": "Problems where at most 1 friend is sure.",
-        "input": "3\n1 0 0\n0 1 0\n0 0 1",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 4,
-        "title": "Unanimous Agreement",
-        "description": "All 3 friends agree on all problems.",
-        "input": "4\n1 1 1\n1 1 1\n1 1 1\n1 1 1",
-        "expectedOutput": "4"
-      },
-      {
-        "id": 5,
-        "title": "Single Problem Edge Case",
-        "description": "Only 1 problem, 2 friends agree.",
-        "input": "1\n0 1 1",
-        "expectedOutput": "1"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
-  },
-  {
-    "id": "158A",
-    "contestId": 158,
-    "index": "A",
-    "title": "Next Round",
-    "emoji": "🏁",
-    "category": "Conditionals / Arrays",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 341706,
-    "timeLimit": "3.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>\"Contestant who earns a score equal to or greater than the $k$-th place finisher's score will advance to the next round, as long as the contestant earns a positive score...\" &mdash; an excerpt from contest rules.</p>\n      <p>A total of $n$ participants took part in the contest ($n \\ge k$), and you already know their scores. Calculate how many participants will advance to the next round.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line of the input contains two integers $n$ and $k$ ($1 \\le k \\le n \\le 50$) separated by a single space.</p>\n      <p>The second line contains $n$ space-separated integers $a_1, a_2, \\dots, a_n$ ($0 \\le a_i \\le 100$), where $a_i$ is the score earned by the participant who got the $i$-th place. The given sequence is non-increasing (that is, for all $i$ from $1$ to $n - 1$ the following condition is fulfilled: $a_i \\ge a_{i+1}$).</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Output the number of participants who advance to the next round.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>In the first sample the participant on the 5th place earned 7 points. As the participant on the 6th place also earned 7 points, there are 6 advancers.</p>\n      <p>In the second sample nobody got a positive score (score > 0), so 0 advance.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Find the score of the k-th participant: remember in 0-indexed arrays, this is scores[k - 1].",
-      "A participant qualifies if score >= scores[k - 1] AND score > 0.",
-      "Even if a participant ties with the k-th place, their score must be strictly greater than 0!"
-    ],
-    "explanation": "Read $n$ and $k$. The cutoff score is $scores[k-1]$. Count all scores $s$ such that $s \\ge scores[k-1]$ and $s > 0$.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: Tie at Cutoff",
-        "description": "Official sample 1: 5th and 6th place tie with 7 points.",
-        "input": "8 5\n10 9 8 7 7 7 5 5",
-        "expectedOutput": "6"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: All Zero Scores",
-        "description": "Official sample 2: positive score rule eliminates everyone.",
-        "input": "4 2\n0 0 0 0",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 3,
-        "title": "All Qualify",
-        "description": "All participants have identical positive score.",
-        "input": "5 3\n1 1 1 1 1",
-        "expectedOutput": "5"
-      },
-      {
-        "id": 4,
-        "title": "Cutoff is Zero",
-        "description": "Participants after index with positive score qualify.",
-        "input": "5 4\n5 4 3 0 0",
-        "expectedOutput": "3"
-      },
-      {
-        "id": 5,
-        "title": "Single Participant Positive",
-        "description": "1 participant with score 10.",
-        "input": "1 1\n10",
-        "expectedOutput": "1"
-      }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
-  },
-  {
-    "id": "50A",
-    "contestId": 50,
-    "index": "A",
-    "title": "Domino piling",
-    "emoji": "🁓",
-    "category": "Math / Geometry",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 338822,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>You are given a rectangular board of $M \\times N$ squares. You are also given an unlimited number of standard domino pieces of $2 \\times 1$ squares.</p>\n      <p>You are asked to place as many dominoes as possible on the board so as to meet the following conditions:</p>\n      <ol>\n        <li>Each domino completely covers two squares.</li>\n        <li>No two dominoes overlap.</li>\n        <li>Each domino lies entirely inside the board. It is allowed to touch the edges of the board.</li>\n      </ol>\n      <p>Find the maximum number of dominoes, which can be placed under these restrictions.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>In a single line you are given two integers $M$ and $N$ ($1 \\le M \\le N \\le 16$).</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Output one number &mdash; the maximal number of dominoes, which can be placed.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Each domino covers exactly 2 squares. The board has $M \\times N$ squares. Maximum dominoes is $\\lfloor (M \\times N) / 2 \\rfloor$.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Total squares on the board = M * N.",
-      "Each domino covers exactly 2 squares.",
-      "Can we always tile all squares except 1 if total area is odd? Yes! The formula is simply floor((M * N) / 2)."
-    ],
-    "explanation": "Because a domino covers 2 squares, at most $\\lfloor \\frac{M \\cdot N}{2} \\rfloor$ dominoes can be placed. Standard greedy strip-filling confirms this upper bound is always achievable.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample Test 1: 2 x 4 Board",
-        "description": "Official sample 1: 2 * 4 = 8 squares, fits 4 dominoes.",
-        "input": "2 4",
-        "expectedOutput": "4"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: 3 x 3 Board",
-        "description": "Official sample 2: 3 * 3 = 9 squares, fits 4 dominoes with 1 leftover square.",
-        "input": "3 3",
-        "expectedOutput": "4"
-      },
-      {
-        "id": 3,
-        "title": "Single 1 x 1 Square",
-        "description": "A 1x1 board cannot fit even one 2x1 domino.",
-        "input": "1 1",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 4,
-        "title": "Long 1 x 16 Strip",
-        "description": "1x16 board fits 8 dominoes.",
-        "input": "1 16",
-        "expectedOutput": "8"
-      },
-      {
-        "id": 5,
-        "title": "Maximum Grid: 16 x 16",
-        "description": "16x16 board = 256 squares = 128 dominoes.",
-        "input": "16 16",
-        "expectedOutput": "128"
-      }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
     "id": "282A",
@@ -328,124 +139,107 @@
     "category": "Implementation",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 382313,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>The classic programming language of Bitland is Bit++. A language that is so peculiar and complicated.</p>\n      <p>The language is that peculiar as it has only one variable, called $x$. Also, there are two operations:</p>\n      <ul>\n        <li>Operation <code>++</code> increases the value of variable $x$ by 1.</li>\n        <li>Operation <code>--</code> decreases the value of variable $x$ by 1.</li>\n      </ul>\n      <p>A statement in language Bit++ is a sequence, consisting of exactly one operation and one variable $x$. The statement is written without spaces, that is, it can only contain characters <code>+</code>, <code>-</code>, <code>X</code>. Executing a statement means applying its operation to variable $x$.</p>\n      <p>A programme in Bit++ is a sequence of statements, each of them needs to be executed. Putting values to variable $x$ is called executing the programme. Initially the value of $x$ is 0.</p>\n      <p>You are given a programme in Bit++. Execute it and find the final value of variable $x$.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains a single integer $n$ ($1 \\le n \\le 150$) &mdash; the number of statements in the programme. Next $n$ lines contain statements. Each line contains exactly one statement. The statements are valid Bit++ statements: <code>++X</code>, <code>X++</code>, <code>--X</code>, or <code>X--</code>.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the final value of $x$.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>If the statement contains '+', $x$ increases by 1. If it contains '-', $x$ decreases by 1.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "The variable starts at 0.",
-      "Notice that every operation contains either '+' or '-'. If it contains '+', x = x + 1, otherwise x = x - 1.",
-      "The position of X (prefix vs postfix) doesn't change the final accumulator value."
-    ],
-    "explanation": "Start with $x = 0$. For each instruction, check if it contains the character '+'. If so, increment $x$ by 1. Otherwise decrement $x$ by 1. Return the final value.",
+    "solvedCount": 383641,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>The classic programming language of Bitland is Bit++. This language is so peculiar and complicated.</p><p>The language is that peculiar as it has exactly one variable, called <span class=\"tex-span\"><i>x</i></span>. Also, there are two operations:</p><ul> <li> Operation <span class=\"tex-font-style-tt\">++</span> increases the value of variable <span class=\"tex-span\"><i>x</i></span> by 1. </li><li> Operation <span class=\"tex-font-style-tt\">--</span> decreases the value of variable <span class=\"tex-span\"><i>x</i></span> by 1. </li></ul><p>A statement in language Bit++ is a sequence, consisting of exactly one operation and one variable <span class=\"tex-span\"><i>x</i></span>. The statement is written without spaces, that is, it can only contain characters \"<span class=\"tex-font-style-tt\">+</span>\", \"<span class=\"tex-font-style-tt\">-</span>\", \"<span class=\"tex-font-style-tt\">X</span>\". Executing a statement means applying the operation it contains.</p><p>A programme in Bit++ is a sequence of statements, each of them needs to be executed. Executing a programme means executing all the statements it contains.</p><p>You're given a programme in language Bit++. The initial value of <span class=\"tex-span\"><i>x</i></span> is <span class=\"tex-span\">0</span>. Execute the programme and find its final value (the value of the variable when this programme is executed).</p>",
+    "inputSpecificationHtml": "<p>The first line contains a single integer <span class=\"tex-span\"><i>n</i></span> <span class=\"tex-span\">(1 ≤ <i>n</i> ≤ 150)</span> — the number of statements in the programme.</p><p>Next <span class=\"tex-span\"><i>n</i></span> lines contain a statement each. Each statement contains exactly one operation (<span class=\"tex-font-style-tt\">++</span> or <span class=\"tex-font-style-tt\">--</span>) and exactly one variable <span class=\"tex-span\"><i>x</i></span> (denoted as letter «<span class=\"tex-font-style-tt\">X</span>»). Thus, there are no empty statements. The operation and the variable can be written in any order.</p>",
+    "outputSpecificationHtml": "<p>Print a single integer — the final value of <span class=\"tex-span\"><i>x</i></span>.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 282A - Bit++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 282A - Bit++\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 282A - Bit++\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 282A - Bit++\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: Single Increment",
-        "description": "Official sample 1: ++X results in 1.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "1\n++X",
         "expectedOutput": "1"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: Balanced Operations",
-        "description": "Official sample 2: X++ then --X returns to 0.",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
         "input": "2\nX++\n--X",
         "expectedOutput": "0"
-      },
-      {
-        "id": 3,
-        "title": "Multiple Decrements Negative Result",
-        "description": "3 decrements starting from 0 reach -3.",
-        "input": "3\n--X\nX--\n--X",
-        "expectedOutput": "-3"
-      },
-      {
-        "id": 4,
-        "title": "Alternating Order",
-        "description": "Mixed prefix and postfix statements.",
-        "input": "4\n++X\nX++\n--X\n++X",
-        "expectedOutput": "2"
-      },
-      {
-        "id": 5,
-        "title": "Net Negative Operations",
-        "description": "More decrements than increments.",
-        "input": "5\n++X\n--X\n--X\n--X\nX++",
-        "expectedOutput": "-1"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
-    "id": "112A",
-    "contestId": 112,
+    "id": "158A",
+    "contestId": 158,
     "index": "A",
-    "title": "Petya and Strings",
-    "emoji": "🔡",
-    "category": "Strings / Comparison",
+    "title": "Next Round",
+    "emoji": "🏁",
+    "category": "Conditionals / Arrays",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 303947,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Little Petya loves presents. His mum bought him two strings of the same size for his birthday. The strings consist of uppercase and lowercase Latin letters. Now Petya wants to compare those two strings <strong>lexicographically</strong>.</p>\n      <p>The letters' case does not matter, that is an uppercase letter is considered equivalent to the corresponding lowercase letter.</p>\n      <p>Compare the strings: print <code>-1</code> if the first string is less than the second one, <code>1</code> if the second string is less, or <code>0</code> if they are equal.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>Each of the first two lines contains a string. The lengths of the strings range from $1$ to $100$ inclusive. It is guaranteed that the strings are of the same length and also consist of uppercase and lowercase Latin letters.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>If the first string is less than the second string, print <code>-1</code>. If the second string is less than the first string, print <code>1</code>. If the strings are equal, print <code>0</code>. Note that the letters' case is not taken into consideration when the strings are compared.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Convert both strings to lowercase. Compare character by character.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Convert both strings to lowercase first so letter casing is ignored.",
-      "Compare them using standard string comparison (< and >).",
-      "Return '-1', '1', or '0' accordingly."
-    ],
-    "explanation": "Convert both strings to lowercase with `.toLowerCase()`. Compare using standard lexicographical comparison.",
+    "solvedCount": 342764,
+    "timeLimit": "3 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>\"Contestant who earns a score equal to or greater than the <span class=\"tex-span\"><i>k</i></span>-th place finisher's score will advance to the next round, as long as the contestant earns a positive score...\" — an excerpt from contest rules.</p><p>A total of <span class=\"tex-span\"><i>n</i></span> participants took part in the contest (<span class=\"tex-span\"><i>n</i> ≥ <i>k</i></span>), and you already know their scores. Calculate how many participants will advance to the next round.</p>",
+    "inputSpecificationHtml": "<p>The first line of the input contains two integers <span class=\"tex-span\"><i>n</i></span> and <span class=\"tex-span\"><i>k</i></span> (<span class=\"tex-span\">1 ≤ <i>k</i> ≤ <i>n</i> ≤ 50</span>) separated by a single space.</p><p>The second line contains <span class=\"tex-span\"><i>n</i></span> space-separated integers <span class=\"tex-span\"><i>a</i><sub class=\"lower-index\">1</sub>, <i>a</i><sub class=\"lower-index\">2</sub>, ..., <i>a</i><sub class=\"lower-index\"><i>n</i></sub></span> (<span class=\"tex-span\">0 ≤ <i>a</i><sub class=\"lower-index\"><i>i</i></sub> ≤ 100</span>), where <span class=\"tex-span\"><i>a</i><sub class=\"lower-index\"><i>i</i></sub></span> is the score earned by the participant who got the <span class=\"tex-span\"><i>i</i></span>-th place. The given sequence is non-increasing (that is, for all <span class=\"tex-span\"><i>i</i></span> from <span class=\"tex-span\">1</span> to <span class=\"tex-span\"><i>n</i> - 1</span> the following condition is fulfilled: <span class=\"tex-span\"><i>a</i><sub class=\"lower-index\"><i>i</i></sub> ≥ <i>a</i><sub class=\"lower-index\"><i>i</i> + 1</sub></span>).</p>",
+    "outputSpecificationHtml": "<p>Output the number of participants who advance to the next round.</p>",
+    "sampleNotesHtml": "<p>In the first example the participant on the 5th place earned 7 points. As the participant on the 6th place also earned 7 points, there are 6 advancers.</p><p>In the second example nobody got a positive score.</p>",
+    "starterCode": "// Problem: 158A - Next Round\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 158A - Next Round\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 158A - Next Round\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 158A - Next Round\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: Equal Strings (Different Case)",
-        "description": "Official sample: 'aaaa' and 'aaaA' are equal ignoring case.",
-        "input": "aaaa\naaaA",
-        "expectedOutput": "0"
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "8 5\n10 9 8 7 7 7 5 5",
+        "expectedOutput": "6"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: First is Less",
-        "description": "Official sample: 'abs' < 'Abz'.",
-        "input": "abs\nAbz",
-        "expectedOutput": "-1"
-      },
-      {
-        "id": 3,
-        "title": "Sample Test 3: Second is Less",
-        "description": "Official sample: 'abcdefg' > 'AbCdEfF'.",
-        "input": "abcdefg\nAbCdEfF",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 4,
-        "title": "Single Characters Differing in Case",
-        "description": "Single char 'Z' vs 'a': lowercase 'z' is greater than 'a'.",
-        "input": "Z\na",
-        "expectedOutput": "1"
-      },
-      {
-        "id": 5,
-        "title": "Identical Strings",
-        "description": "Both strings have identical case and characters.",
-        "input": "hellocodeforces\nhellocodeforces",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "4 2\n0 0 0 0",
         "expectedOutput": "0"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
+  },
+  {
+    "id": "50A",
+    "contestId": 50,
+    "index": "A",
+    "title": "Domino piling",
+    "emoji": "🁓",
+    "category": "Math / Geometry",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 340172,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>You are given a rectangular board of <span class=\"tex-span\"><i>M</i> × <i>N</i></span> squares. Also you are given an unlimited number of standard domino pieces of <span class=\"tex-span\">2 × 1</span> squares. You are allowed to rotate the pieces. You are asked to place as many dominoes as possible on the board so as to meet the following conditions:</p><p>1. Each domino completely covers two squares.</p><p>2. No two dominoes overlap.</p><p>3. Each domino lies entirely inside the board. It is allowed to touch the edges of the board.</p><p>Find the maximum number of dominoes, which can be placed under these restrictions.</p>",
+    "inputSpecificationHtml": "<p>In a single line you are given two integers <span class=\"tex-span\"><i>M</i></span> and <span class=\"tex-span\"><i>N</i></span> — board sizes in squares (<span class=\"tex-span\">1 ≤ <i>M</i> ≤ <i>N</i> ≤ 16</span>).</p>",
+    "outputSpecificationHtml": "<p>Output one number — the maximal number of dominoes, which can be placed.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 50A - Domino piling\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 50A - Domino piling\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 50A - Domino piling\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 50A - Domino piling\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "2 4",
+        "expectedOutput": "4"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "3 3",
+        "expectedOutput": "4"
+      }
+    ]
   },
   {
     "id": "263A",
@@ -456,189 +250,107 @@
     "category": "Matrices / Simulation",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 337389,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>You've got a $5 \\times 5$ matrix, consisting of 24 zeroes and a single number one. Let's index the matrix rows by numbers from 1 to 5 from top to bottom, let's index the matrix columns by numbers from 1 to 5 from left to right.</p>\n      <p>In one move, you are allowed to apply one of the two following transformations to the matrix:</p>\n      <ol>\n        <li>Swap two neighboring matrix rows, that is, rows with indexes $i$ and $i + 1$ for some integer $i$ ($1 \\le i < 5$).</li>\n        <li>Swap two neighboring matrix columns, that is, columns with indexes $j$ and $j + 1$ for some integer $j$ ($1 \\le j < 5$).</li>\n      </ol>\n      <p>You think that a matrix looks <strong>beautiful</strong>, if the single number one of the matrix is in the middle of it (in the cell that is on the intersection of the third row and the third column). Count the minimum number of moves needed to make the matrix beautiful.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The input consists of five lines, each line contains five integers: the $j$-th integer in the $i$-th line of the input represents the element of the matrix that is located on the intersection of the $i$-th row and the $j$-th column. It is guaranteed that the matrix consists of 24 zeroes and a single number one.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the minimum number of moves needed to make the matrix beautiful.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>The target position is $(3, 3)$. The minimum moves is the Manhattan distance: $|r - 3| + |c - 3|$.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Find the coordinates (row, col) of the number 1 (using 1-based indexing, from 1 to 5).",
-      "The center of the 5x5 matrix is at row 3, column 3.",
-      "Swapping adjacent rows changes row coordinate by 1; swapping adjacent columns changes col by 1.",
-      "The total moves needed is the Manhattan distance: abs(row - 3) + abs(col - 3)."
-    ],
-    "explanation": "Locate the coordinates $(r, c)$ of the element equal to 1. Moving adjacent rows/cols translates to Manhattan distance to the center $(3, 3)$, which equals $|r - 3| + |c - 3|$.",
+    "solvedCount": 338296,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>You've got a <span class=\"tex-span\">5 × 5</span> matrix, consisting of <span class=\"tex-span\">24</span> zeroes and a single number one. Let's index the matrix rows by numbers from <span class=\"tex-span\">1</span> to <span class=\"tex-span\">5</span> from top to bottom, let's index the matrix columns by numbers from <span class=\"tex-span\">1</span> to <span class=\"tex-span\">5</span> from left to right. In one move, you are allowed to apply one of the two following transformations to the matrix:</p><ol> <li> Swap two neighboring matrix rows, that is, rows with indexes <span class=\"tex-span\"><i>i</i></span> and <span class=\"tex-span\"><i>i</i> + 1</span> for some integer <span class=\"tex-span\"><i>i</i></span> <span class=\"tex-span\">(1 ≤ <i>i</i> &lt; 5)</span>. </li><li> Swap two neighboring matrix columns, that is, columns with indexes <span class=\"tex-span\"><i>j</i></span> and <span class=\"tex-span\"><i>j</i> + 1</span> for some integer <span class=\"tex-span\"><i>j</i></span> <span class=\"tex-span\">(1 ≤ <i>j</i> &lt; 5)</span>. </li></ol><p>You think that a matrix looks <span class=\"tex-font-style-it\">beautiful</span>, if the single number one of the matrix is located in its middle (in the cell that is on the intersection of the third row and the third column). Count the minimum number of moves needed to make the matrix beautiful.</p>",
+    "inputSpecificationHtml": "<p>The input consists of five lines, each line contains five integers: the <span class=\"tex-span\"><i>j</i></span>-th integer in the <span class=\"tex-span\"><i>i</i></span>-th line of the input represents the element of the matrix that is located on the intersection of the <span class=\"tex-span\"><i>i</i></span>-th row and the <span class=\"tex-span\"><i>j</i></span>-th column. It is guaranteed that the matrix consists of <span class=\"tex-span\">24</span> zeroes and a single number one.</p>",
+    "outputSpecificationHtml": "<p>Print a single integer — the minimum number of moves needed to make the matrix beautiful.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 263A - Beautiful Matrix\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 263A - Beautiful Matrix\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 263A - Beautiful Matrix\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 263A - Beautiful Matrix\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: Corner (1, 1)",
-        "description": "Official sample 1: 1 is at (1, 1). Distance = |1-3| + |1-3| = 4.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "0 0 0 0 0\n0 0 0 0 1\n0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0",
         "expectedOutput": "3"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: Already at Center (3, 3)",
-        "description": "Official sample 2: 1 is at center, 0 moves required.",
-        "input": "0 0 0 0 0\n0 0 0 0 0\n0 0 1 0 0\n0 0 0 0 0\n0 0 0 0 0",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 3,
-        "title": "Top-Left Corner (1, 1)",
-        "description": "1 is at row 1, col 1: |1-3| + |1-3| = 4.",
-        "input": "1 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0",
-        "expectedOutput": "4"
-      },
-      {
-        "id": 4,
-        "title": "Bottom-Right Corner (5, 5)",
-        "description": "1 is at row 5, col 5: |5-3| + |5-3| = 4.",
-        "input": "0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 1",
-        "expectedOutput": "4"
-      },
-      {
-        "id": 5,
-        "title": "Off-Center (2, 4)",
-        "description": "1 is at row 2, col 4: |2-3| + |4-3| = 2.",
-        "input": "0 0 0 0 0\n0 0 0 1 0\n0 0 0 0 0\n0 0 0 0 0\n0 0 0 0 0",
-        "expectedOutput": "2"
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "0 0 0 0 0\n0 0 0 0 0\n0 1 0 0 0\n0 0 0 0 0\n0 0 0 0 0",
+        "expectedOutput": "1"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
-    "id": "339A",
-    "contestId": 339,
+    "id": "1A",
+    "contestId": 1,
     "index": "A",
-    "title": "Helpful Maths",
-    "emoji": "➕",
-    "category": "Sorting / Strings",
+    "title": "Theatre Square",
+    "emoji": "🔢",
+    "category": "Math",
     "type": "exercise",
-    "rating": 800,
-    "solvedCount": 291842,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Xenia is a beginner mathematician. Today the teacher wrote the sum of numbers 1, 2 and 3 on the board. The sum consisted of several numbers and signs \"+\".</p>\n      <p>Xenia has just begun learning counting, so she can only calculate a sum if the summands follow in <strong>non-decreasing order</strong>. For example, she can't calculate a sum $1+3+2+1$ but she can calculate sums $1+1+2$ and $3+3$.</p>\n      <p>You've got the sum that was written on the board. Rearrange the summands and print the sum in such a way that Xenia can calculate the sum.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains a non-empty string $s$ &mdash; the sum Xenia needs to count. String $s$ contains no spaces. It only contains digits and characters \"+\". The length of string $s$ cannot exceed $100$ characters.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print the new sum that Xenia can count.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Extract all numbers, sort them ascending, and join them back with '+'.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Split the input string by '+' to get an array of number strings.",
-      "Sort the numbers in ascending order.",
-      "Join the array back with '+' as the separator."
-    ],
-    "explanation": "Split the string along '+', convert or sort the digits ascendingly, and join them back with '+'.",
+    "rating": 1000,
+    "solvedCount": 335085,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Theatre Square in the capital city of Berland has a rectangular shape with the size <span class=\"tex-span\"><i>n</i> × <i>m</i></span> meters. On the occasion of the city's anniversary, a decision was taken to pave the Square with square granite flagstones. Each flagstone is of the size <span class=\"tex-span\"><i>a</i> × <i>a</i></span>.</p><p>What is the least number of flagstones needed to pave the Square? It's allowed to cover the surface larger than the Theatre Square, but the Square has to be covered. It's not allowed to break the flagstones. The sides of flagstones should be parallel to the sides of the Square.</p>",
+    "inputSpecificationHtml": "<p>The input contains three positive integer numbers in the first line: <span class=\"tex-span\"><i>n</i>,  <i>m</i></span> and <span class=\"tex-span\"><i>a</i></span> (<span class=\"tex-span\">1 ≤  <i>n</i>, <i>m</i>, <i>a</i> ≤ 10<sup class=\"upper-index\">9</sup></span>).</p>",
+    "outputSpecificationHtml": "<p>Write the needed number of flagstones.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 1A - Theatre Square\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 1A - Theatre Square\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 1A - Theatre Square\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 1A - Theatre Square\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: 3+2+1",
-        "description": "Official sample: numbers 3, 2, 1 sorted become 1+2+3.",
-        "input": "3+2+1",
-        "expectedOutput": "1+2+3"
-      },
-      {
-        "id": 2,
-        "title": "Sample Test 2: 1+1+3+1+3",
-        "description": "Official sample: repeated digits.",
-        "input": "1+1+3+1+3",
-        "expectedOutput": "1+1+1+3+3"
-      },
-      {
-        "id": 3,
-        "title": "Sample Test 3: Single Number 2",
-        "description": "Official sample with only one summand.",
-        "input": "2",
-        "expectedOutput": "2"
-      },
-      {
-        "id": 4,
-        "title": "Already Sorted",
-        "description": "Expression that is already in non-decreasing order.",
-        "input": "1+2+2+3",
-        "expectedOutput": "1+2+2+3"
-      },
-      {
-        "id": 5,
-        "title": "All Same Numbers",
-        "description": "Expression containing identical numbers.",
-        "input": "3+3+3+3",
-        "expectedOutput": "3+3+3+3"
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "6 6 4",
+        "expectedOutput": "4"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
-    "id": "266A",
-    "contestId": 266,
+    "id": "112A",
+    "contestId": 112,
     "index": "A",
-    "title": "Stones on the Table",
-    "emoji": "💎",
-    "category": "Strings / Greedy",
+    "title": "Petya and Strings",
+    "emoji": "🔡",
+    "category": "Strings / Comparison",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 258419,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>There are $n$ stones on the table in a row, each of them can be red, green or blue. Count the minimum number of stones to take from the table so that any two neighboring stones had different colors. Stones of the same color are considered neighboring if there are no other stones between them.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains integer $n$ ($1 \\le n \\le 50$) &mdash; the number of stones on the table.</p>\n      <p>The next line contains string $s$, which represents the colors of the stones. We'll consider the stones in the row numbered from 1 to $n$ from left to right. Then the $i$-th character $s$ equals \"R\", if the $i$-th stone is red, \"G\", if it's green and \"B\", if it's blue.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print a single integer &mdash; the minimum number of stones you need to remove.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Whenever $s[i] == s[i-1]$, we must remove one stone. So count all adjacent pairs with identical colors.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Any adjacent pair of identical colors violates the rule.",
-      "Iterate from index 1 to n - 1.",
-      "If s[i] === s[i - 1], increment the count."
-    ],
-    "explanation": "Two adjacent stones with the same color require at least one removal. Therefore, the minimum removals required is simply the count of indices $i$ where $s[i] == s[i-1]$.",
+    "solvedCount": 304750,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Little Petya loves presents. His mum bought him two strings of the same size for his birthday. The strings consist of uppercase and lowercase Latin letters. Now Petya wants to compare those two strings <span class=\"tex-font-style-underline\">lexicographically</span>. The letters' case does not matter, that is an uppercase letter is considered equivalent to the corresponding lowercase letter. Help Petya perform the comparison.</p>",
+    "inputSpecificationHtml": "<p>Each of the first two lines contains a bought string. The strings' lengths range from <span class=\"tex-span\">1</span> to <span class=\"tex-span\">100</span> inclusive. It is guaranteed that the strings are of the same length and also consist of uppercase and lowercase Latin letters.</p>",
+    "outputSpecificationHtml": "<p>If the first string is less than the second one, print \"-1\". If the second string is less than the first one, print \"1\". If the strings are equal, print \"0\". Note that the letters' case is not taken into consideration when the strings are compared.</p>",
+    "sampleNotesHtml": "<p>If you want more formal information about the lexicographical order (also known as the \"<span class=\"tex-font-style-underline\">dictionary order</span>\" or \"<span class=\"tex-font-style-underline\">alphabetical order</span>\"), you can visit the following site:</p><ul><li> <span class=\"tex-font-style-tt\">http://en.wikipedia.org/wiki/Lexicographical_order</span></li></ul>",
+    "starterCode": "// Problem: 112A - Petya and Strings\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 112A - Petya and Strings\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 112A - Petya and Strings\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 112A - Petya and Strings\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: RRG",
-        "description": "Official sample: 1 removal required.",
-        "input": "3\nRRG",
-        "expectedOutput": "1"
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "aaaa\naaaA",
+        "expectedOutput": "0"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: RRRRR",
-        "description": "Official sample: 4 removals required.",
-        "input": "5\nRRRRR",
-        "expectedOutput": "4"
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "abs\nAbz",
+        "expectedOutput": "-1"
       },
       {
         "id": 3,
-        "title": "Sample Test 3: BRBG",
-        "description": "Official sample: no two adjacent have the same color.",
-        "input": "4\nBRBG",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 4,
-        "title": "Single Stone",
-        "description": "Only 1 stone on the table.",
-        "input": "1\nG",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 5,
-        "title": "Alternating Stones with One Duplicate",
-        "description": "RGBRGBB -> 1 removal.",
-        "input": "7\nRGBRGBB",
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "abcdefg\nAbCdEfF",
         "expectedOutput": "1"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
     "id": "236A",
@@ -649,124 +361,246 @@
     "category": "Hash Sets / Counting",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 298654,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Those days, many boys use beautiful girls' photos as avatars in forums. So it is very hard to tell the gender of a user at the first glance.</p>\n      <p>Here is a method: if the number of distinct characters in one's user name is odd, then he is a male, otherwise she is a female.</p>\n      <p>You are given the string that denotes the user name, please help our hero to determine the gender of this user by his method.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains a non-empty string, that contains only lowercase English letters &mdash; the user name. The string doesn't contain more than $100$ letters.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>If the user is a female by our hero's method, print <code>CHAT WITH HER!</code>. If the user is a male, print <code>IGNORE HIM!</code>.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Count the distinct characters using a Set. If size is even: \"CHAT WITH HER!\". If odd: \"IGNORE HIM!\".</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Use a Set or frequency array to count the number of unique characters.",
-      "Check whether `distinctCount % 2 === 0`.",
-      "Even -> 'CHAT WITH HER!', Odd -> 'IGNORE HIM!'."
-    ],
-    "explanation": "Insert all characters into a Set to filter duplicates. Check the parity of the set size: even corresponds to female ('CHAT WITH HER!'), odd to male ('IGNORE HIM!').",
+    "solvedCount": 299523,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Those days, many boys use beautiful girls' photos as avatars in forums. So it is pretty hard to tell the gender of a user at the first glance. Last year, our hero went to a forum and had a nice chat with a beauty (he thought so). After that they talked very often and eventually they became a couple in the network. </p><p>But yesterday, he came to see \"her\" in the real world and found out \"she\" is actually a very strong man! Our hero is very sad and he is too tired to love again now. So he came up with a way to recognize users' genders by their user names.</p><p>This is his method: if the number of distinct characters in one's user name is odd, then he is a male, otherwise she is a female. You are given the string that denotes the user name, please help our hero to determine the gender of this user by his method.</p>",
+    "inputSpecificationHtml": "<p>The first line contains a non-empty string, that contains only lowercase English letters — the user name. This string contains at most 100 letters.</p>",
+    "outputSpecificationHtml": "<p>If it is a female by our hero's method, print \"<span class=\"tex-font-style-tt\">CHAT WITH HER!</span>\" (without the quotes), otherwise, print \"<span class=\"tex-font-style-tt\">IGNORE HIM!</span>\" (without the quotes).</p>",
+    "sampleNotesHtml": "<p>For the first example. There are 6 distinct characters in \"<span class=\"tex-font-style-tt\">wjmzbmr</span>\". These characters are: \"<span class=\"tex-font-style-tt\">w</span>\", \"<span class=\"tex-font-style-tt\">j</span>\", \"<span class=\"tex-font-style-tt\">m</span>\", \"<span class=\"tex-font-style-tt\">z</span>\", \"<span class=\"tex-font-style-tt\">b</span>\", \"<span class=\"tex-font-style-tt\">r</span>\". So wjmzbmr is a female and you should print \"<span class=\"tex-font-style-tt\">CHAT WITH HER!</span>\".</p>",
+    "starterCode": "// Problem: 236A - Boy or Girl\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 236A - Boy or Girl\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 236A - Boy or Girl\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 236A - Boy or Girl\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: wjmzbmr (6 distinct letters)",
-        "description": "Official sample: {w, j, m, z, b, r} has 6 letters (even).",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "wjmzbmr",
         "expectedOutput": "CHAT WITH HER!"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: xiaodao (5 distinct letters)",
-        "description": "Official sample: {x, i, a, o, d} has 5 letters (odd).",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
         "input": "xiaodao",
         "expectedOutput": "IGNORE HIM!"
       },
       {
         "id": 3,
-        "title": "Sample Test 3: sevenkplus (8 distinct letters)",
-        "description": "Official sample: 8 distinct characters (even).",
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
         "input": "sevenkplus",
         "expectedOutput": "CHAT WITH HER!"
-      },
-      {
-        "id": 4,
-        "title": "Single Repeated Character",
-        "description": "'aaaaa' has only 1 unique letter (odd).",
-        "input": "aaaaa",
-        "expectedOutput": "IGNORE HIM!"
-      },
-      {
-        "id": 5,
-        "title": "Alphabet Subset (2 distinct)",
-        "description": "'ab' has 2 distinct letters (even).",
-        "input": "ab",
-        "expectedOutput": "CHAT WITH HER!"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
   },
   {
-    "id": "977A",
-    "contestId": 977,
+    "id": "339A",
+    "contestId": 339,
     "index": "A",
-    "title": "Wrong Subtraction",
-    "emoji": "➖",
-    "category": "Simulation / Math",
+    "title": "Helpful Maths",
+    "emoji": "➕",
+    "category": "Sorting / Strings",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 230498,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>Little girl Tanya is learning how to decrease a number by one, but she does it wrong with a number consisting of two or more digits. Tanya subtracts one from a number by the following algorithm:</p>\n      <ul>\n        <li>if the last digit of the number is non-zero, she decreases the number by one;</li>\n        <li>if the last digit of the number is zero, she divides the number by 10 (i.e. removes the last digit).</li>\n      </ul>\n      <p>You are given two integer numbers $n$ and $k$. Tanya will subtract one from $n$ $k$ times. Your task is to print the result after all $k$ subtractions.</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line of the input contains two integer numbers $n$ and $k$ ($2 \\le n \\le 10^9$, $1 \\le k \\le 50$) &mdash; the initial number and the number of subtractions.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Print one integer number &mdash; the result of the decreasing $n$ by one $k$ times.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>512 -> 511 -> 510 -> 51 -> 50. Total 4 steps for 512 with k=4 results in 50.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "Simulate k steps in a loop.",
-      "Check the last digit: if n % 10 === 0, divide by 10 (Math.floor(n / 10)).",
-      "Otherwise, subtract 1 (n--)."
-    ],
-    "explanation": "Loop $k$ times. In each iteration, if $n$ ends with a zero ($n \\% 10 == 0$), integer divide $n$ by 10. Otherwise, decrease $n$ by 1.",
+    "solvedCount": 292636,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Xenia the beginner mathematician is a third year student at elementary school. She is now learning the addition operation.</p><p>The teacher has written down the sum of multiple numbers. Pupils should calculate the sum. To make the calculation easier, the sum only contains numbers 1, 2 and 3. Still, that isn't enough for Xenia. She is only beginning to count, so she can calculate a sum only if the summands follow in non-decreasing order. For example, she can't calculate sum 1+3+2+1 but she can calculate sums 1+1+2 and 3+3.</p><p>You've got the sum that was written on the board. Rearrange the summans and print the sum in such a way that Xenia can calculate the sum.</p>",
+    "inputSpecificationHtml": "<p>The first line contains a non-empty string <span class=\"tex-span\"><i>s</i></span> — the sum Xenia needs to count. String <span class=\"tex-span\"><i>s</i></span> contains no spaces. It only contains digits and characters \"<span class=\"tex-font-style-tt\">+</span>\". Besides, string <span class=\"tex-span\"><i>s</i></span> is a correct sum of numbers 1, 2 and 3. String <span class=\"tex-span\"><i>s</i></span> is at most 100 characters long.</p>",
+    "outputSpecificationHtml": "<p>Print the new sum that Xenia can count.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 339A - Helpful Maths\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 339A - Helpful Maths\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 339A - Helpful Maths\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 339A - Helpful Maths\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: 512 with 4 steps",
-        "description": "Official sample 1: 512 -> 511 -> 510 -> 51 -> 50.",
-        "input": "512 4",
-        "expectedOutput": "50"
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "3+2+1",
+        "expectedOutput": "1+2+3"
       },
       {
         "id": 2,
-        "title": "Sample Test 2: 1000000000 with 9 steps",
-        "description": "Official sample 2: nine zero divisions removes all 9 zeroes, leaving 1.",
-        "input": "1000000000 9",
-        "expectedOutput": "1"
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "1+1+3+1+3",
+        "expectedOutput": "1+1+1+3+3"
       },
       {
         "id": 3,
-        "title": "Single Step Non-Zero",
-        "description": "Single step on 42 gives 41.",
-        "input": "42 1",
-        "expectedOutput": "41"
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "2",
+        "expectedOutput": "2"
+      }
+    ]
+  },
+  {
+    "id": "281A",
+    "contestId": 281,
+    "index": "A",
+    "title": "Word Capitalization",
+    "emoji": "🔠",
+    "category": "Strings",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 286521,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Capitalization is writing a word with its first letter as a capital letter. Your task is to capitalize the given word.</p><p>Note, that during capitalization all the letters except the first one remains unchanged.</p>",
+    "inputSpecificationHtml": "<p>A single line contains a non-empty word. This word consists of lowercase and uppercase English letters. The length of the word will not exceed <span class=\"tex-span\">10<sup class=\"upper-index\">3</sup></span>.</p>",
+    "outputSpecificationHtml": "<p>Output the given word after capitalization.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 281A - Word Capitalization\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 281A - Word Capitalization\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 281A - Word Capitalization\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 281A - Word Capitalization\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "ApPLe",
+        "expectedOutput": "ApPLe"
       },
       {
-        "id": 4,
-        "title": "Single Step Ending in Zero",
-        "description": "Single step on 30 gives 3.",
-        "input": "30 1",
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "konjac",
+        "expectedOutput": "Konjac"
+      }
+    ]
+  },
+  {
+    "id": "791A",
+    "contestId": 791,
+    "index": "A",
+    "title": "Bear and Big Brother",
+    "emoji": "🐻",
+    "category": "Loops / Math",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 274027,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Bear Limak wants to become the largest of bears, or at least to become larger than his brother Bob.</p><p>Right now, Limak and Bob weigh <span class=\"tex-span\"><i>a</i></span> and <span class=\"tex-span\"><i>b</i></span> respectively. It's guaranteed that Limak's weight is smaller than or equal to his brother's weight.</p><p>Limak eats a lot and his weight is tripled after every year, while Bob's weight is doubled after every year.</p><p>After how many full years will Limak become strictly larger (strictly heavier) than Bob?</p>",
+    "inputSpecificationHtml": "<p>The only line of the input contains two integers <span class=\"tex-span\"><i>a</i></span> and <span class=\"tex-span\"><i>b</i></span> (<span class=\"tex-span\">1 ≤ <i>a</i> ≤ <i>b</i> ≤ 10</span>) — the weight of Limak and the weight of Bob respectively.</p>",
+    "outputSpecificationHtml": "<p>Print one integer, denoting the integer number of years after which Limak will become strictly larger than Bob.</p>",
+    "sampleNotesHtml": "<p>In the first sample, Limak weighs <span class=\"tex-span\">4</span> and Bob weighs <span class=\"tex-span\">7</span> initially. After one year their weights are <span class=\"tex-span\">4·3 = 12</span> and <span class=\"tex-span\">7·2 = 14</span> respectively (one weight is tripled while the other one is doubled). Limak isn't larger than Bob yet. After the second year weights are <span class=\"tex-span\">36</span> and <span class=\"tex-span\">28</span>, so the first weight is greater than the second one. Limak became larger than Bob after two years so you should print <span class=\"tex-span\">2</span>.</p><p>In the second sample, Limak's and Bob's weights in next years are: <span class=\"tex-span\">12</span> and <span class=\"tex-span\">18</span>, then <span class=\"tex-span\">36</span> and <span class=\"tex-span\">36</span>, and finally <span class=\"tex-span\">108</span> and <span class=\"tex-span\">72</span> (after three years). The answer is <span class=\"tex-span\">3</span>. Remember that Limak wants to be larger than Bob and he won't be satisfied with equal weights.</p><p>In the third sample, Limak becomes larger than Bob after the first year. Their weights will be <span class=\"tex-span\">3</span> and <span class=\"tex-span\">2</span> then.</p>",
+    "starterCode": "// Problem: 791A - Bear and Big Brother\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 791A - Bear and Big Brother\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 791A - Bear and Big Brother\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 791A - Bear and Big Brother\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "4 7",
+        "expectedOutput": "2"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "4 9",
         "expectedOutput": "3"
       },
       {
-        "id": 5,
-        "title": "Multiple Consecutive Decrements",
-        "description": "15 with 5 steps: 15 -> 14 -> 13 -> 12 -> 11 -> 10.",
-        "input": "15 5",
-        "expectedOutput": "10"
+        "id": 3,
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "1 1",
+        "expectedOutput": "1"
       }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
+    ]
+  },
+  {
+    "id": "617A",
+    "contestId": 617,
+    "index": "A",
+    "title": "Elephant",
+    "emoji": "🐘",
+    "category": "Math / Greedy",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 267354,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>An elephant decided to visit his friend. It turned out that the elephant's house is located at point <span class=\"tex-span\">0</span> and his friend's house is located at point <span class=\"tex-span\"><i>x</i>(<i>x</i> &gt; 0)</span> of the coordinate line. In one step the elephant can move <span class=\"tex-span\">1</span>, <span class=\"tex-span\">2</span>, <span class=\"tex-span\">3</span>, <span class=\"tex-span\">4</span> or <span class=\"tex-span\">5</span> positions forward. Determine, what is the minimum number of steps he need to make in order to get to his friend's house.</p>",
+    "inputSpecificationHtml": "<p>The first line of the input contains an integer <span class=\"tex-span\"><i>x</i></span> (<span class=\"tex-span\">1 ≤ <i>x</i> ≤ 1 000 000</span>) — The coordinate of the friend's house.</p>",
+    "outputSpecificationHtml": "<p>Print the minimum number of steps that elephant needs to make to get from point <span class=\"tex-span\">0</span> to point <span class=\"tex-span\"><i>x</i></span>.</p>",
+    "sampleNotesHtml": "<p>In the first sample the elephant needs to make one step of length <span class=\"tex-span\">5</span> to reach the point <span class=\"tex-span\"><i>x</i></span>.</p><p>In the second sample the elephant can get to point <span class=\"tex-span\"><i>x</i></span> if he moves by <span class=\"tex-span\">3</span>, <span class=\"tex-span\">5</span> and <span class=\"tex-span\">4</span>. There are other ways to get the optimal answer but the elephant cannot reach <span class=\"tex-span\"><i>x</i></span> in less than three moves.</p>",
+    "starterCode": "// Problem: 617A - Elephant\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 617A - Elephant\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 617A - Elephant\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 617A - Elephant\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "5",
+        "expectedOutput": "1"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "12",
+        "expectedOutput": "3"
+      }
+    ]
+  },
+  {
+    "id": "266A",
+    "contestId": 266,
+    "index": "A",
+    "title": "Stones on the Table",
+    "emoji": "💎",
+    "category": "Strings / Greedy",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 259122,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>There are <span class=\"tex-span\"><i>n</i></span> stones on the table in a row, each of them can be red, green or blue. Count the minimum number of stones to take from the table so that any two neighboring stones had different colors. Stones in a row are considered neighboring if there are no other stones between them.</p>",
+    "inputSpecificationHtml": "<p>The first line contains integer <span class=\"tex-span\"><i>n</i></span> <span class=\"tex-span\">(1 ≤ <i>n</i> ≤ 50)</span> — the number of stones on the table. </p><p>The next line contains string <span class=\"tex-span\"><i>s</i></span>, which represents the colors of the stones. We'll consider the stones in the row numbered from <span class=\"tex-span\">1</span> to <span class=\"tex-span\"><i>n</i></span> from left to right. Then the <span class=\"tex-span\"><i>i</i></span>-th character <span class=\"tex-span\"><i>s</i></span> equals \"<span class=\"tex-font-style-tt\">R</span>\", if the <span class=\"tex-span\"><i>i</i></span>-th stone is red, \"<span class=\"tex-font-style-tt\">G</span>\", if it's green and \"<span class=\"tex-font-style-tt\">B</span>\", if it's blue.</p>",
+    "outputSpecificationHtml": "<p>Print a single integer — the answer to the problem.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 266A - Stones on the Table\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 266A - Stones on the Table\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 266A - Stones on the Table\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 266A - Stones on the Table\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "3\nRRG",
+        "expectedOutput": "1"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "5\nRRRRR",
+        "expectedOutput": "4"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "4\nBRBG",
+        "expectedOutput": "0"
+      }
+    ]
   },
   {
     "id": "546A",
@@ -777,108 +611,24 @@
     "category": "Math / Arithmetic",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 249941,
-    "timeLimit": "1.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "\n      <p>A soldier wants to buy $w$ bananas in the shop. He has to pay $k$ dollars for the first banana, $2k$ dollars for the second one and so on (in other words, he has to pay $i \\cdot k$ dollars for the $i$-th banana).</p>\n      <p>He has $n$ dollars. How many dollars does he have to borrow from his friend soldier to buy $w$ bananas?</p>\n    ",
-    "inputSpecificationHtml": "\n      <p>The first line contains three positive integers $k, n, w$ ($1 \\le k, w \\le 1000$, $0 \\le n \\le 10^9$) &mdash; the cost of the first banana, initial number of dollars the soldier has and number of bananas he wants.</p>\n    ",
-    "outputSpecificationHtml": "\n      <p>Output one integer &mdash; the amount of dollars that the soldier must borrow from his friend. If he doesn't have to borrow money, output <code>0</code>.</p>\n    ",
-    "sampleNotesHtml": "\n      <p>Total cost is $k \\times (1 + 2 + \\dots + w) = k \\times \\frac{w(w+1)}{2}$. Borrow amount is $\\max(0, \\text{totalCost} - n)$.</p>\n    ",
-    "starterCode": "",
-    "starterCodePy": "",
-    "hints": [
-      "The sum of numbers from 1 to w is w * (w + 1) / 2.",
-      "The total cost is k * w * (w + 1) / 2.",
-      "If the soldier has enough dollars (n >= totalCost), he borrows 0. Output max(0, totalCost - n)."
-    ],
-    "explanation": "The total cost of $w$ bananas is $k \\cdot \\sum_{i=1}^w i = k \\cdot \\frac{w(w+1)}{2}$. The borrowed amount is $\\max(0, \\text{total} - n)$.",
+    "solvedCount": 250717,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>A soldier wants to buy <span class=\"tex-span\"><i>w</i></span> bananas in the shop. He has to pay <span class=\"tex-span\"><i>k</i></span> dollars for the first banana, <span class=\"tex-span\">2<i>k</i></span> dollars for the second one and so on (in other words, he has to pay <span class=\"tex-span\"><i>i</i>·<i>k</i></span> dollars for the <span class=\"tex-span\"><i>i</i></span>-th banana). </p><p>He has <span class=\"tex-span\"><i>n</i></span> dollars. How many dollars does he have to borrow from his friend soldier to buy <span class=\"tex-span\"><i>w</i></span> bananas?</p>",
+    "inputSpecificationHtml": "<p>The first line contains three positive integers <span class=\"tex-span\"><i>k</i>, <i>n</i>, <i>w</i></span> (<span class=\"tex-span\">1  ≤  <i>k</i>, <i>w</i>  ≤  1000</span>, <span class=\"tex-span\">0 ≤ <i>n</i> ≤ 10<sup class=\"upper-index\">9</sup></span>), the cost of the first banana, initial number of dollars the soldier has and number of bananas he wants. </p>",
+    "outputSpecificationHtml": "<p>Output one integer — the amount of dollars that the soldier must borrow from his friend. If he doesn't have to borrow money, output <span class=\"tex-span\">0</span>.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 546A - Soldier and Bananas\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 546A - Soldier and Bananas\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 546A - Soldier and Bananas\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 546A - Soldier and Bananas\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample Test 1: k=3, n=17, w=4",
-        "description": "Official sample: total cost = 3 * 10 = 30. Borrows 30 - 17 = 13.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "3 17 4",
         "expectedOutput": "13"
-      },
-      {
-        "id": 2,
-        "title": "Exact Amount: No Borrowing",
-        "description": "Soldier has exactly enough money -> borrows 0.",
-        "input": "3 30 4",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 3,
-        "title": "More than Enough Money",
-        "description": "Soldier has extra dollars -> borrows 0.",
-        "input": "5 100 2",
-        "expectedOutput": "0"
-      },
-      {
-        "id": 4,
-        "title": "Zero Initial Dollars",
-        "description": "Soldier has 0 dollars -> must borrow entire cost.",
-        "input": "10 0 3",
-        "expectedOutput": "60"
-      },
-      {
-        "id": 5,
-        "title": "Large Number of Bananas",
-        "description": "k=1, n=50, w=10 -> cost is 55, borrows 5.",
-        "input": "1 50 10",
-        "expectedOutput": "5"
-      }
-    ],
-    "starterCodeJava": "",
-    "starterCodeCpp": ""
-  },
-  {
-    "id": "116A",
-    "contestId": 116,
-    "index": "A",
-    "title": "Tram",
-    "emoji": "🚊",
-    "category": "Simulation",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 420000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>Linear tram route has $n$ stops. At each stop $i$, $a_i$ passengers get off and $b_i$ passengers get on the tram. Find the minimum possible tram capacity such that the number of passengers inside never exceeds capacity.</p>",
-    "inputSpecificationHtml": "<p>The first line contains an integer $n$ ($2 \\le n \\le 1000$). The next $n$ lines contain pairs of integers $a_i$ and $b_i$ ($0 \\le a_i, b_i \\le 1000$).</p>",
-    "outputSpecificationHtml": "<p>Print a single integer &mdash; the minimum capacity of the tram.</p>",
-    "sampleNotesHtml": "<p>At the 2nd stop, 2 people exit and 5 enter, giving 6 people in the tram, which is the maximum throughout the route.</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Maintain a running passenger counter starting from 0.",
-      "At each stop: current = current - a_i + b_i.",
-      "Track the maximum value of current throughout the simulation."
-    ],
-    "explanation": "Simulate the passenger count stop by stop. Since the tram starts empty, count = 0. For each stop i, subtract exiting passengers a_i and add entering passengers b_i. The required capacity is max(count) across all stops.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample 1: 4 stops",
-        "description": "Official sample test case.",
-        "input": "4\n0 3\n2 5\n4 2\n4 0",
-        "expectedOutput": "6"
-      },
-      {
-        "id": 2,
-        "title": "Sample 2: Simple 2 stops",
-        "description": "Single load and unload.",
-        "input": "2\n0 5\n5 0",
-        "expectedOutput": "5"
-      },
-      {
-        "id": 3,
-        "title": "Sample 3: 3 stops constant 1",
-        "description": "One person swaps at middle stop.",
-        "input": "3\n0 1\n1 1\n1 0",
-        "expectedOutput": "1"
       }
     ]
   },
@@ -887,48 +637,167 @@
     "contestId": 59,
     "index": "A",
     "title": "Word",
-    "emoji": "🔤",
-    "category": "Strings",
+    "emoji": "📝",
+    "category": "Strings / Case",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 460000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>Vasya is very upset because he often mixes up uppercase and lowercase letters. Given a word $s$, change the case so that either all letters are lowercase or all are uppercase. Choose the case that requires the minimum changes. If the counts are equal, prefer lowercase.</p>",
-    "inputSpecificationHtml": "<p>The first line contains word $s$, consisting of uppercase and lowercase Latin letters ($1 \\le |s| \\le 100$).</p>",
-    "outputSpecificationHtml": "<p>Print the corrected word $s$.</p>",
-    "sampleNotesHtml": "<p>In HoUse, 2 uppercase and 3 lowercase, so convert all to lowercase: house.</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Count uppercase letters and lowercase letters.",
-      "If uppercase > lowercase, convert entire string to uppercase.",
-      "Else (lowercase >= uppercase), convert entire string to lowercase."
-    ],
-    "explanation": "Loop through the string and count how many characters are uppercase vs lowercase. If uppercase count is strictly greater than lowercase count, convert all characters to uppercase. Otherwise, convert to lowercase.",
+    "solvedCount": 242330,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Vasya is very upset that many people on the Net mix uppercase and lowercase letters in one word. That's why he decided to invent an extension for his favorite browser that would change the letters' register in every word so that it either only consisted of lowercase letters or, vice versa, only of uppercase ones. At that as little as possible letters should be changed in the word. For example, the word <span class=\"tex-font-style-tt\">HoUse</span> must be replaced with <span class=\"tex-font-style-tt\">house</span>, and the word <span class=\"tex-font-style-tt\">ViP</span> — with <span class=\"tex-font-style-tt\">VIP</span>. If a word contains an equal number of uppercase and lowercase letters, you should replace all the letters with lowercase ones. For example, <span class=\"tex-font-style-tt\">maTRIx</span> should be replaced by <span class=\"tex-font-style-tt\">matrix</span>. Your task is to use the given method on one given word.</p>",
+    "inputSpecificationHtml": "<p>The first line contains a word <span class=\"tex-span\"><i>s</i></span> — it consists of uppercase and lowercase Latin letters and possesses the length from <span class=\"tex-span\">1</span> to <span class=\"tex-span\">100</span>.</p>",
+    "outputSpecificationHtml": "<p>Print the corrected word <span class=\"tex-span\"><i>s</i></span>. If the given word <span class=\"tex-span\"><i>s</i></span> has strictly more uppercase letters, make the word written in the uppercase register, otherwise - in the lowercase one.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 59A - Word\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 59A - Word\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 59A - Word\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 59A - Word\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample 1: HoUse",
-        "description": "More lowercase letters.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "HoUse",
         "expectedOutput": "house"
       },
       {
         "id": 2,
-        "title": "Sample 2: ViP",
-        "description": "More uppercase letters.",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
         "input": "ViP",
         "expectedOutput": "VIP"
       },
       {
         "id": 3,
-        "title": "Sample 3: maTRIx",
-        "description": "Equal count (3 and 3), prefer lowercase.",
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
         "input": "maTRIx",
         "expectedOutput": "matrix"
+      }
+    ]
+  },
+  {
+    "id": "118A",
+    "contestId": 118,
+    "index": "A",
+    "title": "String Task",
+    "emoji": "✂️",
+    "category": "Strings / Filtering",
+    "type": "exercise",
+    "rating": 1000,
+    "solvedCount": 241853,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Petya started to attend programming lessons. On the first lesson his task was to write a simple program. The program was supposed to do the following: in the given string, consisting if uppercase and lowercase Latin letters, it: </p><ul> <li> deletes all the vowels, </li><li> inserts a character \"<span class=\"tex-font-style-tt\">.</span>\" before each consonant, </li><li> replaces all uppercase consonants with corresponding lowercase ones. </li></ul><p>Vowels are letters \"A\", \"O\", \"Y\", \"E\", \"U\", \"I\", and the rest are consonants. The program's input is exactly one string, it should return the output as a single string, resulting after the program's processing the initial string.</p><p>Help Petya cope with this easy task.</p>",
+    "inputSpecificationHtml": "<p>The first line represents input string of Petya's program. This string only consists of uppercase and lowercase Latin letters and its length is from <span class=\"tex-span\">1</span> to <span class=\"tex-span\">100</span>, inclusive.</p>",
+    "outputSpecificationHtml": "<p>Print the resulting string. It is guaranteed that this string is not empty.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 118A - String Task\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 118A - String Task\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 118A - String Task\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 118A - String Task\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "tour",
+        "expectedOutput": ".t.r"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "Codeforces",
+        "expectedOutput": ".c.d.f.r.c.s"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "aBAcAba",
+        "expectedOutput": ".b.c.b"
+      }
+    ]
+  },
+  {
+    "id": "977A",
+    "contestId": 977,
+    "index": "A",
+    "title": "Wrong Subtraction",
+    "emoji": "➖",
+    "category": "Simulation / Math",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 231194,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Little girl Tanya is learning how to decrease a number by one, but she does it wrong with a number consisting of two or more digits. Tanya subtracts one from a number by the following algorithm:</p><ul> <li> if the last digit of the number is non-zero, she decreases the number by one; </li><li> if the last digit of the number is zero, she divides the number by 10 (i.e. removes the last digit). </li></ul><p>You are given an integer number $$$n$$$. Tanya will subtract one from it $$$k$$$ times. Your task is to print the result after all $$$k$$$ subtractions.</p><p>It is guaranteed that the result will be positive integer number.</p>",
+    "inputSpecificationHtml": "<p>The first line of the input contains two integer numbers $$$n$$$ and $$$k$$$ ($$$2 \\le n \\le 10^9$$$, $$$1 \\le k \\le 50$$$) — the number from which Tanya will subtract and the number of subtractions correspondingly.</p>",
+    "outputSpecificationHtml": "<p>Print one integer number — the result of the decreasing $$$n$$$ by one $$$k$$$ times.</p><p>It is guaranteed that the result will be positive integer number. </p>",
+    "sampleNotesHtml": "<p>The first example corresponds to the following sequence: $$$512 \\rightarrow 511 \\rightarrow 510 \\rightarrow 51 \\rightarrow 50$$$.</p>",
+    "starterCode": "// Problem: 977A - Wrong Subtraction\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 977A - Wrong Subtraction\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 977A - Wrong Subtraction\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 977A - Wrong Subtraction\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "512 4",
+        "expectedOutput": "50"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "1000000000 9",
+        "expectedOutput": "1"
+      }
+    ]
+  },
+  {
+    "id": "110A",
+    "contestId": 110,
+    "index": "A",
+    "title": "Nearly Lucky Number",
+    "emoji": "🍀",
+    "category": "Strings / Counting",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 211740,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p><span class=\"tex-font-style-underline\">Petya loves lucky numbers. We all know that lucky numbers are the positive integers whose decimal representations contain only the lucky digits <span class=\"tex-font-style-bf\">4</span> and <span class=\"tex-font-style-bf\">7</span>. For example, numbers <span class=\"tex-font-style-bf\">47</span>, <span class=\"tex-font-style-bf\">744</span>, <span class=\"tex-font-style-bf\">4</span> are lucky and <span class=\"tex-font-style-bf\">5</span>, <span class=\"tex-font-style-bf\">17</span>, <span class=\"tex-font-style-bf\">467</span> are not.</span></p><p>Unfortunately, not all numbers are lucky. Petya calls a number <span class=\"tex-font-style-underline\">nearly lucky</span> if the number of lucky digits in it is a lucky number. He wonders whether number <span class=\"tex-span\"><i>n</i></span> is a nearly lucky number.</p>",
+    "inputSpecificationHtml": "<p>The only line contains an integer <span class=\"tex-span\"><i>n</i></span> (<span class=\"tex-span\">1 ≤ <i>n</i> ≤ 10<sup class=\"upper-index\">18</sup></span>).</p><p>Please do not use the %lld specificator to read or write 64-bit numbers in С++. It is preferred to use the cin, cout streams or the %I64d specificator.</p>",
+    "outputSpecificationHtml": "<p>Print on the single line \"<span class=\"tex-font-style-tt\">YES</span>\" if <span class=\"tex-span\"><i>n</i></span> is a nearly lucky number. Otherwise, print \"<span class=\"tex-font-style-tt\">NO</span>\" (without the quotes).</p>",
+    "sampleNotesHtml": "<p>In the first sample there are 3 lucky digits (first one and last two), so the answer is \"<span class=\"tex-font-style-tt\">NO</span>\".</p><p>In the second sample there are 7 lucky digits, 7 is lucky number, so the answer is \"<span class=\"tex-font-style-tt\">YES</span>\".</p><p>In the third sample there are no lucky digits, so the answer is \"<span class=\"tex-font-style-tt\">NO</span>\".</p>",
+    "starterCode": "// Problem: 110A - Nearly Lucky Number\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 110A - Nearly Lucky Number\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 110A - Nearly Lucky Number\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 110A - Nearly Lucky Number\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "40047",
+        "expectedOutput": "NO"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "7747774",
+        "expectedOutput": "YES"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "1000000000000000000",
+        "expectedOutput": "NO"
       }
     ]
   },
@@ -937,218 +806,204 @@
     "contestId": 69,
     "index": "A",
     "title": "Young Physicist",
-    "emoji": "⚛️",
-    "category": "Math / Simulation",
+    "emoji": "🔢",
+    "category": "Implementation / Math",
     "type": "exercise",
     "rating": 1000,
-    "solvedCount": 490000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>A body is at rest if the vector sum of all forces applied to it equals zero. Given $n$ force vectors $(x_i, y_i, z_i)$, determine whether the body is in static equilibrium.</p>",
-    "inputSpecificationHtml": "<p>The first line contains an integer $n$ ($1 \\le n \\le 100$). The next $n$ lines each contain three integers $x_i, y_i, z_i$ ($-100 \\le x_i, y_i, z_i \\le 100$).</p>",
-    "outputSpecificationHtml": "<p>Print <code>YES</code> if the body is in equilibrium, otherwise print <code>NO</code>.</p>",
-    "sampleNotesHtml": "<p>Check sum(x) == 0 && sum(y) == 0 && sum(z) == 0.</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Keep three separate accumulators: sumX, sumY, sumZ.",
-      "For equilibrium, ALL THREE sums must equal zero simultaneously."
-    ],
-    "explanation": "Add up all the x coordinates, y coordinates, and z coordinates independently. If sumX == 0 and sumY == 0 and sumZ == 0, output YES, otherwise output NO.",
+    "solvedCount": 211454,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>A guy named Vasya attends the final grade of a high school. One day Vasya decided to watch a match of his favorite hockey team. And, as the boy loves hockey very much, even more than physics, he forgot to do the homework. Specifically, he forgot to complete his physics tasks. Next day the teacher got very angry at Vasya and decided to teach him a lesson. He gave the lazy student a seemingly easy task: You are given an idle body in space and the forces that affect it. The body can be considered as a material point with coordinates (0; 0; 0). Vasya had only to answer whether it is in equilibrium. \"Piece of cake\" — thought Vasya, we need only to check if the sum of all vectors is equal to 0. So, Vasya began to solve the problem. But later it turned out that there can be lots and lots of these forces, and Vasya can not cope without your help. Help him. Write a program that determines whether a body is idle or is moving by the given vectors of forces.</p>",
+    "inputSpecificationHtml": "<p>The first line contains a positive integer <span class=\"tex-span\"><i>n</i></span> (<span class=\"tex-span\">1 ≤ <i>n</i> ≤ 100</span>), then follow <span class=\"tex-span\"><i>n</i></span> lines containing three integers each: the <span class=\"tex-span\"><i>x</i><sub class=\"lower-index\"><i>i</i></sub></span> coordinate, the <span class=\"tex-span\"><i>y</i><sub class=\"lower-index\"><i>i</i></sub></span> coordinate and the <span class=\"tex-span\"><i>z</i><sub class=\"lower-index\"><i>i</i></sub></span> coordinate of the force vector, applied to the body (<span class=\"tex-span\"> - 100 ≤ <i>x</i><sub class=\"lower-index\"><i>i</i></sub>, <i>y</i><sub class=\"lower-index\"><i>i</i></sub>, <i>z</i><sub class=\"lower-index\"><i>i</i></sub> ≤ 100</span>).</p>",
+    "outputSpecificationHtml": "<p>Print the word \"<span class=\"tex-font-style-tt\">YES</span>\" if the body is in equilibrium, or the word \"<span class=\"tex-font-style-tt\">NO</span>\" if it is not.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 69A - Young Physicist\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 69A - Young Physicist\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 69A - Young Physicist\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 69A - Young Physicist\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample 1: Unequal forces",
-        "description": "Vector sum does not equal zero.",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
         "input": "3\n4 1 7\n-2 4 -1\n1 -5 -3",
         "expectedOutput": "NO"
       },
       {
         "id": 2,
-        "title": "Sample 2: Equilibrium forces",
-        "description": "Vector sums equal zero on all 3 axes.",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
         "input": "3\n3 -1 7\n-5 2 -4\n2 -1 -3",
         "expectedOutput": "YES"
       }
     ]
   },
   {
-    "id": "266B",
-    "contestId": 266,
-    "index": "B",
-    "title": "Queue at the School",
-    "emoji": "🚶",
-    "category": "Simulation",
+    "id": "734A",
+    "contestId": 734,
+    "index": "A",
+    "title": "Anton and Danik",
+    "emoji": "♟️",
+    "category": "Strings / Counting",
     "type": "exercise",
     "rating": 800,
-    "solvedCount": 410000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>During recess children stand in a queue. If a boy is standing immediately before a girl, he will let the girl swap positions with him in one second. Given queue string and time $t$, determine the queue state after $t$ seconds.</p>",
-    "inputSpecificationHtml": "<p>The first line contains integers $n$ and $t$ ($1 \\le n, t \\le 50$). The second line contains string $s$ of length $n$ with characters <code>B</code> (boy) and <code>G</code> (girl).</p>",
-    "outputSpecificationHtml": "<p>Print the string representing the queue after $t$ seconds.</p>",
-    "sampleNotesHtml": "<p>In 1 second, BG turns into GB.</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Simulate t rounds.",
-      "In each round, iterate through the string and whenever s[i] == \"B\" and s[i+1] == \"G\", swap them and skip the next index so you don\"t move the boy twice in one second."
-    ],
-    "explanation": "For each second from 1 to t, traverse the string. Whenever you encounter s[i] == \"B\" and s[i+1] == \"G\", swap them to s[i] = \"G\" and s[i+1] = \"B\", then increment i by 1 extra to avoid moving the same child again in the same second.",
+    "solvedCount": 207178,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Anton likes to play chess, and so does his friend Danik.</p><p>Once they have played <span class=\"tex-span\"><i>n</i></span> games in a row. For each game it's known who was the winner — Anton or Danik. None of the games ended with a tie.</p><p>Now Anton wonders, who won more games, he or Danik? Help him determine this.</p>",
+    "inputSpecificationHtml": "<p>The first line of the input contains a single integer <span class=\"tex-span\"><i>n</i></span> (<span class=\"tex-span\">1 ≤ <i>n</i> ≤ 100 000</span>) — the number of games played.</p><p>The second line contains a string <span class=\"tex-span\"><i>s</i></span>, consisting of <span class=\"tex-span\"><i>n</i></span> uppercase English letters '<span class=\"tex-font-style-tt\">A</span>' and '<span class=\"tex-font-style-tt\">D</span>' — the outcome of each of the games. The <span class=\"tex-span\"><i>i</i></span>-th character of the string is equal to '<span class=\"tex-font-style-tt\">A</span>' if the Anton won the <span class=\"tex-span\"><i>i</i></span>-th game and '<span class=\"tex-font-style-tt\">D</span>' if Danik won the <span class=\"tex-span\"><i>i</i></span>-th game.</p>",
+    "outputSpecificationHtml": "<p>If Anton won more games than Danik, print \"<span class=\"tex-font-style-tt\">Anton</span>\" (without quotes) in the only line of the output.</p><p>If Danik won more games than Anton, print \"<span class=\"tex-font-style-tt\">Danik</span>\" (without quotes) in the only line of the output.</p><p>If Anton and Danik won the same number of games, print \"<span class=\"tex-font-style-tt\">Friendship</span>\" (without quotes).</p>",
+    "sampleNotesHtml": "<p>In the first sample, Anton won <span class=\"tex-span\">6</span> games, while Danik — only <span class=\"tex-span\">1</span>. Hence, the answer is \"<span class=\"tex-font-style-tt\">Anton</span>\".</p><p>In the second sample, Anton won <span class=\"tex-span\">3</span> games and Danik won <span class=\"tex-span\">4</span> games, so the answer is \"<span class=\"tex-font-style-tt\">Danik</span>\".</p><p>In the third sample, both Anton and Danik won <span class=\"tex-span\">3</span> games and the answer is \"<span class=\"tex-font-style-tt\">Friendship</span>\".</p>",
+    "starterCode": "// Problem: 734A - Anton and Danik\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 734A - Anton and Danik\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 734A - Anton and Danik\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 734A - Anton and Danik\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample 1: 5 children 1 second",
-        "description": "One round of swapping.",
-        "input": "5 1\nBGGBG",
-        "expectedOutput": "GBGGB"
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "6\nADAAAA",
+        "expectedOutput": "Anton"
       },
       {
         "id": 2,
-        "title": "Sample 2: 5 children 2 seconds",
-        "description": "Two rounds of swapping.",
-        "input": "5 2\nBGGBG",
-        "expectedOutput": "GGBGB"
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "7\nDDDAADA",
+        "expectedOutput": "Danik"
       },
       {
         "id": 3,
-        "title": "Sample 3: All girls and one boy at end",
-        "description": "No swaps possible.",
-        "input": "4 1\nGGGB",
-        "expectedOutput": "GGGB"
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "6\nDADADA",
+        "expectedOutput": "Friendship"
       }
     ]
   },
   {
-    "id": "160A",
-    "contestId": 160,
+    "id": "96A",
+    "contestId": 96,
     "index": "A",
-    "title": "Twins",
-    "emoji": "🪙",
-    "category": "Greedy / Sorting",
+    "title": "Football",
+    "emoji": "⚽",
+    "category": "Strings / Sliding Window",
     "type": "exercise",
     "rating": 900,
-    "solvedCount": 450000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>You have $n$ coins with values $a_1, a_2, \\dots, a_n$. Find the minimum number of coins to take such that the total sum of your coins is strictly greater than the sum of the remaining coins.</p>",
-    "inputSpecificationHtml": "<p>The first line contains integer $n$ ($1 \\le n \\le 100$). The second line contains $n$ integers $a_i$ ($1 \\le a_i \\le 100$).</p>",
-    "outputSpecificationHtml": "<p>Print the minimum number of coins needed.</p>",
-    "sampleNotesHtml": "<p>Taking coins 3 and 3 gives sum 6 > 0 (taking 1 coin gives 3 which is not strictly greater than 3).</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Calculate total sum of all coins.",
-      "Sort the coins in descending order.",
-      "Greedily pick the largest coin until your accumulated sum > total / 2."
-    ],
-    "explanation": "To minimize the count of coins taken while maximizing their sum, greedily choose the largest values first. Sort the array in non-increasing order. Keep taking coins until your sum strictly exceeds half the total sum.",
+    "solvedCount": 203165,
+    "timeLimit": "2 seconds",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Petya loves football very much. One day, as he was watching a football match, he was writing the players' current positions on a piece of paper. To simplify the situation he depicted it as a string consisting of zeroes and ones. A zero corresponds to players of one team; a one corresponds to players of another team. If there are at least <span class=\"tex-span\">7</span> players of some team standing one after another, then the situation is considered dangerous. For example, the situation <span class=\"tex-span\">00100110111111101</span> is dangerous and <span class=\"tex-span\">11110111011101</span> is not. You are given the current situation. Determine whether it is dangerous or not.</p>",
+    "inputSpecificationHtml": "<p>The first input line contains a non-empty string consisting of characters \"0\" and \"1\", which represents players. The length of the string does not exceed <span class=\"tex-span\">100</span> characters. There's at least one player from each team present on the field.</p>",
+    "outputSpecificationHtml": "<p>Print \"YES\" if the situation is dangerous. Otherwise, print \"NO\".</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 96A - Football\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 96A - Football\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 96A - Football\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 96A - Football\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample 1: Two equal coins",
-        "description": "Must take both coins for strictly greater sum.",
-        "input": "2\n3 3",
-        "expectedOutput": "2"
-      },
-      {
-        "id": 2,
-        "title": "Sample 2: Three coins 2 1 2",
-        "description": "Taking two 2s gives 4 > 1.",
-        "input": "3\n2 1 2",
-        "expectedOutput": "2"
-      }
-    ]
-  },
-  {
-    "id": "520A",
-    "contestId": 520,
-    "index": "A",
-    "title": "Pangram",
-    "emoji": "🔤",
-    "category": "Strings",
-    "type": "exercise",
-    "rating": 800,
-    "solvedCount": 430000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>A word or a sentence in some language is called a pangram if all the characters of the alphabet of this language appear in it at least once. Given a string, determine whether it is a pangram.</p>",
-    "inputSpecificationHtml": "<p>The first line contains an integer $n$ ($1 \\le n \\le 100$). The second line contains string $s$ consisting of uppercase and lowercase Latin letters.</p>",
-    "outputSpecificationHtml": "<p>Print <code>YES</code> if the string is a pangram, otherwise print <code>NO</code>.</p>",
-    "sampleNotesHtml": "<p>There are 26 letters in the English alphabet.</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Convert the string to lowercase.",
-      "Collect all unique letters in a set.",
-      "If the set size is 26, it is a pangram."
-    ],
-    "explanation": "Convert the string to lowercase and insert all letters into a set (or boolean frequency array of size 26). If the set has size 26, answer YES, otherwise NO.",
-    "testCases": [
-      {
-        "id": 1,
-        "title": "Sample 1: Too short",
-        "description": "Only 12 letters.",
-        "input": "12\ntoosmallword",
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "001001",
         "expectedOutput": "NO"
       },
       {
         "id": 2,
-        "title": "Sample 2: Classic pangram",
-        "description": "Contains all 26 English letters.",
-        "input": "35\nTheQuickBrownFoxJumpsOverTheLazyDog",
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "1000000001",
         "expectedOutput": "YES"
       }
     ]
   },
   {
-    "id": "580A",
-    "contestId": 580,
+    "id": "41A",
+    "contestId": 41,
     "index": "A",
-    "title": "Kefa and First Steps",
-    "emoji": "📈",
-    "category": "Implementation / DP",
+    "title": "Translation",
+    "emoji": "🔄",
+    "category": "Strings / Reversal",
     "type": "exercise",
-    "rating": 900,
-    "solvedCount": 460000,
-    "timeLimit": "2.0s",
-    "memoryLimit": "256MB",
-    "descriptionHtml": "<p>Kefa wants to celebrate his first progress in competitive programming. Given an array of $n$ numbers, find the length of the maximum non-decreasing contiguous subsegment.</p>",
-    "inputSpecificationHtml": "<p>The first line contains integer $n$ ($1 \\le n \\le 10^5$). The second line contains $n$ integers $a_1, a_2, \\dots, a_n$ ($1 \\le a_i \\le 10^9$).</p>",
-    "outputSpecificationHtml": "<p>Print a single integer &mdash; the maximum length of a non-decreasing contiguous subsegment.</p>",
-    "sampleNotesHtml": "<p>Subsegment [1, 3, 4] has length 3 and is non-decreasing.</p>",
-    "starterCode": "",
-    "starterCodeCpp": "",
-    "starterCodeJava": "",
-    "starterCodePy": "",
-    "hints": [
-      "Maintain curLen = 1 and maxLen = 1.",
-      "Iterate from index 1 to n-1: if a[i] >= a[i-1], curLen++, else curLen = 1.",
-      "Update maxLen = max(maxLen, curLen)."
-    ],
-    "explanation": "Loop through the array starting from the second element. If the current number is greater than or equal to the previous number, increment the current streak length. Otherwise, reset the streak length to 1. The answer is the maximum streak encountered.",
+    "rating": 800,
+    "solvedCount": 199712,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>The translation from the Berland language into the Birland language is not an easy task. Those languages are very similar: a Berlandish word differs from a Birlandish word with the same meaning a little: it is spelled (and pronounced) reversely. For example, a Berlandish word <span class=\"tex-font-style-tt\">code</span> corresponds to a Birlandish word <span class=\"tex-font-style-tt\">edoc</span>. However, making a mistake during the \"translation\" is easy. Vasya translated the word <span class=\"tex-span\"><i>s</i></span> from Berlandish into Birlandish as <span class=\"tex-span\"><i>t</i></span>. Help him: find out if he translated the word correctly.</p>",
+    "inputSpecificationHtml": "<p>The first line contains word <span class=\"tex-span\"><i>s</i></span>, the second line contains word <span class=\"tex-span\"><i>t</i></span>. The words consist of lowercase Latin letters. The input data do not contain unnecessary spaces. The words are not empty and their lengths do not exceed 100 symbols.</p>",
+    "outputSpecificationHtml": "<p>If the word <span class=\"tex-span\"><i>t</i></span> is a word <span class=\"tex-span\"><i>s</i></span>, written reversely, print <span class=\"tex-font-style-tt\">YES</span>, otherwise print <span class=\"tex-font-style-tt\">NO</span>.</p>",
+    "sampleNotesHtml": "",
+    "starterCode": "// Problem: 41A - Translation\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 41A - Translation\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 41A - Translation\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 41A - Translation\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
     "testCases": [
       {
         "id": 1,
-        "title": "Sample 1: 6 elements",
-        "description": "Subsegment 1, 3, 4 has length 3.",
-        "input": "6\n2 2 1 3 4 1",
-        "expectedOutput": "3"
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "code\nedoc",
+        "expectedOutput": "YES"
       },
       {
         "id": 2,
-        "title": "Sample 2: Already non-decreasing",
-        "description": "All 3 elements form one subsegment.",
-        "input": "3\n2 2 9",
-        "expectedOutput": "3"
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "abb\naba",
+        "expectedOutput": "NO"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "code\ncode",
+        "expectedOutput": "NO"
+      }
+    ]
+  },
+  {
+    "id": "677A",
+    "contestId": 677,
+    "index": "A",
+    "title": "Vanya and Fence",
+    "emoji": "🚶",
+    "category": "Math / Logic",
+    "type": "exercise",
+    "rating": 800,
+    "solvedCount": 190603,
+    "timeLimit": "1 second",
+    "memoryLimit": "256 megabytes",
+    "descriptionHtml": "<p>Vanya and his friends are walking along the fence of height <span class=\"tex-span\"><i>h</i></span> and they do not want the guard to notice them. In order to achieve this the height of each of the friends should not exceed <span class=\"tex-span\"><i>h</i></span>. If the height of some person is greater than <span class=\"tex-span\"><i>h</i></span> he can bend down and then he surely won't be noticed by the guard. The height of the <span class=\"tex-span\"><i>i</i></span>-th person is equal to <span class=\"tex-span\"><i>a</i><sub class=\"lower-index\"><i>i</i></sub></span>.</p><p>Consider the width of the person walking as usual to be equal to <span class=\"tex-span\">1</span>, while the width of the bent person is equal to <span class=\"tex-span\">2</span>. Friends want to talk to each other while walking, so they would like to walk in a single row. What is the minimum width of the road, such that friends can walk in a row and remain unattended by the guard?</p>",
+    "inputSpecificationHtml": "<p>The first line of the input contains two integers <span class=\"tex-span\"><i>n</i></span> and <span class=\"tex-span\"><i>h</i></span> (<span class=\"tex-span\">1 ≤ <i>n</i> ≤ 1000</span>, <span class=\"tex-span\">1 ≤ <i>h</i> ≤ 1000</span>) — the number of friends and the height of the fence, respectively.</p><p>The second line contains <span class=\"tex-span\"><i>n</i></span> integers <span class=\"tex-span\"><i>a</i><sub class=\"lower-index\"><i>i</i></sub></span> (<span class=\"tex-span\">1 ≤ <i>a</i><sub class=\"lower-index\"><i>i</i></sub> ≤ 2<i>h</i></span>), the <span class=\"tex-span\"><i>i</i></span>-th of them is equal to the height of the <span class=\"tex-span\"><i>i</i></span>-th person.</p>",
+    "outputSpecificationHtml": "<p>Print a single integer — the minimum possible valid width of the road.</p>",
+    "sampleNotesHtml": "<p>In the first sample, only person number <span class=\"tex-span\">3</span> must bend down, so the required width is equal to <span class=\"tex-span\">1 + 1 + 2 = 4</span>.</p><p>In the second sample, all friends are short enough and no one has to bend, so the width <span class=\"tex-span\">1 + 1 + 1 + 1 + 1 + 1 = 6</span> is enough.</p><p>In the third sample, all the persons have to bend, except the last one. The required minimum width of the road is equal to <span class=\"tex-span\">2 + 2 + 2 + 2 + 2 + 1 = 11</span>.</p>",
+    "starterCode": "// Problem: 677A - Vanya and Fence\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeCpp": "// Problem: 677A - Vanya and Fence\n#include <iostream>\nusing namespace std;\n\nint main() {\n    ios_base::sync_with_stdio(false);\n    cin.tie(NULL);\n    // TODO: implement your solution here\n    return 0;\n}\n",
+    "starterCodeJava": "// Problem: 677A - Vanya and Fence\nimport java.util.Scanner;\n\npublic class Solution {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        // TODO: implement your solution here\n    }\n}\n",
+    "starterCodePy": "# Problem: 677A - Vanya and Fence\nimport sys\n\ndef solve():\n    # TODO: implement your solution here\n    pass\n\nif __name__ == '__main__':\n    solve()\n",
+    "testCases": [
+      {
+        "id": 1,
+        "title": "Sample Test 1",
+        "description": "Official sample test case 1 from Codeforces.",
+        "input": "3 7\n4 5 14",
+        "expectedOutput": "4"
+      },
+      {
+        "id": 2,
+        "title": "Sample Test 2",
+        "description": "Official sample test case 2 from Codeforces.",
+        "input": "6 1\n1 1 1 1 1 1",
+        "expectedOutput": "6"
+      },
+      {
+        "id": 3,
+        "title": "Sample Test 3",
+        "description": "Official sample test case 3 from Codeforces.",
+        "input": "6 5\n7 6 8 9 10 5",
+        "expectedOutput": "11"
       }
     ]
   }

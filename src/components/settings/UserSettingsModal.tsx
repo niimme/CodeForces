@@ -830,13 +830,13 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                 <form onSubmit={handleSignIn} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '5px' }}>
-                      Username, Codeforces Handle, or Email
+                      Username or Email
                     </label>
                     <input
                       type="text"
                       value={signInIdentifier}
                       onChange={e => setSignInIdentifier(e.target.value)}
-                      placeholder="e.g. nicholas or nicholas@codeforces.dev"
+                      placeholder="Enter your username"
                       required
                       style={{
                         width: '100%',
@@ -901,13 +901,13 @@ export const UserSettingsModal: React.FC<UserSettingsModalProps> = ({
                 <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                      Codeforces Handle
+                      Username
                     </label>
                     <input
                       type="text"
                       value={registerHandle}
                       onChange={e => setRegisterHandle(e.target.value)}
-                      placeholder="e.g. algorithm_champ"
+                      placeholder="Enter your username"
                       required
                       style={{
                         width: '100%',

@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { SupportedLanguage, UserProgress } from '../../types';
 
-export type WorkspaceTab = 'instructions' | 'log' | 'hints';
+export type WorkspaceTab = 'instructions' | 'log';
 
 interface InstructionsHeaderProps {
   activeTab: WorkspaceTab;
@@ -58,15 +58,6 @@ export const InstructionsHeader: React.FC<InstructionsHeaderProps> = ({
               {logCount}
             </span>
           )}
-        </button>
-
-        <button
-          className={`instructions-tab-btn ${activeTab === 'hints' ? 'active' : ''}`}
-          onClick={() => onSelectTab('hints')}
-          id="tab-hints"
-        >
-          <span>💡</span>
-          <span>Hints</span>
         </button>
       </div>
 

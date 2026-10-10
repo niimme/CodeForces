@@ -82,6 +82,14 @@ System.err.println("debug: x = $x, ans = $ans")`,
   },
 ];
 
+const LOG_COMMANDS: Record<string, string> = {
+  cpp: 'std::cerr',
+  c: 'fprintf(stderr, ...)',
+  python: 'print(..., file=sys.stderr)',
+  java: 'System.err.println()',
+  kotlin: 'System.err.println()',
+};
+
 export const ProblemStatement: React.FC<ProblemStatementProps> = ({
   problem,
   activeTab,
@@ -91,28 +99,17 @@ export const ProblemStatement: React.FC<ProblemStatementProps> = ({
   onToggleMaximize,
   language = 'cpp',
 }) => {
-  const [expandedHints, setExpandedHints] = useState<Record<number, boolean>>({});
-  const [selectedLogLang, setSelectedLogLang] = useState<string>(language);
   const [copiedLogLang, setCopiedLogLang] = useState<string | null>(null);
-  const [showLogInstructions, setShowLogInstructions] = useState<boolean>(true);
 
-  React.useEffect(() => {
-    if (language) {
-      setSelectedLogLang(language);
-    }
-  }, [language]);
+  const currentLang = (language || 'cpp').toLowerCase();
+  const currentGuide = LOG_GUIDES.find(g => g.id.toLowerCase() === currentLang) || LOG_GUIDES[0];
+  const currentLogCommand = LOG_COMMANDS[currentLang] || 'std::cerr';
+  const isCopied = copiedLogLang === currentGuide.id;
 
   const handleCopySnippet = (snippetCode: string, langId: string) => {
     navigator.clipboard.writeText(snippetCode);
     setCopiedLogLang(langId);
     setTimeout(() => setCopiedLogLang(null), 2000);
-  };
-
-  const toggleHint = (index: number) => {
-    setExpandedHints(prev => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
   };
 
   return (
@@ -173,28 +170,26 @@ export const ProblemStatement: React.FC<ProblemStatementProps> = ({
               </div>
             </>
           )}
-
-          {problem.sampleNotesHtml && (
-            <>
-              <div className="section-heading">
-                <span>💡</span>
-                <span>Note & Analysis</span>
-              </div>
-              <div className="statement-text">
-                <MathRenderer content={problem.sampleNotesHtml} />
-              </div>
-            </>
-          )}
         </>
       )}
 
       {/* LOG TAB */}
       {activeTab === 'log' && (
         <div style={{ padding: '10px 0' }}>
-          <div className="section-heading" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span>📋</span>
-              <span>Console Execution Logs</span>
+          {/* Header matching Scenario Log screenshot */}
+          <div style={{ marginBottom: '18px' }}>
+            <h2
+              style={{
+                fontSize: '18px',
+                fontWeight: 800,
+                color: '#0f172a',
+                margin: '0 0 6px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <span>Scenario Log</span>
               {capturedLogs.length > 0 && (
                 <span
                   style={{
@@ -209,29 +204,28 @@ export const ProblemStatement: React.FC<ProblemStatementProps> = ({
                   {capturedLogs.length} line{capturedLogs.length === 1 ? '' : 's'}
                 </span>
               )}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setShowLogInstructions(!showLogInstructions)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: '#2563eb',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-              }}
-              id="btn-toggle-log-instructions"
-            >
-              <span>{showLogInstructions ? 'Hide Instructions ▲' : 'Log Instructions ▼'}</span>
-            </button>
+            </h2>
+            <p style={{ fontSize: '13px', color: '#475569', margin: 0, lineHeight: 1.5 }}>
+              This is the output from your code execution. Here you can analyse the changes you&apos;ve made. Use{' '}
+              <code
+                style={{
+                  backgroundColor: '#f1f5f9',
+                  color: '#0284c7',
+                  padding: '2px 6px',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                  fontFamily: 'var(--font-mono)',
+                  fontWeight: 600,
+                  border: '1px solid #e2e8f0',
+                }}
+              >
+                {currentLogCommand}
+              </code>{' '}
+              to log values.
+            </p>
           </div>
 
-          {/* Captured Logs Terminal Output */}
+          {/* Captured Logs Terminal Output OR Empty State Illustration */}
           {capturedLogs.length > 0 ? (
             <div
               style={{
@@ -274,263 +268,213 @@ export const ProblemStatement: React.FC<ProblemStatementProps> = ({
           ) : (
             <div
               style={{
-                background: '#f8fafc',
-                border: '1px dashed #cbd5e1',
-                borderRadius: '10px',
-                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '36px 20px 28px',
                 textAlign: 'center',
-                color: '#64748b',
-                fontSize: '13px',
-                marginBottom: '16px',
               }}
             >
-              <div style={{ fontSize: '20px', marginBottom: '4px' }}>📡</div>
-              <p style={{ margin: 0, fontWeight: 600 }}>No runtime logs captured yet.</p>
-              <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#94a3b8' }}>
-                Run your code to capture stderr output from any supported language below.
+              <div
+                style={{
+                  width: '130px',
+                  height: '130px',
+                  borderRadius: '50%',
+                  backgroundColor: '#eef2ff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginBottom: '16px',
+                }}
+              >
+                <svg
+                  width="74"
+                  height="74"
+                  viewBox="0 0 74 74"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    x="18"
+                    y="14"
+                    width="34"
+                    height="46"
+                    rx="3"
+                    fill="#c7d2fe"
+                    transform="rotate(-8 18 14)"
+                  />
+                  <rect
+                    x="24"
+                    y="17"
+                    width="34"
+                    height="46"
+                    rx="3"
+                    fill="#ffffff"
+                    stroke="#818cf8"
+                    strokeWidth="2"
+                  />
+                  <path
+                    d="M30 27C32 25.5 34 28.5 36 27C38 25.5 40 28.5 42 27C44 25.5 46 28.5 48 27"
+                    stroke="#818cf8"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M30 33C32 31.5 34 34.5 36 33C38 31.5 40 34.5 42 33C44 31.5 46 34.5 48 33"
+                    stroke="#818cf8"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M30 39C32 37.5 34 40.5 36 39C38 37.5 40 40.5 42 39C44 37.5 46 40.5 48 39"
+                    stroke="#818cf8"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M30 45C32 43.5 34 46.5 36 45C38 43.5 40 46.5 42 45"
+                    stroke="#818cf8"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                  <g transform="translate(39, 21) rotate(42)">
+                    <rect x="0" y="0" width="7" height="28" rx="1.5" fill="#ffffff" stroke="#818cf8" strokeWidth="2" />
+                    <path d="M0 28L3.5 35L7 28Z" fill="#818cf8" />
+                    <line x1="0" y1="6" x2="7" y2="6" stroke="#818cf8" strokeWidth="1.5" />
+                  </g>
+                </svg>
+              </div>
+
+              <div
+                style={{
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  color: '#64748b',
+                }}
+              >
+                You&apos;ve not logged anything out yet
+              </div>
+            </div>
+          )}
+
+          {/* Current Language Debug Logging Guide */}
+          <div
+            style={{
+              marginTop: '16px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #e2e8f0',
+              borderRadius: '12px',
+              padding: '16px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+            }}
+          >
+            <div style={{ marginBottom: '12px' }}>
+              <h3 style={{ fontSize: '13.5px', fontWeight: 800, color: '#0f172a', margin: '0 0 4px' }}>
+                💡 Debug Logging in {currentGuide.name}
+              </h3>
+              <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.4 }}>
+                Use standard error (<strong>stderr</strong>) to print debug output. Because test evaluation only verifies standard output (<strong>stdout</strong>), stderr logging never interferes with test case correctness!
               </p>
             </div>
-          )}
 
-          {/* Multi-Language Logging Instructions Guide */}
-          {showLogInstructions && (
+            {/* ONLY Current Language Button */}
+            <div style={{ marginBottom: '12px' }}>
+              <button
+                type="button"
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: '20px',
+                  border: `1.5px solid ${currentGuide.color}`,
+                  backgroundColor: currentGuide.bg,
+                  color: currentGuide.color,
+                  fontSize: '12.5px',
+                  fontWeight: 700,
+                  cursor: 'default',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+                id={`tab-log-guide-${currentGuide.id}`}
+              >
+                <span>{currentGuide.name}</span>
+                <code style={{ fontSize: '11px', opacity: 0.9 }}>{currentGuide.badge}</code>
+              </button>
+            </div>
+
+            {/* Current Language Guide Card */}
             <div
               style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '12px',
-                padding: '16px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                backgroundColor: currentGuide.bg,
+                border: `1px solid ${currentGuide.border}`,
+                borderRadius: '10px',
+                padding: '14px',
               }}
             >
-              <div style={{ marginBottom: '12px' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: 800, color: '#0f172a', margin: '0 0 4px' }}>
-                  💡 Debug Logging in Allowed Languages
-                </h3>
-                <p style={{ fontSize: '12px', color: '#64748b', margin: 0, lineHeight: 1.4 }}>
-                  Use standard error (<strong>stderr</strong>) to print debug output. Because test evaluation only verifies standard output (<strong>stdout</strong>), stderr logging never interferes with test case correctness!
-                </p>
-              </div>
-
-              {/* Language Pills Filter */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '14px' }}>
-                {LOG_GUIDES.map(lg => {
-                  const isCurrentActive = selectedLogLang.toLowerCase() === lg.id.toLowerCase();
-                  return (
-                    <button
-                      key={lg.id}
-                      type="button"
-                      onClick={() => setSelectedLogLang(lg.id)}
-                      style={{
-                        padding: '5px 12px',
-                        borderRadius: '20px',
-                        border: isCurrentActive ? `1.5px solid ${lg.color}` : '1px solid #e2e8f0',
-                        backgroundColor: isCurrentActive ? lg.bg : '#f8fafc',
-                        color: isCurrentActive ? lg.color : '#475569',
-                        fontSize: '12px',
-                        fontWeight: isCurrentActive ? 700 : 500,
-                        cursor: 'pointer',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        transition: 'all 0.15s ease',
-                      }}
-                      id={`tab-log-guide-${lg.id}`}
-                    >
-                      <span>{lg.name}</span>
-                      <code style={{ fontSize: '10.5px', opacity: 0.85 }}>{lg.badge}</code>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Active Language Guide Card */}
-              {(() => {
-                const guide = LOG_GUIDES.find(g => g.id.toLowerCase() === selectedLogLang.toLowerCase()) || LOG_GUIDES[0];
-                const isCopied = copiedLogLang === guide.id;
-
-                return (
-                  <div
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span
                     style={{
-                      backgroundColor: guide.bg,
-                      border: `1px solid ${guide.border}`,
-                      borderRadius: '10px',
-                      padding: '14px',
+                      fontSize: '11px',
+                      fontWeight: 800,
+                      color: '#ffffff',
+                      backgroundColor: currentGuide.color,
+                      padding: '2px 8px',
+                      borderRadius: '5px',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span
-                          style={{
-                            fontSize: '11px',
-                            fontWeight: 800,
-                            color: '#ffffff',
-                            backgroundColor: guide.color,
-                            padding: '2px 8px',
-                            borderRadius: '5px',
-                          }}
-                        >
-                          {guide.name}
-                        </span>
-                        <span style={{ fontSize: '12px', color: '#475569', fontWeight: 600 }}>
-                          {guide.badge}
-                        </span>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleCopySnippet(guide.code, guide.id)}
-                        style={{
-                          backgroundColor: '#ffffff',
-                          border: '1px solid #cbd5e1',
-                          color: isCopied ? '#16a34a' : '#334155',
-                          borderRadius: '6px',
-                          padding: '3px 10px',
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                        }}
-                        id={`btn-copy-log-${guide.id}`}
-                      >
-                        <span>{isCopied ? '✓ Copied!' : '📋 Copy Snippet'}</span>
-                      </button>
-                    </div>
-
-                    <pre
-                      style={{
-                        margin: '0 0 8px',
-                        padding: '10px 12px',
-                        backgroundColor: '#0f172a',
-                        color: '#f8fafc',
-                        borderRadius: '8px',
-                        fontSize: '12px',
-                        fontFamily: 'var(--font-mono)',
-                        lineHeight: 1.45,
-                        overflowX: 'auto',
-                      }}
-                    >
-                      {guide.code}
-                    </pre>
-
-                    <p style={{ margin: 0, fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
-                      {guide.description}
-                    </p>
-                  </div>
-                );
-              })()}
-
-              {/* Quick Summary of All Other Allowed Languages */}
-              <div style={{ marginTop: '14px', borderTop: '1px solid #e2e8f0', paddingTop: '12px' }}>
-                <span style={{ fontSize: '11.5px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '6px' }}>
-                  Quick Reference for All Allowed Languages:
-                </span>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8px' }}>
-                  {LOG_GUIDES.map(item => (
-                    <div
-                      key={item.id}
-                      onClick={() => setSelectedLogLang(item.id)}
-                      style={{
-                        padding: '8px 10px',
-                        borderRadius: '8px',
-                        backgroundColor: '#f8fafc',
-                        border: '1px solid #e2e8f0',
-                        cursor: 'pointer',
-                        fontSize: '11.5px',
-                        transition: 'all 0.15s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-                        <strong style={{ color: item.color }}>{item.name}</strong>
-                        <code style={{ fontSize: '10px', color: '#64748b' }}>{item.badge}</code>
-                      </div>
-                      <div style={{ color: '#64748b', fontSize: '11px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {item.description}
-                      </div>
-                    </div>
-                  ))}
+                    {currentGuide.name}
+                  </span>
+                  <span style={{ fontSize: '12px', color: '#475569', fontWeight: 600 }}>
+                    {currentGuide.badge}
+                  </span>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleCopySnippet(currentGuide.code, currentGuide.id)}
+                  style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #cbd5e1',
+                    color: isCopied ? '#16a34a' : '#334155',
+                    borderRadius: '6px',
+                    padding: '4px 10px',
+                    fontSize: '11.5px',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                  id={`btn-copy-log-${currentGuide.id}`}
+                >
+                  <span>{isCopied ? '✓ Copied!' : '📋 Copy Snippet'}</span>
+                </button>
               </div>
+
+              <pre
+                style={{
+                  margin: '0 0 8px',
+                  padding: '10px 12px',
+                  backgroundColor: '#0f172a',
+                  color: '#f8fafc',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                  fontFamily: 'var(--font-mono)',
+                  lineHeight: 1.45,
+                  overflowX: 'auto',
+                }}
+              >
+                {currentGuide.code}
+              </pre>
+
+              <p style={{ margin: 0, fontSize: '12px', color: '#475569', lineHeight: 1.4 }}>
+                {currentGuide.description}
+              </p>
             </div>
-          )}
-        </div>
-      )}
-
-      {/* HINTS TAB */}
-      {activeTab === 'hints' && (
-        <div style={{ padding: '10px 0' }}>
-          <div className="section-heading">
-            <span>💡</span>
-            <span>Progressive Hints</span>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '12px' }}>
-            {(!problem.hints || problem.hints.length === 0) ? (
-              <p style={{ color: '#64748b', fontSize: '13px' }}>No hints available for this challenge.</p>
-            ) : (
-              problem.hints.map((hint, i) => {
-                const isExpanded = !!expandedHints[i];
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      background: '#f8fafc',
-                      border: '1px solid #e2e8f0',
-                      borderRadius: '10px',
-                      overflow: 'hidden'
-                    }}
-                  >
-                    <button
-                      onClick={() => toggleHint(i)}
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '12px 16px',
-                        background: 'none',
-                        border: 'none',
-                        cursor: 'pointer',
-                        textAlign: 'left',
-                        fontWeight: 700,
-                        fontSize: '13px',
-                        color: '#0f172a'
-                      }}
-                      id={`btn-hint-${i + 1}`}
-                    >
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span>💡</span>
-                        <span>Hint {i + 1}</span>
-                      </span>
-                      <span style={{ fontSize: '12px', color: '#64748b' }}>
-                        {isExpanded ? '▲ Hide' : '▼ Reveal'}
-                      </span>
-                    </button>
-
-                    {isExpanded && (
-                      <div
-                        style={{
-                          padding: '12px 16px',
-                          borderTop: '1px solid #e2e8f0',
-                          background: '#ffffff',
-                          fontSize: '13px',
-                          color: '#334155',
-                          lineHeight: 1.6
-                        }}
-                      >
-                        {hint}
-                      </div>
-                    )}
-                  </div>
-                );
-              })
-            )}
           </div>
         </div>
       )}
-
     </div>
   );
 };

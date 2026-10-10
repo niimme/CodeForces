@@ -7,11 +7,10 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
-    "scrape": "tsx scripts/scrape.ts"
+    "scrape": "python3 scripts/scrape.py"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",
-    "cheerio": "^1.0.0",
     "katex": "^0.16.21",
     "lucide-react": "^1.16.0",
     "next": "^15.2.1",

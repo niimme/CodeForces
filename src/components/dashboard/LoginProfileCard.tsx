@@ -609,11 +609,11 @@ export const LoginProfileCard: React.FC<LoginProfileCardProps> = ({
               <div>
                 <div style={{ marginBottom: '12px' }}>
                   <label style={{ display: 'block', fontSize: '12.5px', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-                    Username, Handle, or Email
+                    Username or Email
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. nicholas or your account name"
+                    placeholder="Enter your username"
                     value={handleInput}
                     onChange={e => setHandleInput(e.target.value)}
                     onKeyDown={e => e.key === 'Enter' && handleModalSignIn()}

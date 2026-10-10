@@ -1525,6 +1525,16 @@ body.cf-no-ligatures .code-textarea,
   z-index: 1;
 }
 
+/* Bracket / Parenthesis Matching Highlight (matching user screenshot) */
+.matching-bracket-highlight {
+  background-color: #bce4e8;
+  color: #0f172a !important;
+  border-radius: 2.5px;
+  box-shadow: 0 0 0 1px rgba(14, 116, 144, 0.4);
+  font-weight: 600;
+  display: inline;
+}
+
 .code-textarea {
   z-index: 2;
   background: transparent !important;
