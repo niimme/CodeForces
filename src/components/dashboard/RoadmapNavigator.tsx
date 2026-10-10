@@ -172,41 +172,6 @@ export const RoadmapNavigator: React.FC<RoadmapNavigatorProps> = ({ progress }) 
           })}
         </div>
       </div>
-
-      {/* C++ Quick Tip Card */}
-      <div
-        style={{
-          background: 'linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%)',
-          borderRadius: '16px',
-          border: '1px solid #dbeafe',
-          padding: '14px 16px',
-          fontSize: '12px',
-          color: '#1e3a8a',
-        }}
-      >
-        <div style={{ fontWeight: 800, marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span>⚡</span>
-          <span>C++20 Fast I/O Tip</span>
-        </div>
-        <p style={{ color: '#475569', fontSize: '11px', lineHeight: 1.5, margin: 0 }}>
-          Always disable stream sync before reading multi-line input on Codeforces:
-        </p>
-        <code
-          style={{
-            display: 'block',
-            marginTop: '6px',
-            padding: '6px 8px',
-            background: 'rgba(255, 255, 255, 0.8)',
-            border: '1px solid #bfdbfe',
-            borderRadius: '6px',
-            fontSize: '10.5px',
-            color: '#1d4ed8',
-            fontFamily: 'monospace',
-          }}
-        >
-          ios::sync_with_stdio(0); cin.tie(0);
-        </code>
-      </div>
     </aside>
   );
 };
